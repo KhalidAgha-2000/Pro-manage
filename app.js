@@ -5,6 +5,7 @@ var logger = require('morgan');
 var dotenv = require('dotenv')
 var createError = require('http-errors');
 const mongoose = require('mongoose');
+var bodyparser = require('body-parser')
 dotenv.config()
 
 
@@ -14,11 +15,14 @@ var registrationRouter = require('./routes/registration');
 
 var app = express();
 
+
+
+app.use(bodyparser.json());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
- app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 app.listen(5000 || process.env.PORT)
 
 //-------------------------------------Start Server & Connect to DataBase

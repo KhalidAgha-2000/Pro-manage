@@ -1,15 +1,17 @@
 const jwt = require('jsonwebtoken')
 
 exports.authenticate = (req, res, next) => {
-    const authHeader = req.headers['authorization'];
-    const tokenFromHeader = authHeader && authHeader.split(" ")[1];
-    const tokenFromCookie = req.cookies.token;
-    if (tokenFromHeader || tokenFromCookie) {
-        jwt.verify(tokenFromHeader || tokenFromCookie, process.env.TOKEN_SCERET, (err) => {
+    const authCookie = req.cookies.token;
+    const authHeader = req.headers.token
+
+    if (authHeader || authCookie) {
+        jwt.verify(authHeader || authCookie, process.env.TOKEN_SCERET, (err, decodedToken) => {
             if (err) {
-                res.status(401).json({ success: false, eee: err.message, message: "Error occurred during authentication!" })
+                if (err) res.status(401).json({ success: false, message: "Token is not valid!" })
             }
             else {
+                // Add the decoded token to the request object
+                req.admin = decodedToken;
                 next()
             }
         })

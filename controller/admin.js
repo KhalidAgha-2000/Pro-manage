@@ -1,36 +1,158 @@
 const bcrypt = require('bcryptjs')
 const adminModel = require('../model/admin')
+const cloudinary = require('cloudinary').v2
+require('dotenv').config();
+
+// Cloudinary Configuration
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API,
+    api_secret: process.env.CLOUDINARY_SECRET
+})
 
 
 class Controller {
 
-    // -------------------- Add
+    // -------------------- Add 
     async addAdmin(req, res) {
 
         // Check if the adminName is already in the database 
         const adminExists = await adminModel.findOne({ email: req.body.email })
-        if (adminExists) return res.json({ success: false, message: "Admin already exists" })
+        if (adminExists) {
+            // 409 Conflict
+            return res.status(409).json({ success: false, message: "Email already exists" })
+        }
 
-        //  Hashing a password
-        const salt = await bcrypt.genSalt(10); //The salt will hash the password and create a string password of dfault complexity of 10
+        //Check length of password && Hash password
+        if (req.body.password.length < 6) {
+            return res.status(500).json({ success: false, message: "Password is too short, insert at least 6 characters." })
+        }
+
+        const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
-        //  Admin creation if no error in Admin data enetered 
-        const admin = new adminModel({
+        // Upload image to Cloudinary
+        // let imageUploadResult;
+        // try {
+        //     imageUploadResult = await cloudinary.uploader.upload(req.file.path);
+        // } catch (error) {
+        //     return res.status(400).json({ success: false, message: "Image is required" });
+        // }
+
+        // Create new admin
+        const newAdmin = new adminModel({
             email: req.body.email,
             username: req.body.username,
             password: hashedPassword,
-        })
+            // image: imageUploadResult.secure_url,
+        });
+
+        // Save new admin to database
         try {
-            const savedAdmin = await admin.save() //This is to save the entered admin data once post request is finished 
-            res.status(200).json({ success: true, message: "Successfully Created", admins: savedAdmin })
-        }
-        catch (err) {
-            res.send({ message: 'Oops! An error occurred' })
+            const savedAdmin = await newAdmin.save();
+            return res.status(201).json({ success: true, message: "Admin added successfully", admin: savedAdmin });
+        } catch (error) {
+            return res.status(500).json({ success: false, message: "Failed to add admin" });
         }
     }
 
-    
+    // -------------------- Edit
+    async UpdateAdminInfo(req, res, next) {
+
+        try {
+            // Check if the email already exists
+            const adminExists = await adminModel.findOne({ email: req.body.email });
+            if (adminExists) {
+                return res.status(400).json({ message: 'Email already exists' });
+            }
+
+            // Update the admin by ID
+            const newAdmin = await adminModel.findByIdAndUpdate(
+                req.params.id,
+                { $set: req.body },
+                { new: true }
+            );
+
+            res.status(200).json({ success: true, message: 'Data updated successfully', data: newAdmin });
+        } catch (err) {
+            res.status(500).json({ success: false, message: "Failed to Update!" });
+        }
+
+    }
+
+    // -------------------- Delete
+    async deleteAdmin(req, res, next) {
+        try {
+            const adminId = req.params.id;
+
+            // Check if admin is trying to delete themselves
+            if (req.admin.id === adminId) {
+                return res.status(403).json({ message: "You cannot delete yourself" });
+            }
+
+            // Delete admin from database
+            const deletedAdmin = await adminModel.findByIdAndDelete(adminId);
+
+            if (!deletedAdmin) {
+                return res.status(404).json({ message: "Admin not found" });
+            }
+
+            res.status(200).json({ success: true, message: "Admin removed from database!" });
+        } catch (err) {
+            next(err);
+        }
+    };
+
+    // -------------------- Change Password
+    async changePassword(req, res, next) {
+        try {
+
+            const admin = await adminModel.findById(req.params.id);
+            const isMatch = await bcrypt.compare(req.body.oldPassword, admin.password);
+            if (!isMatch) {
+                return res.status(400).json({ success: false, message: "Invalid old password" });
+            }
+
+            //Check length of password && Hash password
+            if (req.body.newPassword.length < 6) {
+                return res.status(500).json({ success: false, message: "Password is too short, insert at least 6 characters." })
+            }
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(req.body.newPassword, salt);
+            const updatedData = await adminModel.findByIdAndUpdate(
+                { _id: req.params.id },
+                { $set: { password: hashedPassword } },
+                { new: true }
+            );
+            res.status(200).json({ success: true, message: "Password changed successfully", data: updatedData });
+        } catch (err) {
+            next(err)
+        }
+    }
+
+    // ---------------------  Change Image
+    async changeImage(req, res, next) {
+        // Upload image to Cloudinary
+        let imageUploadResult;
+        try {
+            imageUploadResult = await cloudinary.uploader.upload(req.file.path);
+        } catch (error) {
+            return res.status(400).json({ success: false, message: "Add image to upload image !" });
+        }
+
+        try {
+            const updatedData = await adminModel.updateOne(
+                { _id: req.params.id },
+                { $set: { image: imageUploadResult.secure_url, } },
+                { new: true }
+            );
+            res.status(200).json({ success: true, message: 'Data updated successfully', data: updatedData });
+        } catch (err) {
+            console.error(err.message);
+            res.status(500).json({ success: false, message: "Failed to Update!" });
+        }
+    }
+
 }
 
 
