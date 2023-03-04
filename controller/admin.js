@@ -12,6 +12,26 @@ cloudinary.config({
 
 
 class Controller {
+    // -------------------- Fetch All Admins
+    async allAdmin(req, res, next) {
+        try {
+            const admins = await adminModel.find({}, '-password');
+            res.status(200).json({ success: true, message: 'Admins', data: admins });
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    // -------------------- Fetch Specific Admin
+    async specificAdmin(req, res, next) {
+        try {
+            const admin = await adminModel.findById(req.params.id, '-password');
+            res.status(200).json({ success: true, message: 'Admin Information!', data: admin });
+        } catch (err) {
+            next(err);
+        }
+    }
+
 
     // -------------------- Add 
     async addAdmin(req, res) {

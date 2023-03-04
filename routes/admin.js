@@ -20,6 +20,8 @@ const upload = multer({
 });
 
 // ---------- Admin Routes
+router.get('/all-admins',  authenticate, controller.allAdmin)
+router.get('/specific-admin/:id',  authenticate, controller.specificAdmin)
 router.post('/add-admin', upload.single('image'), authenticate, controller.addAdmin)
 router.post('/update-info/:id', authenticate, controller.UpdateAdminInfo)
 router.delete('/remove-admin/:id', authenticate, controller.deleteAdmin)
