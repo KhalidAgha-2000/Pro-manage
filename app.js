@@ -40,9 +40,8 @@ mongoose.connect(process.env.CONNECTION_STRING, {
 
 
 app.use('/', indexRouter);
-app.use('/api/v1/admins', adminRouter);
+app.use('/api/v1', adminRouter);
 app.use('/api/v1/registration', registrationRouter);
-
 
 // //-------------------------------------Create and error object,catch 404 and forward to error handler
 app.use(function (req, res, next) {

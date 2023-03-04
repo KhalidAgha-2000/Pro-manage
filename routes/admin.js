@@ -1,5 +1,6 @@
 var express = require('express')
 var router = express.Router()
+var group = require('express-group-routes');
 var controller = require('../controller/admin')
 const { authenticate } = require('../middleware/authentication')
 
@@ -18,16 +19,31 @@ const upload = multer({
         cb(null, true);
     },
 });
+// Group all admin routes
 
-// ---------- Admin Routes
-router.get('/all-admins',  authenticate, controller.allAdmin)
-router.get('/specific-admin/:id',  authenticate, controller.specificAdmin)
-router.post('/add-admin', upload.single('image'), authenticate, controller.addAdmin)
-router.post('/update-info/:id', authenticate, controller.UpdateAdminInfo)
-router.delete('/remove-admin/:id', authenticate, controller.deleteAdmin)
-router.put('/change-password/:id', authenticate, controller.changePassword)
-router.put('/change-image/:id', upload.single('image'), authenticate, controller.changeImage)
+router.group('/admins', (adminRouter) => {
 
+    // Use the authenticate middleware for all admin routes
+    adminRouter.use(authenticate);
 
+    // Group all image upload routes
+    adminRouter.group('', (imageRouter) => {
+        // Use the upload middleware for all image routes
+        imageRouter.use(upload.single('image'));
 
+        // ---------- Image Routes
+        imageRouter.post('/add-admin', controller.addAdmin)
+        imageRouter.put('/change-image/:id', controller.changeImage)
+    });
+
+    // ---------- Admin Routes
+    adminRouter.get('/all-admins', controller.allAdmin)
+    adminRouter.get('/specific-admin/:id', controller.specificAdmin)
+    adminRouter.post('/add-admin', upload.single('image'), controller.addAdmin)
+    adminRouter.put('/change-image/:id', upload.single('image'), controller.changeImage)
+    adminRouter.post('/update-info/:id', controller.UpdateAdminInfo)
+    adminRouter.delete('/remove-admin/:id', controller.deleteAdmin)
+    adminRouter.put('/change-password/:id', controller.changePassword)
+
+})
 module.exports = router
