@@ -87,13 +87,13 @@ class Controller {
             }
 
             // Update the admin by ID
-            const newAdmin = await adminModel.findByIdAndUpdate(
+            const newAdminData = await adminModel.findByIdAndUpdate(
                 req.params.id,
                 { $set: req.body },
                 { new: true }
             );
 
-            res.status(200).json({ success: true, message: 'Data updated successfully', data: newAdmin });
+            res.status(200).json({ success: true, message: 'Data updated successfully', data: newAdminData });
         } catch (err) {
             res.status(500).json({ success: false, message: "Failed to Update!" });
         }
@@ -168,7 +168,6 @@ class Controller {
             );
             res.status(200).json({ success: true, message: 'Data updated successfully', data: updatedData });
         } catch (err) {
-            console.error(err.message);
             res.status(500).json({ success: false, message: "Failed to Update!" });
         }
     }

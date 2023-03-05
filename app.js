@@ -11,6 +11,8 @@ dotenv.config()
 
 var indexRouter = require('./routes/index');
 var adminRouter = require('./routes/admin');
+var kpiRouter = require('./routes/kpi');
+var employeeRouter = require('./routes/employee');
 var registrationRouter = require('./routes/registration');
 
 var app = express();
@@ -41,6 +43,8 @@ mongoose.connect(process.env.CONNECTION_STRING, {
 
 app.use('/', indexRouter);
 app.use('/api/v1', adminRouter);
+app.use('/api/v1', kpiRouter);
+app.use('/api/v1', employeeRouter);
 app.use('/api/v1/registration', registrationRouter);
 
 // //-------------------------------------Create and error object,catch 404 and forward to error handler
