@@ -47,8 +47,15 @@ const employeeSchema = new Schema({
     {
         collection: 'Employees',
         timestamps: true,
+        toJSON: { virtuals: true },
+        toObject: { virtuals: true },
     }
 );
 
+
+employeeSchema.virtual('Employee_Name')
+    .get(function () {
+        return this.first_name.charAt(0).toUpperCase() + this.first_name.slice(1).toLowerCase() + ' ' + this.last_name.charAt(0).toUpperCase() + this.last_name.slice(1).toLowerCase()
+    })
 const Model = model('Employee', employeeSchema);
 module.exports = Model;
