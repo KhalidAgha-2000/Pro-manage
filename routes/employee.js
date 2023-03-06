@@ -8,7 +8,7 @@ const { authenticate } = require('../middleware/authentication')
 
 router.group('/employees', (employeeRouter) => {
 
-    employeeRouter.get('/getKPIsOfspecificEmployee/:id', controller.getKPIsOfspecificEmployee)
+    employeeRouter.get('/kpis-of-specific-employee/:id', controller.getKPIsOfspecificEmployee)
     // Use the authenticate middleware for all Employee routes
     employeeRouter.use(authenticate);
     
