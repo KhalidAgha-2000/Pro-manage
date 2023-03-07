@@ -186,31 +186,19 @@ class Controller {
                         from: "kpis",
                         localField: "kpis.kpi",
                         foreignField: "_id",
-                        as: "kpi"
+                        as: "kpis.kpi"
                     }
                 },
-
                 // Unwind the resulting array from the lookup operation
-                { $unwind: "$kpi" },
+                { $unwind: "$kpis.kpi" },
 
                 // Add a new field to the kpis array to store the name of the kpi from the kpis collection
-                {
-                    $addFields: {
-                        "kpis.kpi_name": "$kpi.name",
-                        fullName: { $concat: ["$first_name", " ", "$last_name"] }
-                    },
-                },
+                { $addFields: { "kpis.kpi_name": "$kpi.name", fullName: { $concat: ["$first_name", " ", "$last_name"] } } },
+
                 // Sort the kpis elements in descending order by kpiDate
                 { $sort: { "kpis.kpiDate": -1 } },
                 // Group the documents by the employee ID again and create a new kpis array with all kpis elements
-                {
-                    $group: {
-                        _id: "$_id",
-                        fullName: { $first: "$fullName" },
-                         kpis: { $push: "$kpis" }
-                    }
-
-                },
+                { $group: { _id: "$_id", fullName: { $first: "$fullName" }, kpis: { $push: "$kpis" } } }
 
             ]);
             if (employee.length === 0) {
@@ -218,8 +206,8 @@ class Controller {
             }
 
             return res.status(200).json({ success: true, message: "KPI(S) of the employee", data: employee[0] });
-        } catch (error) {
-            next(error)
+        } catch (err) {
+            next(err)
         }
     };
 
@@ -228,6 +216,5 @@ class Controller {
 
 const controller = new Controller(); //Creating an instance from this class 
 module.exports = controller;
-
 
 

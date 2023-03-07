@@ -14,7 +14,7 @@ router.group('/kpis', (kpiRouter) => {
     // ---------- KPI Routes
     kpiRouter.get('/all-kpis', controller.allKpis)
     kpiRouter.post('/add-kpi', controller.addKpi)
-    kpiRouter.delete('/remove-kpi/:id', controller.deleteKpi)
+    kpiRouter.delete('/remove-kpi/:id', controller.deleteKPI)
 })
 
 module.exports = router

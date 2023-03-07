@@ -38,24 +38,27 @@ const employeeSchema = new Schema({
             }
         }
     ],
-    // team: {
-    //    type: Schema.Types.ObjectId,
-    //     ref: 'Team',
-    //     default: null
-    // },
+    team: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Team',
+    }],
 },
     {
-        collection: 'Employees',
+        collection: 'employees',
         timestamps: true,
         toJSON: { virtuals: true },
         toObject: { virtuals: true },
     }
-);
+)
 
 
-employeeSchema.virtual('Employee_Name')
-    .get(function () {
-        return this.first_name.charAt(0).toUpperCase() + this.first_name.slice(1).toLowerCase() + ' ' + this.last_name.charAt(0).toUpperCase() + this.last_name.slice(1).toLowerCase()
-    })
+employeeSchema.virtual('Employee_Name').get(function () {
+    return this.first_name.charAt(0).toUpperCase() + this.first_name.slice(1).toLowerCase() + ' ' + this.last_name.charAt(0).toUpperCase() + this.last_name.slice(1).toLowerCase()
+})
+
+// employeeSchema.pre(['find', 'findOne'], function () {
+//     this.populate(['team'])
+// })
+
 const Model = model('Employee', employeeSchema);
 module.exports = Model;

@@ -13,6 +13,7 @@ var indexRouter = require('./routes/index');
 var adminRouter = require('./routes/admin');
 var kpiRouter = require('./routes/kpi');
 var employeeRouter = require('./routes/employee');
+var teamRouter = require('./routes/team');
 var registrationRouter = require('./routes/registration');
 
 var app = express();
@@ -37,7 +38,7 @@ mongoose.connect(process.env.CONNECTION_STRING, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(() => {
-    console.log("--------------- Successfully Connected To Database --------------- ");
+    console.log("*-*-*-*-*-*-*-*-* Successfully Connected To Database *-*-*-*-*-*-*-*-* ");
 }).catch(console.error);
 
 
@@ -45,6 +46,7 @@ app.use('/', indexRouter);
 app.use('/api/v1', adminRouter);
 app.use('/api/v1', kpiRouter);
 app.use('/api/v1', employeeRouter);
+app.use('/api/v1', teamRouter);
 app.use('/api/v1/registration', registrationRouter);
 
 // //-------------------------------------Create and error object,catch 404 and forward to error handler
