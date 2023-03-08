@@ -10,12 +10,9 @@ class Controller {
                 _id: team._id,
                 name: team.name,
                 numberOfEmployees: team.employees.length,
-                employees: team.employees.map(employee => ({
-                    _id: employee._id,
-                    Employee_Name: employee.Employee_Name,
-                    email: employee.email,
-                    phone: employee.phone
-                }))
+                numberOfProjects: team.projects.length,
+                project: team.projects,
+                employees: team.employees
             }));
             res.status(200).json({ success: true, message: 'All Teams', data: teamData });
         } catch (err) {
@@ -30,7 +27,7 @@ class Controller {
             if (!team) {
                 return res.status(404).json({ success: false, message: "Team not found" });
             }
-            res.status(200).json({ success: true, message: 'Team Information', numberOfEmployees: team.employees.length, data: team });
+            res.status(200).json({ success: true, message: 'Team Information', numberOfProjects: team.projects.length, numberOfEmployees: team.employees.length, data: team });
         } catch (err) {
             next(err);
         }
@@ -76,7 +73,11 @@ class Controller {
             // Check if Team has employees
             if (team.employees && team.employees.length > 0) {
                 res.status(403).json({ success: false, message: "This Team has a list of employees, cannot be deleted" });
-            } else {
+            }
+            else if (team.projects && team.projects.length > 0) {
+                res.status(403).json({ success: false, message: "This Team is assigned to project(s), cannot be deleted" });
+            }
+            else {
                 // Delete Team from database
                 const deletedTeam = await teamModel.findByIdAndDelete(req.params.id);
 

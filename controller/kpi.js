@@ -12,7 +12,7 @@ class Controller {
     }
 
     // -------------------- Add Kpi
-    async addKpi(req, res) {
+    async addKpi(req, res, next) {
 
         // Check if the request body is empty
         if (!req.body || Object.keys(req.body).length === 0) {
