@@ -35,7 +35,8 @@ class Controller {
             const savedKPI = await newKpi.save();
             return res.status(201).json({ success: true, message: "New KPI added successfully", data: savedKPI });
         } catch (error) {
-            return res.status(500).json({ success: false, message: "Failed to add KPI" });
+            // return res.status(500).json({ success: false, message: "Failed to add KPI" });
+            next(error)
         }
 
     }
@@ -61,6 +62,36 @@ class Controller {
             res.status(200).json({ success: true, message: "KPI removed from database!" });
         } catch (err) {
             next(err);
+        }
+
+    }
+
+    // ---------------------  Update KPI name
+    async updateKPIName(req, res, next) {
+
+        try {
+
+            // Check if the request body is empty
+            if (!req.body || Object.keys(req.body).length === 0) {
+                return res.status(400).json({ success: false, message: "You must add KPI name" });
+            }
+
+            // Check if the name already exists
+            const apiExists = await kpiModel.findOne({ name: req.body.name });
+            if (apiExists) {
+                return res.status(400).json({ message: 'KPI already exists' });
+            }
+
+            // Update the KPI by ID
+            const kpiData = await kpiModel.findByIdAndUpdate(
+                req.params.id,
+                { $set: req.body },
+                { new: true }
+            );
+
+            res.status(200).json({ success: true, message: 'Data updated successfully', data: kpiData });
+        } catch (err) {
+            next(err)
         }
 
     }
