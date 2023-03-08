@@ -11,7 +11,6 @@ class Controller {
         }
     }
 
-
     // -------------------- Add Kpi
     async addKpi(req, res) {
 

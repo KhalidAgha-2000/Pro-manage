@@ -74,7 +74,8 @@ class Controller {
             );
             res.status(200).json({ success: true, message: 'Data updated successfully', data: updatedData });
         } catch (err) {
-            res.status(500).json({ success: false, message: "Failed to Update!" });
+            // res.status(500).json({ success: false, message: "Failed to Update!" });
+            next(err)
         }
     }
 
@@ -97,7 +98,8 @@ class Controller {
 
             res.status(200).json({ success: true, message: 'Data updated successfully', data: newemployeeData });
         } catch (err) {
-            res.status(500).json({ success: false, message: "Failed to Update!" });
+            next(err)
+            // res.status(500).json({ success: false, message: "Failed to Update!" });
         }
 
     }
@@ -139,7 +141,7 @@ class Controller {
             return res.status(201).json({ success: true, message: "Employee added successfully", employee: savedEmployee });
         } catch (error) {
             next(error)
-            return res.status(500).json({ success: false, message: "Failed to add Employee" });
+            // return res.status(500).json({ success: false, message: "Failed to add Employee" });
         }
     }
 
@@ -164,8 +166,9 @@ class Controller {
             return res.status(200).json({ success: true, message: 'KPI added to employee', employee: employeeWithKpi });
 
         } catch (error) {
-            console.error(error);
-            return res.status(500).json({ success: false, message: 'Server error' });
+            // console.error(error);
+            // return res.status(500).json({ success: false, message: 'Server error' });
+            next(error)
         }
     };
 

@@ -120,6 +120,37 @@ class Controller {
         }
     }
 
+
+    // ---------------------  Update Team name
+    async updateTeamName(req, res, next) {
+
+        try {
+
+            // Check if the request body is empty
+            if (!req.body || Object.keys(req.body).length === 0) {
+                return res.status(400).json({ success: false, message: "You must add Team name" });
+            }
+
+            // Check if the name already exists
+            const teamExists = await teamModel.findOne({ name: req.body.name });
+            if (teamExists) {
+                return res.status(400).json({ message: 'Email already exists' });
+            }
+
+            // Update the Team by ID
+            const teamData = await teamModel.findByIdAndUpdate(
+                req.params.id,
+                { $set: req.body },
+                { new: true }
+            );
+
+            res.status(200).json({ success: true, message: 'Data updated successfully', data: teamData });
+        } catch (err) {
+            next(err)
+            // res.status(500).json({ success: false, message: "Failed to Update!" });
+        }
+
+    }
 }
 
 
