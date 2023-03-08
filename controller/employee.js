@@ -17,7 +17,7 @@ class Controller {
     // -------------------- Fetch All Employees
     async allEmployees(req, res, next) {
         try {
-            const employees = await employeeModel.find({}, '-kpis')
+            const employees = await employeeModel.find({}, '-kpis');
             res.status(200).json({ success: true, message: 'Employees', data: employees });
         } catch (err) {
             next(err);

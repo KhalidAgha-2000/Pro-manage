@@ -38,10 +38,10 @@ const employeeSchema = new Schema({
             }
         }
     ],
-    team: [{
+    team: {
         type: Schema.Types.ObjectId,
         ref: 'Team',
-    }],
+    },
 },
     {
         collection: 'employees',

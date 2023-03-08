@@ -6,10 +6,6 @@ const teamSchema = new Schema({
         required: true,
         lowercase: true
     },
-    // employee: [{
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'Employee',
-    // }],
 },
     {
         collection: 'teams',
@@ -19,12 +15,19 @@ const teamSchema = new Schema({
     }
 );
 
+teamSchema.virtual('employees', {
+    ref: 'Employee',
+    localField: '_id',
+    foreignField: 'team',
+    options: {
+        select: 'first_name last_name email -team' // Specify the fields to be loaded from the employee document
+    }
+});
 
-
-teamSchema.virtual('employee', {
-    ref: 'Employee',//Model to populate from 
-    localField: '_id', // field in Current Model = Category
-    foreignField: 'team',// field in Book Model
+teamSchema.pre(['find', 'findOne'], function () {
+    this.populate(['employees'])
 })
+
 const Model = model('Team', teamSchema);
 module.exports = Model;
+

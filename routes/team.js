@@ -16,6 +16,7 @@ router.group('/teams', (teamRouter) => {
     teamRouter.get('/specific-team/:id', controller.specificTeam)
     teamRouter.post('/add-team', controller.addTeam)
     teamRouter.put('/assign-employees-to-team/:id', controller.assignEmployeeToTeam)
+    teamRouter.delete('/remove-team/:id', controller.deleteTeam)
 })
 
 module.exports = router

@@ -5,15 +5,19 @@ class Controller {
     // -------------------- Fetch All Teams
     async allTeams(req, res, next) {
         try {
-            const teams = await teamModel.find({}, '-employee');
-            // const teams = await teamModel.find({}, '-employee');
-            // const teamsWithCount = teams.map(team => {
-            //     return {
-            //         ...team,
-            //         employeeCount: team.employee.length || 0
-            //     }
-            // });
-            res.status(200).json({ success: true, message: 'Teams', data: teams });
+            const teams = await teamModel.find({})
+            const teamData = teams.map(team => ({
+                _id: team._id,
+                name: team.name,
+                numberOfEmployees: team.employees.length,
+                employees: team.employees.map(employee => ({
+                    _id: employee._id,
+                    Employee_Name: employee.Employee_Name,
+                    email: employee.email,
+                    phone: employee.phone
+                }))
+            }));
+            res.status(200).json({ success: true, message: 'All Teams', data: teamData });
         } catch (err) {
             next(err);
         }
@@ -22,12 +26,11 @@ class Controller {
     // -------------------- Fetch Specific Team
     async specificTeam(req, res, next) {
         try {
-            const team = await teamModel.findById(req.params.id)
-            // .populate({
-            //     path: 'employee',
-            //     select: `first_name last_name`
-            //  });
-            res.status(200).json({ success: true, message: 'Team Information', data: team });
+            const team = await teamModel.findById(req.params.id).populate('employees')
+            if (!team) {
+                return res.status(404).json({ success: false, message: "Team not found" });
+            }
+            res.status(200).json({ success: true, message: 'Team Information', numberOfEmployees: team.employees.length, data: team });
         } catch (err) {
             next(err);
         }
@@ -61,84 +64,63 @@ class Controller {
 
     }
 
-    // -------------------- Delete
-    async deleteKpi(req, res, next) {
+    // -------------------- Delete / Check if team does not has employee(s)
+    async deleteTeam(req, res, next) {
         try {
+            const team = await teamModel.findById(req.params.id).populate('employees')
 
-            // Delete KPI from database
-            const deletedKpi = await teamModel.findByIdAndDelete(req.params.id);
-
-            if (!deletedKpi) {
-                return res.status(404).json({ success: false, message: "KPI not found" });
+            if (!team) {
+                return res.status(404).json({ success: false, message: "Team not found" });
             }
 
-            res.status(200).json({ success: true, message: "KPI removed from database" });
+            // Check if Team has employees
+            if (team.employees && team.employees.length > 0) {
+                res.status(403).json({ success: false, message: "This Team has a list of employees, cannot be deleted" });
+            } else {
+                // Delete Team from database
+                const deletedTeam = await teamModel.findByIdAndDelete(req.params.id);
+
+                if (!deletedTeam) {
+                    return res.status(404).json({ success: false, message: "Team not found" });
+                }
+
+                res.status(200).json({ success: true, message: "Team removed from database!" });
+            }
         } catch (err) {
             next(err);
         }
     };
 
     // -------------------- Assign employees To Team
-
     async assignEmployeeToTeam(req, res, next) {
         try {
-            // First, check if the employee is already assigned to a team
-            const existingEmployee = await employeeModel.findOne({ _id: req.body.employeeId });
-            if (existingEmployee.team) {
-                if (existingEmployee.team.toString() === req.params.id) {
-                    return res.send({ success: false, message: 'Employee is already assigned to this team' })
-                } else {
-                    return res.send({ success: false, message: 'Employee is already assigned to another team' })
-                }
+            let { id } = req.params;
+            const teamm = await teamModel.findById(id);
+            const employee = await employeeModel.findById(req.body.employeeId);
+
+            if (!employee) {
+                return res.status(404).json({ success: false, message: "Employee not found" });
             }
 
+            if (!teamm) {
+                return res.status(404).json({ success: false, message: "Team not found" });
+            }
 
-            // If the employee is not assigned to a team, add them to the new team
-            const updatedEmployee = await employeeModel.findOneAndUpdate(
-                { _id: employeeId },
-                { team: req.params.id },
-                { new: true }
-            ).populate({ path: 'team' });
+            if (employee.team && employee.team !== id) {
+                const assignedTeam = await teamModel.findById(employee.team);
+                return res.status(409).json({ success: false, message: `Employee ${employee.Employee_Name} is already assigned to team: ${assignedTeam.name}`, employeeData: employee });
+            }
 
-            return res.send({ success: true, message: 'Employee has been added to the team', data: updatedEmployee })
+            employee.team = id;
+            await employee.save();
+
+            return res.status(200).json({ success: true, data: employee, message: `Employee ${employee.Employee_Name} has been successfully assigned to team: ${teamm.name}` });
         } catch (err) {
-            console.error(err);
-            return res.send({ success: false, message: 'Failed to add employee to team' })
+            next(err)
         }
-        // try {
-
-        //     const employee = await employeeModel.findById(req.body.employeeID);
-        //     if (!employee) {
-        //         res.status(404).json({ success: false, message: "Employee not found" })
-        //         return
-        //     }
-
-        //     const team = await teamModel.findById(req.params.id);
-        //     if (!team) {
-        //         res.status(404).json({ success: false, message: "Team not found" })
-        //         return
-        //     }
-
-        //     // ------------ Check if employee already in the team
-        //     if (team.employee.includes(req.body.employeeID)) {
-        //         res.status(409).json({ success: false, message: "Employee is already in the team" })
-        //         return
-        //     }
-
-        //     team.employee.push(req.body.employeeID);
-        //     const updatedTeam = await team.save();
-
-
-        //     res.status(201).json({ success: true, message: "Employee successfully assigned to the team", data: updatedTeam })
-        // } catch (err) {
-        //     next(err);
-        // }
     }
 
-
 }
-
-
 
 
 const controller = new Controller(); //Creating an instance from this class 
