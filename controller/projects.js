@@ -5,8 +5,57 @@ class Controller {
     // -------------------- Fetch All Projects
     async allProjects(req, res, next) {
         try {
-            const Projects = await projectModel.find({});
-            res.status(200).json({ success: true, message: 'Projects', data: Projects });
+            //Archived / not Archived
+            const isArchived = req.query.isArchived === 'true'; // convert query parameter to boolean
+            const query = isArchived ? { 'archive.archived': true } : { 'archive.archived': false };
+            const projects = await projectModel.find(query).populate('team');
+
+            // const projects = await projectModel.find({}).populate('team');
+            const projectData = projects.map(projj => ({
+                _id: projj._id,
+                name: projj.name,
+                archive: projj.archive,
+                status: projj.in_progress,
+                team: projj.team._id,
+                teamName: projj.team.name,
+                numberOfEmployees: projj.team.employees.length,
+                numberOfProjectOfTheTeam: projj.team.projects.length,
+            }));
+            res.status(200).json({ success: true, message: 'Projects', data: projectData, });
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    // -------------------- Fetch Specific Project
+    async specificProject(req, res, next) {
+        try {
+
+            const project = await projectModel.findById(req.params.id).populate('team')
+            // .populate({ path: 'team', select: 'name employees' })
+            // .select('-team.projects');
+            let data = {
+                // const projects = await projectModel.find({}).populate('team');
+                _id: project._id,
+                name: project.name,
+                archive: project.archive.archived,
+                archiveDate: project.archive.arcivedDate,
+                status: project.in_progress,
+                team: project.team._id,
+                teamName: project.team.name,
+                teamemployees: project.team.employees.map(emp => ({
+                    _id: emp._id,
+                    first_name: emp.first_name,
+                    last_name: emp.last_name,
+                    email: emp.email,
+                    Employee_Name: emp.Employee_Name,
+                })),
+                numberOfEmployees: project.team.employees.length,
+                numberOfProjectOfTheTeam: project.team.projects.length,
+
+            }
+
+            res.status(200).json({ success: true, message: 'Project Information!', data: data });
         } catch (err) {
             next(err);
         }
@@ -87,7 +136,7 @@ class Controller {
                 return res.status(404).json({ success: false, message: "Project not found" });
             }
 
-            // Update the admin by ID
+            // Update the Project by ID
             const in_progress = project.in_progress;
             const newProjectData = await projectModel.findByIdAndUpdate(
                 req.params.id,
@@ -101,7 +150,34 @@ class Controller {
         }
     }
 
+    // Remove Project to Archive
+    async archiveProject(req, res, next) {
+        try {
+            const project = await projectModel.findById({ _id: req.params.id })
 
+            if (!project) {
+                return res.status(404).json({ success: false, message: "Project not found" });
+            }
+            if (project.archive.archived) {
+                return res.status(400).json({ success: false, message: "Project is already archived" });
+            }
+            // Archive the Project by ID
+            const newProjectData = await projectModel.findByIdAndUpdate(
+                req.params.id,
+                {
+                    $set: {
+                        'archive.archived': true,
+                        'archive.arcivedDate': new Date().toDateString()
+                    }
+                },
+                { new: true }
+            );
+
+            res.status(200).json({ success: true, message: 'Project Removed to Archive successfully', data: newProjectData });
+        } catch (err) {
+            next(err)
+        }
+    }
 }
 
 

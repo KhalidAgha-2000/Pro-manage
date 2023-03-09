@@ -11,6 +11,17 @@ const projectSchema = new Schema({
         required: true,
         default: false,
     },
+    archive: {
+        archived: {
+            type: Boolean,
+            required: false,
+            default: false,
+        },
+        arcivedDate: {
+            type: Intl,
+        }
+    },
+
     team: {
         type: Schema.Types.ObjectId,
         ref: 'Team',

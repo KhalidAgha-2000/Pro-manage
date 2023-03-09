@@ -13,10 +13,12 @@ router.group('/projects', (projectRouter) => {
 
     // ---------- Project Routes
     projectRouter.get('/all-projects', controller.allProjects)
+    projectRouter.get('/specific-project/:id', controller.specificProject)
     projectRouter.post('/add-project', controller.addProject)
     projectRouter.put('/update-project-name/:id', controller.updateProjectName)
     projectRouter.put('/change-project-status/:id', controller.changeProjectStatus)
-    // projectRouter.delete('/remove-kpi/:id', controller.deleteKPI)
+    projectRouter.put('/archive-project/:id', controller.archiveProject)
+    // projectRouter.delete('/remove-project/:id', controller.deleteProject)
 })
 
 module.exports = router
