@@ -178,6 +178,33 @@ class Controller {
             next(err)
         }
     }
+
+    // Change Team of project
+    async changeTeamOfProject(req, res, next) {
+        try {
+            const project = await projectModel.findById({ _id: req.params.id })
+
+            if (!project) {
+                return res.status(404).json({ success: false, message: "Project not found" });
+            }
+
+            // Update the Project by ID
+            const teamID = await teamModel.findById({ _id: req.body.teamID })
+            if (!teamID) {
+                return res.status(404).json({ success: false, message: "Team not found" });
+            }
+
+            const newProjectData = await projectModel.findByIdAndUpdate(
+                req.params.id,
+                { $set: { team: teamID } },
+                { new: true }
+            );
+
+            res.status(200).json({ success: true, message: 'New Team assigned successfully', data: newProjectData });
+        } catch (err) {
+            next(err)
+        }
+    }
 }
 
 

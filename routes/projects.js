@@ -18,7 +18,7 @@ router.group('/projects', (projectRouter) => {
     projectRouter.put('/update-project-name/:id', controller.updateProjectName)
     projectRouter.put('/change-project-status/:id', controller.changeProjectStatus)
     projectRouter.put('/archive-project/:id', controller.archiveProject)
-    // projectRouter.delete('/remove-project/:id', controller.deleteProject)
+    projectRouter.put('/change-team/:id', controller.changeTeamOfProject)
 })
 
 module.exports = router
