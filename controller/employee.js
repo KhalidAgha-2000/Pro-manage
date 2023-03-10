@@ -1,4 +1,6 @@
 const employeeModel = require('../model/employee')
+const projectModel = require('../model/projects')
+const roletModel = require('../model/role')
 const kpiModel = require('../model/kpi')
 const cloudinary = require('cloudinary').v2
 const ObjectID = require('mongodb').ObjectId
@@ -17,7 +19,8 @@ class Controller {
     // -------------------- Fetch All Employees
     async allEmployees(req, res, next) {
         try {
-            const employees = await employeeModel.find({}, '-kpis');
+            // const employees = await employeeModel.find({});
+            const employees = await employeeModel.find({}, '-kpis -roles');
             res.status(200).json({ success: true, message: 'Employees', data: employees });
         } catch (err) {
             next(err);
@@ -27,9 +30,39 @@ class Controller {
     // -------------------- Fetch Specific Employee
     async specificEmployee(req, res, next) {
         try {
-            const employee = await employeeModel.findById(req.params.id).populate('kpis.kpi')
+            const employee = await employeeModel.findById(req.params.id)
+                // .populate('team')
+                .populate(['roles.role', 'roles.project', 'team'])
+                .exec()
 
-            res.status(200).json({ success: true, message: 'Employee Information!', data: employee });
+            let data = {
+                _id: employee._id,
+                first_name: employee.first_name,
+                last_name: employee.last_name,
+                email: employee.email,
+                phone: employee.phone,
+                image: employee.image,
+                team: employee.team._id,
+                teamName: employee.team.name,
+                teamEmployeeCount: employee.team.employees.length,
+
+                teamProjectCount: employee.team.projects.length,
+                kpis: employee.kpis.map(kk => ({
+                    kpi: kk.kpi,
+                    rate: kk.rate,
+                    kpiDate: kk.kpiDate
+                })),
+
+                roles: employee.roles.map(rr => ({
+                    role: rr.role,
+                    project: {
+                        id: rr.project._id,
+                        name: rr.project.name
+                    }
+                }))
+
+            }
+            res.status(200).json({ success: true, message: 'Employee Information!', data: data });
         } catch (err) {
             next(err);
         }
@@ -213,6 +246,38 @@ class Controller {
             next(err)
         }
     };
+
+
+    // -------------------- Assign Role To Employee 
+    async assignRoleToEmployee(req, res, next) {
+
+        try {
+            const project = await projectModel.findById({ _id: req.params.id });
+            const employee = await employeeModel.findById({ _id: req.body.employeeID }).populate('roles.role');
+            const role = await roletModel.findById({ _id: req.body.roleID });
+
+            if (!project) {
+                return res.status(404).json({ success: false, message: "Project not found" });
+            }
+            if (!employee) {
+                return res.status(404).json({ success: false, message: "Employee not found" });
+            }
+            if (!role) {
+                return res.status(404).json({ success: false, message: "Role not found" });
+            }
+            employee.roles.push({ project: project._id, role: role._id });
+            await employee.save();
+
+            const respond = {
+                status: 200,
+                message: 'Role added successfully',
+                data: project,
+            }
+            res.status(200).json(respond);
+        } catch (err) {
+            next(err)
+        }
+    }
 
 }
 

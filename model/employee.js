@@ -42,6 +42,18 @@ const employeeSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Team',
     },
+    roles: [
+        {
+            role: {
+                type: Schema.Types.ObjectId,
+                ref: 'Role'
+            },
+            project: {
+                type: Schema.Types.ObjectId,
+                ref: 'Project'
+            }
+        }
+    ]
 },
     {
         collection: 'employees',
@@ -55,10 +67,6 @@ const employeeSchema = new Schema({
 employeeSchema.virtual('Employee_Name').get(function () {
     return this.first_name.charAt(0).toUpperCase() + this.first_name.slice(1).toLowerCase() + ' ' + this.last_name.charAt(0).toUpperCase() + this.last_name.slice(1).toLowerCase()
 })
-
-// employeeSchema.pre(['find', 'findOne'], function () {
-//     this.populate(['team'])
-// })
 
 const Model = model('Employee', employeeSchema);
 module.exports = Model;

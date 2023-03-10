@@ -8,7 +8,7 @@ class Controller {
             //Archived / not Archived
             const isArchived = req.query.isArchived === 'true'; // convert query parameter to boolean
             const query = isArchived ? { 'archive.archived': true } : { 'archive.archived': false };
-            const projects = await projectModel.find(query).populate('team');
+            const projects = await projectModel.find(query, null, { timeout: 20000 }).populate('team');
 
             // const projects = await projectModel.find({}).populate('team');
             const projectData = projects.map(projj => ({
