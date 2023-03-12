@@ -22,18 +22,16 @@ const Login = () => {
     const handleLogin = async (e) => {
         e.preventDefault();
 
-
         try {
             const response = await axios.post('http://localhost:5000/api/v1/registration/login', { email, password });
             setNotificationBar(true)
             setPass(true)
             setNotificationBarMessage(response.data.message)
             localStorage.setItem('token', response.data.token); // Set token in local storage
+            localStorage.setItem('id', response.data.data._id); // Set ID in local storage
             setTimeout(() => {
                 navigate('/dashboard/Admins'); // Navigate to home page after 3s delay
             }, 3000);
-            // console.log(response.data);
-            // alert(response.data.message)
         } catch (error) {
             if (error.response && error.response.data) {
                 // Update error and messageError state if there is an error response
@@ -45,7 +43,6 @@ const Login = () => {
                 setNotificationBar(true)
                 setPass(false)
                 setNotificationBarMessage(error.response.data.message)
-                // console.log(error.response.data.message);
             }
         }
         finally {

@@ -4,7 +4,7 @@ import Header from "./Shared/Header";
 function Dashboard(props) {
 
     return (
-        <div className='dashboard'>
+        <div className='dashboard flex h-screen overflow-hidden'>
             <SideBar />
             <div className='dashboard-body'>
                 <Header />
