@@ -6,6 +6,7 @@ var dotenv = require('dotenv')
 var createError = require('http-errors');
 const mongoose = require('mongoose');
 var bodyparser = require('body-parser')
+var cors = require('cors');
 dotenv.config()
 
 
@@ -27,6 +28,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 app.listen(5000 || process.env.PORT)
 
