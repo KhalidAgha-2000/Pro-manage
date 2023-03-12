@@ -1,2 +1,30 @@
-/.env
-/node_modules
+# Backend
+/Backend/.env
+/Backend/node_modules
+
+# Frontend
+
+/Frontend/ERP/.env
+/Frontend/ERP/logs
+/Frontend/ERP/*.log
+/Frontend/ERP/npm-debug.log*
+/Frontend/ERP/yarn-debug.log*
+/Frontend/ERP/yarn-error.log*
+/Frontend/ERP/pnpm-debug.log*
+/Frontend/ERP/lerna-debug.log*
+
+/Frontend/ERP/node_modules
+/Frontend/ERP/dist
+/Frontend/ERP/dist-ssr
+/Frontend/ERP/*.local
+
+# Editor directories and files
+/Frontend/ERP/.vscode/*
+/Frontend/ERP/!.vscode/extensions.json
+/Frontend/ERP/.idea
+/Frontend/ERP/.DS_Store
+/Frontend/ERP/*.suo
+/Frontend/ERP/*.ntvs*
+/Frontend/ERP/*.njsproj
+/Frontend/ERP/*.sln
+/Frontend/ERP/*.sw?
