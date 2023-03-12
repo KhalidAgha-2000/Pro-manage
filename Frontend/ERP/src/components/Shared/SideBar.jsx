@@ -10,37 +10,8 @@ import axios from 'axios';
 import { Context } from '../Context/Context';
 
 
-const SideBar = () => {
-    const { setNotificationBar, setNotificationBarMessage, setPass } = useContext(Context)
-    const [dataSpecificAdmin, setDataSpecificAdmin] = useState([])
-    let adminID = localStorage.getItem('id')
+const SideBar = (props) => {
 
-
-    const getSpecificAdminData = async () => {
-        try {
-            const response = await axios.get(`http://localhost:5000/api/v1/admins//specific-admin/${adminID}`, {
-                headers: { token: localStorage.getItem('token') }
-            })
-            setDataSpecificAdmin(response.data.data)
-        } catch (error) {
-            if (error.response && error.response.data) {
-                setNotificationBar(true)
-                setPass(false)
-                setNotificationBarMessage("Oops! Some thing wrong, try again")
-                console.log(response);
-            }
-        }
-        finally {
-            setInterval(() => {
-                setNotificationBar(false)
-                setPass(false)
-                setNotificationBarMessage('')
-            }, 4000);
-        }
-    }
-    useEffect(() => {
-        getSpecificAdminData()
-    }, [])
     return (
 
         <div className='sticky top-0 flex flex-col w-1/4 min-h-max
@@ -54,11 +25,11 @@ const SideBar = () => {
                 <div className="profile h-20 aspect-square border-4 border-orange rounded-full ">
                     <img
                         // src="https://images.pexels.com/photos/343717/pexels-photo-343717.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                        src={dataSpecificAdmin.image}
+                        src={props.dataSpecificAdmin.image}
                         alt="admin-image"
                         className="profile--image h-full aspect-square rounded-full object-cover" />
                 </div>
-                <span className='text-xl font-semibold font-montserrat text-orange uppercase'>{dataSpecificAdmin.username}</span>
+                <span className='text-xl font-semibold font-montserrat text-orange uppercase'>{props.dataSpecificAdmin.username}</span>
             </header>
 
             {/* Dashboard Links */}

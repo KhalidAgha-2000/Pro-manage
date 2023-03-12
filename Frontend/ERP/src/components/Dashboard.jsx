@@ -1,13 +1,44 @@
 import { Outlet } from "react-router-dom";
 import SideBar from "./Shared/SideBar";
 import Header from "./Shared/Header";
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
+import { Context } from "./Context/Context";
 function Dashboard(props) {
 
+    const { setNotificationBar, setNotificationBarMessage, setPass, adminData } = useContext(Context)
+    const [dataSpecificAdmin, setDataSpecificAdmin] = useState([])
+
+
+    const getSpecificAdminData = async () => {
+        try {
+            const response = await axios.get(`http://localhost:5000/api/v1/admins//specific-admin/${adminData}`, {
+                headers: { token: localStorage.getItem('token') }
+            })
+            setDataSpecificAdmin(response.data.data)
+        } catch (error) {
+            if (error.response && error.response.data) {
+                setNotificationBar(true)
+                setPass(false)
+                setNotificationBarMessage("Oops! Some thing wrong, try again")
+            }
+        }
+        finally {
+            setInterval(() => {
+                setNotificationBar(false)
+                setPass(false)
+                setNotificationBarMessage('')
+            }, 4000);
+        }
+    }
+    useEffect(() => {
+        getSpecificAdminData()
+    }, [])
     return (
-        <div className='dashboard flex h-screen overflow-hidden'>
-            <SideBar />
-            <div className='dashboard-body'>
-                <Header />
+        <div className='dashboard flex w-full h-screen overflow-hidden'>
+            <SideBar dataSpecificAdmin={dataSpecificAdmin} />
+            <div className='dashboard-body w-3/4'>
+                <Header dataSpecificAdmin={dataSpecificAdmin} />
                 <Outlet />
             </div>
         </div>

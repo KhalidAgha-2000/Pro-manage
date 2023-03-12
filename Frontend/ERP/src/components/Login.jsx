@@ -7,7 +7,7 @@ import { Context } from './Context/Context';
 
 const Login = () => {
     const navigate = useNavigate();
-    const { setNotificationBar, setNotificationBarMessage, setPass } = useContext(Context)
+    const { setNotificationBar, setNotificationBarMessage, setPass, setAdminData } = useContext(Context)
 
     // Initialize state variables
     const [formValues, setFormValues] = useState({
@@ -28,7 +28,7 @@ const Login = () => {
             setPass(true)
             setNotificationBarMessage(response.data.message)
             localStorage.setItem('token', response.data.token); // Set token in local storage
-            localStorage.setItem('id', response.data.data._id); // Set ID in local storage
+            setAdminData(response.data.data._id)
             setTimeout(() => {
                 navigate('/dashboard/Admins'); // Navigate to home page after 3s delay
             }, 3000);
