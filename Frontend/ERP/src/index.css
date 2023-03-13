@@ -98,3 +98,8 @@
     color: #df5b28;
     background-color: #f0f0f0;
 }
+
+
+#general__search::-webkit-search-cancel-button {
+    display: none;
+}

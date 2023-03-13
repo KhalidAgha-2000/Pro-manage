@@ -15,7 +15,7 @@ const SideBar = (props) => {
     return (
 
         <div className='sticky top-0 flex flex-col w-1/4 min-h-max
-         text-light py-1 px-3 overflow-hidden bg-dark
+         text-light py-1 px-3 overflow-hidden bg-dark rounded-r-3xl
          ' >
 
             {/* SideBar -- SideNav */}
