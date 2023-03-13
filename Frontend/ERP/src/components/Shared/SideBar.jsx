@@ -24,12 +24,16 @@ const SideBar = (props) => {
              py-2 pb-15 bg-light text-dark rounded-xl my-6 border-4 border-orange'>
                 <div className="profile h-20 aspect-square border-4 border-orange rounded-full ">
                     <img
-                        // src="https://images.pexels.com/photos/343717/pexels-photo-343717.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                        src={props.dataSpecificAdmin.image}
+                        src=
+                        {props.dataSpecificAdmin.image && props.dataSpecificAdmin.image ||
+                            "https://images.pexels.com/photos/343717/pexels-photo-343717.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                        }
                         alt="admin-image"
                         className="profile--image h-full aspect-square rounded-full object-cover" />
                 </div>
-                <span className='text-xl font-semibold font-montserrat text-orange uppercase'>{props.dataSpecificAdmin.username}</span>
+                <span className='text-xl font-semibold font-montserrat text-orange uppercase'>
+                    {props.dataSpecificAdmin.username && props.dataSpecificAdmin.username || "..."}
+                </span>
             </header>
 
             {/* Dashboard Links */}

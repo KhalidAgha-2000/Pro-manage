@@ -6,6 +6,15 @@ import { useState } from 'react';
 import { Context } from './Context/Context';
 
 const Login = () => {
+    const checkIfEmpty = (obj) => {
+        let status = false
+        for (let key in obj) {
+            if (obj[key] === "") {
+                status = true
+            }
+        }
+        return status;
+    }
     const navigate = useNavigate();
     const { setNotificationBar, setNotificationBarMessage, setPass, setAdminData } = useContext(Context)
 
@@ -28,7 +37,8 @@ const Login = () => {
             setPass(true)
             setNotificationBarMessage(response.data.message)
             localStorage.setItem('token', response.data.token); // Set token in local storage
-            setAdminData(response.data.data._id)
+            localStorage.setItem('id', response.data.data._id); // Set token in local storage
+            // setAdminData(response.data.data._id)
             setTimeout(() => {
                 navigate('/dashboard/Admins'); // Navigate to home page after 3s delay
             }, 3000);
@@ -96,16 +106,10 @@ const Login = () => {
                     </div>
 
                     <button
-                        className='btnbtn'
+                        disabled={checkIfEmpty(formValues)}
+                        className='btnbtn disabled:cursor-not-allowed disabled:opacity-25'
                         type="submit" name='login'>Continue
                     </button>
-
-                    {/* Error message
-                    {error &&
-                        <span className='animate-bounce   w-3/5 my-6 text-center  transition-all duration-1000 text-[#b91c1c] font-bold h-auto'>
-                            {messageError}
-                        </span>
-                    } */}
 
                 </form>
             </div>

@@ -6,13 +6,13 @@ import { useContext, useEffect, useState } from "react";
 import { Context } from "./Context/Context";
 function Dashboard(props) {
 
-    const { setNotificationBar, setNotificationBarMessage, setPass, adminData } = useContext(Context)
+    const { setNotificationBar, setNotificationBarMessage, setPass } = useContext(Context)
     const [dataSpecificAdmin, setDataSpecificAdmin] = useState([])
-
+    const adminID = localStorage.getItem('id')
 
     const getSpecificAdminData = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/v1/admins//specific-admin/${adminData}`, {
+            const response = await axios.get(`http://localhost:5000/api/v1/admins//specific-admin/${adminID}`, {
                 headers: { token: localStorage.getItem('token') }
             })
             setDataSpecificAdmin(response.data.data)

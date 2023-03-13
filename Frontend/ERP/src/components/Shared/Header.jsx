@@ -7,7 +7,8 @@ const Header = (props) => {
                 <h1 className='text-3xl'><b>Dashboard</b></h1>
                 <p className='relative ml-10 text-xl 
                 before:absolute before:bg-[#4bb543] before:top-2 before:-left-6 before:w-4 before:h-4 before:rounded-full before:animate-pulse'
-                >{props.dataSpecificAdmin.email}</p>
+                >{props.dataSpecificAdmin.email && props.dataSpecificAdmin.email || "..."}</p>
+                {/* {props.dataSpecificAdmin.email ? props.dataSpecificAdmin.email : "Admin Email"}</p> */}
 
             </div>
 
