@@ -20,7 +20,7 @@ function Dashboard(props) {
             if (error.response && error.response.data) {
                 setNotificationBar(true)
                 setPass(false)
-                setNotificationBarMessage("Oops! Some thing wrong, try again")
+                setNotificationBarMessage("Oops! Some thing wrong, try to reload")
             }
         }
         finally {

@@ -6,6 +6,7 @@ import Dashboard from './components/Dashboard'
 import Admins from './components/Admins'
 import Login from './components/Login'
 import Notification from './components/Shared/Notification'
+import NotFound from './components/Shared/NotFound'
 
 function App() {
   const { notificationBar, setNotificationBar, notificationBarMessage, setNotificationBarMessage } = useContext(Context)
@@ -24,11 +25,14 @@ function App() {
             localStorage.getItem('token') !== null || '' ?
               <Route path="/dashboard" element={<Dashboard />}>
                 <Route path="Admins" element={<Admins />} />
+                {/* <Route path="*" element={<NotFound />} /> */}
               </Route>
               :
-              <Route path="*" element={<Login />} />
+              <Route path="/login" element={<Login />} />
           }
+          <Route path="*" element={<NotFound />} />
         </Routes>
+
       </Router>
 
     </div>

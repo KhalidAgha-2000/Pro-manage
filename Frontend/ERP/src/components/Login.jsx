@@ -60,7 +60,7 @@ const Login = () => {
         <div className='Login flex h-screen'>
 
             {/* Right */}
-            <div className="left-side w-1/3 h-screen bg-light  flex flex-col items-center justify-center ">
+            <div className="left-side w-2/5 h-screen bg-light  flex flex-col items-center justify-center ">
                 <img src={logo} alt="Logo" className='w-52 h-auto aspect-square p-2' />
                 <h1 className='w-full text-center font-extrabold transition-all duration-1000 font-montserrat text-4xl my-2 text-orange'>ERP_System</h1>
                 <h5 className='text-dark text-2xl '>Facilitate your HR management</h5>
@@ -68,7 +68,7 @@ const Login = () => {
             </div>
 
             {/* Left */}
-            <div className="right-side w-2/3 flex flex-col items-center py-14 h-screen bg-orange">
+            <div className="right-side w-3/5 flex flex-col items-center py-14 h-screen bg-orange">
                 <img src={logo} alt="Logo" className='w-10' />
                 <h1 className='w-[80%] h-auto m font-semibold text-2xl  text-light text-center m-auto'>Sign In as Administrator</h1>
                 <form
