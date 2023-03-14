@@ -5,6 +5,7 @@ import Admins from './components/Admins'
 import Login from './components/Login'
 import Notification from './components/Shared/Notification'
 import NotFound from './components/Shared/NotFound'
+import Analysis from './components/Analysis'
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
           {
             localStorage.getItem('token') !== null || '' ?
               <Route path="/dashboard" element={<Dashboard />}>
-                <Route path="Admins" element={<Admins />} />
+                <Route path="Analysis" element={<Analysis />} />
                 {/* <Route path="*" element={<NotFound />} /> */}
               </Route>
               :
