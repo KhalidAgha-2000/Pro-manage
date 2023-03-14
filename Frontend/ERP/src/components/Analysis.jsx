@@ -27,7 +27,7 @@ const Analysis = () => {
             const response = await axios.get(`http://localhost:5000/api/v1/analysis-data`, {
                 headers: { token: localStorage.getItem('token') }
             })
-            console.log(response.data.data);
+            // console.log(response.data.data);
             await setAnalysisDataState(response.data.data)
         } catch (error) {
             if (error.response && error.response.data) {

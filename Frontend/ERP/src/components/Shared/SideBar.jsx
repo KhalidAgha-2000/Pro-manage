@@ -10,9 +10,11 @@ import NavItem from './NavItem';
 import axios from 'axios';
 import { Context } from '../Context/Context';
 import { motion } from "framer-motion";
+import { NavLink } from 'react-router-dom';
 
 
 const SideBar = (props) => {
+    const [activeNavItem, setActiveNavItem] = useState('Analysis');
 
     return (
 
@@ -45,8 +47,8 @@ const SideBar = (props) => {
             {/* Dashboard Links */}
             <div className="divider relative m-auto h-[1px] w-4/5 bg-light"></div>
 
-            <NavItem title='Analysis' Icon={SiGoogleanalytics} linkTo={'dashboard/Analysis'} />
-            <NavItem title='Admins' Icon={MdAdminPanelSettings} linkTo={'dashboard/Admins'} />
+            <NavItem title='Analysis' Icon={SiGoogleanalytics} linkTo={'dashboard/Analysis'} setActiveNavItem={setActiveNavItem} activeNavItem={activeNavItem} />
+            <NavItem title='Admins' Icon={MdAdminPanelSettings} linkTo={'dashboard/Admins'} setActiveNavItem={setActiveNavItem} activeNavItem={activeNavItem} />
             <NavItem title='Employees' Icon={MdGroupAdd} />
             <NavItem title='Teams' Icon={RiTeamFill} />
             <NavItem title='Projects' Icon={FaProjectDiagram} />
@@ -57,7 +59,7 @@ const SideBar = (props) => {
 
             <NavItem title='Logout' Icon={HiOutlineLogout} />
 
-        </motion.div>
+        </motion.div >
     )
 }
 

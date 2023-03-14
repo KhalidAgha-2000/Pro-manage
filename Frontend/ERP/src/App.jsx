@@ -21,6 +21,7 @@ function App() {
             localStorage.getItem('token') !== null || '' ?
               <Route path="/dashboard" element={<Dashboard />}>
                 <Route path="Analysis" element={<Analysis />} />
+                <Route path="Admins" element={<Admins />} />
                 {/* <Route path="*" element={<NotFound />} /> */}
               </Route>
               :
