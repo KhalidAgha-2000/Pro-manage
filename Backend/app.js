@@ -18,6 +18,7 @@ var teamRouter = require('./routes/team');
 var roleRouter = require('./routes/role');
 var projectRouter = require('./routes/projects');
 var registrationRouter = require('./routes/registration');
+var analysisRouter = require('./routes/analysis');
 
 var app = express();
 
@@ -53,6 +54,7 @@ app.use('/api/v1', employeeRouter);
 app.use('/api/v1', teamRouter);
 app.use('/api/v1', roleRouter);
 app.use('/api/v1', projectRouter);
+app.use('/api/v1', analysisRouter);
 app.use('/api/v1/registration', registrationRouter);
 
 // //-------------------------------------Create and error object,catch 404 and forward to error handler
