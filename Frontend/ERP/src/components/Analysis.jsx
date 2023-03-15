@@ -8,6 +8,7 @@ import { AiFillProject } from "react-icons/ai";
 import { VscSymbolVariable } from "react-icons/vsc";
 import { motion } from "framer-motion";
 import { Context } from './Context/Context';
+import axiosInstance from '../constants/axios';
 
 const Analysis = () => {
     const [analysisDataState, setAnalysisDataState] = useState({})
@@ -24,7 +25,7 @@ const Analysis = () => {
     ]
     const getAllAnalysisData = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/v1/analysis-data`, {
+            const response = await axiosInstance.get('/analysis-data', {
                 headers: { token: localStorage.getItem('token') }
             })
             // console.log(response.data.data);

@@ -4,6 +4,7 @@ import Header from "./Shared/Header";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { Context } from "./Context/Context";
+import axiosInstance from '../constants/axios';
 function Dashboard(props) {
 
     const { setNotificationBar, setNotificationBarMessage, setPass } = useContext(Context)
@@ -12,9 +13,10 @@ function Dashboard(props) {
 
     const getSpecificAdminData = async () => {
         try {
-            const response = await axios.get(`http://localhost:5000/api/v1/admins//specific-admin/${adminID}`, {
-                headers: { token: localStorage.getItem('token') }
-            })
+            const response = await
+                axiosInstance.get(`/admins/specific-admin/${adminID}`, {
+                    headers: { token: localStorage.getItem('token') }
+                })
             setDataSpecificAdmin(response.data.data)
         } catch (error) {
             if (error.response && error.response.data) {
@@ -35,7 +37,7 @@ function Dashboard(props) {
         getSpecificAdminData()
     }, [])
     return (
-        <div className='dashboard flex w-full h-screen overflow-hidden'>
+        <div className='dashboard flex w-full h-[100vh] overflow-hidden '>
             <SideBar dataSpecificAdmin={dataSpecificAdmin} />
             <div className='dashboard-body w-3/4'>
                 <Header dataSpecificAdmin={dataSpecificAdmin} />

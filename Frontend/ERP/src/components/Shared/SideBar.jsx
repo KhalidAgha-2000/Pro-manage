@@ -22,7 +22,7 @@ const SideBar = (props) => {
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2, duration: 0.5, ease: "easeInOut" }} className='sticky top-0 flex flex-col w-1/4 min-h-max
-         text-light py-1 px-3 overflow-hidden bg-dark rounded-r-3xl
+         text-light py-1 px-3 overflow-hidden bg-dark rounded-r-3xl 
          ' >
 
             {/* SideBar -- SideNav */}

@@ -14,8 +14,12 @@ module.exports = {
         // 'orange': '#e14d19',
         'dark': '#151315',
         'light': '#f0f0f0',
+        'success': '#4bb543',
+        'failed': '#ff3333',
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar'),
+  ],
 }

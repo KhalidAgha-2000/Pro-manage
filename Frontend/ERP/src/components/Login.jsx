@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { Context } from './Context/Context';
+import axiosInstance from '../constants/axios';
 
 const Login = () => {
 
@@ -32,7 +33,7 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post('http://localhost:5000/api/v1/registration/login', { email, password });
+            const response = await axiosInstance.post('/registration/login', { email, password });
             setNotificationBar(true)
             setPass(true)
             setNotificationBarMessage(response.data.message)

@@ -8,7 +8,7 @@ const Notification = () => {
         <>
             {notificationBar ?
                 <div
-                    className={`${pass ? 'bg-[#4bb543]' : 'bg-[#ff3333]'}  overflow-hidden w-full absolute z-[9999] h-10 py-2 px-4 text-light font-bold`}
+                    className={`${pass ? 'bg-success' : 'bg-failed'}  overflow-hidden w-full absolute z-[9999] h-10 py-2 px-4 text-light font-bold`}
                 >{notificationBarMessage}
                 </div> : null
             }
