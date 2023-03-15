@@ -5,13 +5,15 @@ import axiosInstance from '../constants/axios';
 import { Context } from './Context/Context';
 import { MdAdminPanelSettings } from 'react-icons/md';
 import { motion } from "framer-motion";
+import Loading from './Shared/Loading';
 const Admins = () => {
-    const { setNotificationBar, setNotificationBarMessage, setPass } = useContext(Context)
+    const { setNotificationBar, setNotificationBarMessage, setPass, loading, setLoading } = useContext(Context)
     const [allAdminsData, setAllAdminsData] = useState([])
     const adminID = localStorage.getItem('id')
 
     const getAllAdmins = async () => {
         try {
+            setLoading(true)
             const response = await
                 axiosInstance.get('/admins/all-admins', {
                     headers: { token: localStorage.getItem('token') }
@@ -26,6 +28,7 @@ const Admins = () => {
             }
         }
         finally {
+            setLoading(false);
             setInterval(() => {
                 setNotificationBar(false)
                 setPass(false)
@@ -38,7 +41,6 @@ const Admins = () => {
     }, [])
     return (
         <div className='w-full h-[75vh] flex flex-wrap justify-center p-3 gap-x-4 gap-y-4 overflow-auto scrollbar-thin scrollbar-thumb-orange scrollbar-track-dark '>
-
             {
                 allAdminsData.map((admin) => (
                     <motion.div

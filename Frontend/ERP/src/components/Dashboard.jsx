@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import SideBar from "./Shared/SideBar";
 import Header from "./Shared/Header";
 import axios from "axios";
+import Loading from './Shared/Loading'
 import { useContext, useEffect, useState } from "react";
 import { Context } from "./Context/Context";
 import axiosInstance from '../constants/axios';
@@ -41,6 +42,7 @@ function Dashboard(props) {
             <SideBar dataSpecificAdmin={dataSpecificAdmin} />
             <div className='dashboard-body w-3/4'>
                 <Header dataSpecificAdmin={dataSpecificAdmin} />
+                <Loading />
                 <Outlet />
             </div>
         </div>

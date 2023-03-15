@@ -12,7 +12,6 @@ function App() {
     <div className=''  >
 
       <Notification />
-
       <Router>
         <Routes>
           <Route path='/' element={<Login />} />

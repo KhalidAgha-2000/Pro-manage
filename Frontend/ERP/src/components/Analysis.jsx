@@ -12,7 +12,7 @@ import axiosInstance from '../constants/axios';
 
 const Analysis = () => {
     const [analysisDataState, setAnalysisDataState] = useState({})
-    const { setNotificationBar, setNotificationBarMessage, setPass } = useContext(Context)
+    const { setNotificationBar, setNotificationBarMessage, setPass, loading, setLoading } = useContext(Context)
     const iconsArray = [
         { icon: <MdAdminPanelSettings size={70} /> },
         { icon: <GiTeamDowngrade size={70} /> },
@@ -25,6 +25,7 @@ const Analysis = () => {
     ]
     const getAllAnalysisData = async () => {
         try {
+            setLoading(true)
             const response = await axiosInstance.get('/analysis-data', {
                 headers: { token: localStorage.getItem('token') }
             })
@@ -38,6 +39,7 @@ const Analysis = () => {
             }
         }
         finally {
+            setLoading(false)
             setInterval(() => {
                 setNotificationBar(false)
                 setPass(false)

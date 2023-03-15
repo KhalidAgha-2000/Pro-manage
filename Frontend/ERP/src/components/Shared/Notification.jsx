@@ -2,15 +2,15 @@ import React, { useContext } from 'react'
 import { Context } from '../Context/Context'
 
 const Notification = () => {
-    const { notificationBar, setNotificationBar, notificationBarMessage, setNotificationBarMessage, pass, setPass } = useContext(Context)
+    const { notificationBar, notificationBarMessage, pass } = useContext(Context)
 
     return (
         <>
-            {notificationBar ?
+            {notificationBar &&
                 <div
                     className={`${pass ? 'bg-success' : 'bg-failed'}  overflow-hidden w-full absolute z-[9999] h-10 py-2 px-4 text-light font-bold`}
                 >{notificationBarMessage}
-                </div> : null
+                </div>
             }
         </>
     )

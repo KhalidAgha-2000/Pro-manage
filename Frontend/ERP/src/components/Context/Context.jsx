@@ -9,13 +9,15 @@ export const ContextBody = ({ children }) => {
     const [pass, setPass] = useState(false)
     const [notificationBarMessage, setNotificationBarMessage] = useState('')
     const [adminData, setAdminData] = useState('')
+    const [loading, setLoading] = useState(false)
     return (
         <Context.Provider
             value={{
                 notificationBar, setNotificationBar,
                 notificationBarMessage, setNotificationBarMessage,
                 pass, setPass,
-                adminData, setAdminData
+                adminData, setAdminData,
+                loading, setLoading
             }}
         >
             {children}
