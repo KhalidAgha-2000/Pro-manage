@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Search from './Search'
 import { motion } from "framer-motion";
 
 const Header = (props) => {
+
+
     return (
         <motion.div
             initial={{ opacity: 0, x: 100 }}

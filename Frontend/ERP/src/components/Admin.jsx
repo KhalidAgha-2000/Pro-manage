@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../constants/axios';
 import { Context } from './Context/Context';
 
-const Admin = () => {
+const Admin = (props) => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [adminData, setAdminData] = useState({})
@@ -23,7 +23,6 @@ const Admin = () => {
                     headers: { token: localStorage.getItem('token') }
                 })
             setAdminData(response.data.data)
-            console.log(adminData);
         } catch (error) {
             if (error.response && error.response.data) {
                 setNotificationBar(true)

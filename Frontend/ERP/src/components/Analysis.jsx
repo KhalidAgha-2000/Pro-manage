@@ -10,7 +10,7 @@ import { motion } from "framer-motion";
 import { Context } from './Context/Context';
 import axiosInstance from '../constants/axios';
 
-const Analysis = () => {
+const Analysis = (props) => {
     const [analysisDataState, setAnalysisDataState] = useState({})
     const { setNotificationBar, setNotificationBarMessage, setPass, loading, setLoading } = useContext(Context)
     const iconsArray = [
@@ -41,14 +41,15 @@ const Analysis = () => {
         finally {
             setLoading(false)
             setInterval(() => {
-                setNotificationBar(false)
                 setPass(false)
                 setNotificationBarMessage('')
+                setNotificationBar(false)
             }, 4000);
         }
     }
     useEffect(() => {
         getAllAnalysisData()
+
     }, [])
 
     return (

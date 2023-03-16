@@ -1,16 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react'
-import Buttons from './Shared/Buttons'
-import { AiOutlineUserDelete, AiFillPushpin, AiFillEdit, AiOutlineInfoCircle } from "react-icons/ai";
+import { AiOutlineUserDelete, AiFillPushpin, AiFillEdit } from "react-icons/ai";
 import axiosInstance from '../constants/axios';
 import { Context } from './Context/Context';
 import { MdAdminPanelSettings } from 'react-icons/md';
-import { BsPinFill } from 'react-icons/bs';
 import { motion } from "framer-motion";
-import Loading from './Shared/Loading';
 import { Link } from 'react-router-dom';
 import { GiCheckMark } from 'react-icons/gi';
 import { TbLetterX } from 'react-icons/tb';
-const Admins = () => {
+const Admins = (props) => {
     const { setNotificationBar, setNotificationBarMessage, setPass, setLoading } = useContext(Context)
     const [allAdminsData, setAllAdminsData] = useState([])
     const [prepareToRemove, setPrepareToRemove] = useState(null)
@@ -51,7 +48,7 @@ const Admins = () => {
                     headers: { token: localStorage.getItem('token') }
                 })
             setAllAdminsData(response.data.data)
-            console.log(response.data.data);
+            // console.log(response.data.data);
         } catch (error) {
             if (error.response && error.response.data) {
                 setNotificationBar(true)
@@ -70,13 +67,14 @@ const Admins = () => {
     }
     useEffect(() => {
         getAllAdmins()
+
     }, [])
     return (
         <div className='w-full h-[75vh] flex flex-wrap justify-center p-3 gap-x-4 gap-y-4 overflow-auto scrollbar-thin scrollbar-thumb-orange scrollbar-track-dark'>
             {
                 allAdminsData
                     .sort((loggedIn) => {
-                        if (loggedIn._id === localStorage.getItem('id')) {
+                        if (loggedIn._id === props.idInToken) {
                             return -1; // admin1 should come first
                         } else {
                             return 0; // keep the same order
@@ -112,13 +110,13 @@ const Admins = () => {
                                 <Link to={"/dashboard/Admins/admin/" + admin._id}>
                                     <AiFillEdit className='hover:scale-150  transition duration-200 ease-in-out' size={20} color='#e04e17' cursor={'pointer'} />
                                 </Link>
-                                <AiOutlineUserDelete className={`hover:scale-150  transition duration-200 ease-in-out ${admin._id === localStorage.getItem('id') && "hidden"}`}
+                                <AiOutlineUserDelete className={`hover:scale-150  transition duration-200 ease-in-out ${admin._id === props.idInToken && "hidden"}`}
                                     size={20} color='#e04e17' cursor={'pointer'} onClick={() => { setPrepareToRemove(admin._id) }}
                                 />
                             </div>
                             {/* Pinned */}
                             <AiFillPushpin size={20} color="#e04e17"
-                                className={`absolute -rotate-90 top-1 left-1 ${admin._id !== localStorage.getItem('id') && "hidden"}`}
+                                className={`absolute -rotate-90 top-1 left-1 ${admin._id !== props.idInToken && "hidden"}`}
                             />
                             {/* Delete */}
                             <div className={`flex justify-around items-center w-full h-full absolute top-0 z-30 bg-light opacity-70  ${prepareToRemove === admin._id ? "flex" : "hidden"} `}>

@@ -10,12 +10,11 @@ function Dashboard(props) {
 
     const { setNotificationBar, setNotificationBarMessage, setPass } = useContext(Context)
     const [dataSpecificAdmin, setDataSpecificAdmin] = useState([])
-    const adminID = localStorage.getItem('id')
 
     const getSpecificAdminData = async () => {
         try {
             const response = await
-                axiosInstance.get(`/admins/specific-admin/${adminID}`, {
+                axiosInstance.get(`/admins/specific-admin/${props.idInToken}`, {
                     headers: { token: localStorage.getItem('token') }
                 })
             setDataSpecificAdmin(response.data.data)
