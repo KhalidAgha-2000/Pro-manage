@@ -4,21 +4,21 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { Context } from './Context/Context';
-import axiosInstance from '../constants/axios';
+import axiosInstance, { checkIfEmpty } from '../constants/axios';
 
 const Login = () => {
 
     // Validation
-    var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    const checkIfEmpty = (obj) => {
-        let status = false
-        for (let key in obj) {
-            if (obj[key] === "" || !validRegex.test(formValues.email)) {
-                status = true
-            }
-        }
-        return status;
-    }
+    // var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    // const checkIfEmpty = (obj) => {
+    //     let status = false
+    //     for (let key in obj) {
+    //         if (obj[key] === "" || !validRegex.test(formValues.email)) {
+    //             status = true
+    //         }
+    //     }
+    //     return status;
+    // }
     const navigate = useNavigate();
     const { setNotificationBar, setNotificationBarMessage, setPass, setAdminData } = useContext(Context)
 
@@ -107,7 +107,7 @@ const Login = () => {
                     </div>
 
                     <button
-                        disabled={checkIfEmpty(formValues)}
+                        disabled={checkIfEmpty(formValues, formValues.email)}
                         className='btnbtn disabled:cursor-not-allowed disabled:opacity-25'
                         type="submit" name='login'>Continue
                     </button>

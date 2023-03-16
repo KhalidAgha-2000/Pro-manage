@@ -6,6 +6,7 @@ import Login from './components/Login'
 import Notification from './components/Shared/Notification'
 import NotFound from './components/Shared/NotFound'
 import Analysis from './components/Analysis'
+import Admin from './components/Admin'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />}>
                 <Route path="Analysis" element={<Analysis />} />
                 <Route path="Admins" element={<Admins />} />
+                <Route path="Admins/admin/:id" element={<Admin />} />
                 {/* <Route path="*" element={<NotFound />} /> */}
               </Route>
               :
