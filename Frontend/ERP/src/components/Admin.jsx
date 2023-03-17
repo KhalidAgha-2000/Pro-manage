@@ -6,6 +6,7 @@ import axiosInstance from '../constants/axios';
 import { Context } from './Context/Context';
 import Buttons from './Shared/Buttons';
 import Cookies from 'js-cookie';
+import logout from '../constants/logout';
 
 const Admin = (props) => {
     const { id } = useParams();
@@ -48,13 +49,16 @@ const Admin = (props) => {
         e.preventDefault()
         try {
             const response = await axiosInstance.put(`/admins/update-info/${id}`, { email: adminEmail, username: adminUsername }, {
-                headers: { token: localStorage.getItem('token') }
+                headers: { token: Cookies.get('token') }
             });
             setLoading(true)
             setNotificationBar(true)
             setPass(true)
             setNotificationBarMessage(response.data.message)
             setAdminData(response.data.data)
+            if (props.idInToken === id) {
+                logout()
+            }
             // console.log(response.data.data);
         } catch (error) {
             if (error.response && error.response.data) {
@@ -94,8 +98,7 @@ const Admin = (props) => {
                     // placeholder={adminData.username}
                     required
                     onChange={(e) =>
-                        setAdminUsername(e.target.value
-                            , console.log(adminUsername))
+                        setAdminUsername(e.target.value)
                     }
                 />
 
@@ -106,8 +109,7 @@ const Admin = (props) => {
                     required
                     type={'email'}
                     onChange={(e) =>
-                        SetAdminEmail(e.target.value
-                            , console.log(adminEmail))
+                        SetAdminEmail(e.target.value)
                     }
                 />
 
@@ -115,9 +117,7 @@ const Admin = (props) => {
                     {props.idInToken === id ?
                         <span className='font-montserrat font-bold text-failed text-lg mx-1'>Logout Required</span>
                         : null}
-                    <Buttons done text={"Done"}
-                    // onClick={(e) => { updateAdminInformation() }}
-                    />
+                    <Buttons done text={"Done"} />
 
                 </div>
             </form>
