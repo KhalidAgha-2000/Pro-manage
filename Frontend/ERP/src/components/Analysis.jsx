@@ -9,6 +9,7 @@ import { VscSymbolVariable } from "react-icons/vsc";
 import { motion } from "framer-motion";
 import { Context } from './Context/Context';
 import axiosInstance from '../constants/axios';
+import Cookies from 'js-cookie';
 
 const Analysis = (props) => {
     const [analysisDataState, setAnalysisDataState] = useState({})
@@ -27,7 +28,8 @@ const Analysis = (props) => {
         try {
             setLoading(true)
             const response = await axiosInstance.get('/analysis-data', {
-                headers: { token: localStorage.getItem('token') }
+                headers: { token: Cookies.get('token') }
+                // headers: { token: localStorage.getItem('token') }
             })
             // console.log(response.data.data);
             await setAnalysisDataState(response.data.data)

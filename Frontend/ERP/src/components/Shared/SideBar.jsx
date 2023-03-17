@@ -10,12 +10,13 @@ import NavItem from './NavItem';
 import axios from 'axios';
 import { Context } from '../Context/Context';
 import { motion } from "framer-motion";
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import logout from '../../constants/logout';
 
 
 const SideBar = (props) => {
     const [activeNavItem, setActiveNavItem] = useState('Analysis');
-
+    const navigate = useNavigate()
     return (
 
         <motion.div
@@ -57,8 +58,19 @@ const SideBar = (props) => {
 
             <div className="divider relative m-auto h-[1px] w-4/5 bg-light"></div>
 
-            <NavItem title='Logout' Icon={HiOutlineLogout} />
 
+            <div
+                onClick={logout}
+                className={`nav__item relative flex justify-start items-center text-orange gap-16 py-3 px-10 
+                    rounded-xl overflow-hidden cursor-pointer transition duration-200 ease-in-out 
+                     hover:bg-orange hover:text-light`}
+            >
+                <HiOutlineLogout className='text-lg' />
+                <h2 className={`
+                    text-base font-semibold font-montserrat `}>
+                    Logut
+                </h2>
+            </div>
         </motion.div >
     )
 }

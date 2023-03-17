@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../constants/axios';
 import { Context } from './Context/Context';
 import Buttons from './Shared/Buttons';
+import Cookies from 'js-cookie';
 
 const Admin = (props) => {
     const { id } = useParams();
@@ -21,7 +22,8 @@ const Admin = (props) => {
             setLoading(true)
             const response = await
                 axiosInstance.get(`/admins/specific-admin/${id}`, {
-                    headers: { token: localStorage.getItem('token') }
+                    headers: { token: Cookies.get('token') }
+                    // headers: { token: localStorage.getItem('token') }
                 })
             setAdminData(response.data.data)
         } catch (error) {
@@ -109,10 +111,14 @@ const Admin = (props) => {
                     }
                 />
 
-                <div className='w-11/12 justify-end flex'>
+                <div className='w-11/12 items-center justify-end flex'>
+                    {props.idInToken === id ?
+                        <span className='font-montserrat font-bold text-failed text-lg mx-1'>Logout Required</span>
+                        : null}
                     <Buttons done text={"Done"}
                     // onClick={(e) => { updateAdminInformation() }}
                     />
+
                 </div>
             </form>
             <div className='flex items-center gap-x-1'>

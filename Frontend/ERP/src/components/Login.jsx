@@ -1,10 +1,13 @@
 import React, { useContext } from 'react'
 import logo from '../assets/logo.png'
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { Context } from './Context/Context';
-import axiosInstance, { checkIfEmpty } from '../constants/axios';
+import axiosInstance from '../constants/axios';
+import checkIfEmpty from '../constants/validation';
+import Cookies from 'js-cookie';
+
+
 
 const Login = () => {
 
@@ -37,10 +40,11 @@ const Login = () => {
             setNotificationBar(true)
             setPass(true)
             setNotificationBarMessage(response.data.message)
-            localStorage.setItem('token', response.data.token); // Set token in local storage
-            localStorage.setItem('id', response.data.data._id); // Set _id in local storage
+            Cookies.set('token', response.data.token, { expires: 1 / 24 }); // Expires in 1 hour (1/24 of a day)
+            Cookies.set('id', response.data.data._id, { expires: 1 / 24 }); // Expires in 1 hour (1/24 of a day)
             setTimeout(() => {
                 navigate('/dashboard/Analysis'); // Navigate to home page after 3s delay
+                window.location.reload()
             }, 3000);
         } catch (error) {
             if (error.response && error.response.data) {

@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Link } from 'react-router-dom';
 import { GiCheckMark } from 'react-icons/gi';
 import { TbLetterX } from 'react-icons/tb';
+import Cookies from 'js-cookie';
 const Admins = (props) => {
     const { setNotificationBar, setNotificationBarMessage, setPass, setLoading } = useContext(Context)
     const [allAdminsData, setAllAdminsData] = useState([])
@@ -17,7 +18,8 @@ const Admins = (props) => {
             setLoading(true)
             const response = await
                 axiosInstance.delete(`/admins/remove-admin/${id}`, {
-                    headers: { token: localStorage.getItem('token') }
+                    headers: { token: Cookies.get('token') }
+                    // headers: { token: localStorage.getItem('token') }
                 })
             setNotificationBar(true)
             setPass(true)
@@ -45,7 +47,8 @@ const Admins = (props) => {
             setLoading(true)
             const response = await
                 axiosInstance.get('/admins/all-admins', {
-                    headers: { token: localStorage.getItem('token') }
+                    headers: { token: Cookies.get('token') }
+                    // headers: { token: localStorage.getItem('token') }
                 })
             setAllAdminsData(response.data.data)
             // console.log(response.data.data);

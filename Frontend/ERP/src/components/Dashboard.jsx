@@ -1,11 +1,11 @@
 import { Outlet } from "react-router-dom";
 import SideBar from "./Shared/SideBar";
 import Header from "./Shared/Header";
-import axios from "axios";
 import Loading from './Shared/Loading'
 import { useContext, useEffect, useState } from "react";
 import { Context } from "./Context/Context";
 import axiosInstance from '../constants/axios';
+import Cookies from "js-cookie";
 function Dashboard(props) {
 
     const { setNotificationBar, setNotificationBarMessage, setPass } = useContext(Context)
@@ -15,7 +15,8 @@ function Dashboard(props) {
         try {
             const response = await
                 axiosInstance.get(`/admins/specific-admin/${props.idInToken}`, {
-                    headers: { token: localStorage.getItem('token') }
+                    // headers: { token: localStorage.getItem('token') }
+                    headers: { token: Cookies.get('token') }
                 })
             setDataSpecificAdmin(response.data.data)
         } catch (error) {
