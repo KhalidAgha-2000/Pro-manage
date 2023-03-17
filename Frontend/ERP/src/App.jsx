@@ -24,7 +24,7 @@ function App() {
               <Route path="/dashboard" element={<Dashboard idInToken={idInToken} />}>
                 <Route path="Analysis" element={<Analysis />} />
                 <Route path="Admins" element={<Admins idInToken={idInToken} />} />
-                <Route path="Admins/admin/:id" element={<Admin />} />
+                <Route path="Admins/admin/:id" element={<Admin idInToken={idInToken} />} />
                 {/* <Route path="*" element={<NotFound />} /> */}
               </Route>
               :
