@@ -15,9 +15,14 @@ const Admin = (props) => {
     const { setNotificationBar, setNotificationBarMessage, setPass, setLoading } = useContext(Context)
     const [adminEmail, SetAdminEmail] = useState(adminData.email)
     const [adminUsername, setAdminUsername] = useState(adminData.username)
+    const [adminNewPassword, setAdminNewPassword] = useState('')
+    const [adminOldPassword, setAdminOldPassword] = useState('')
+
     useEffect(() => {
         specificAdmin()
     }, [])
+
+    // Data of the admin
     const specificAdmin = async () => {
         try {
             setLoading(true)
@@ -45,6 +50,7 @@ const Admin = (props) => {
 
     }
 
+    // Update email / username 
     const updateAdminInformation = async (e) => {
         e.preventDefault()
         try {
@@ -78,6 +84,39 @@ const Admin = (props) => {
 
     }
 
+    // change Password
+    const changePassword = async (e) => {
+        e.preventDefault()
+        try {
+            const response = await axiosInstance.put(`/admins/change-password/${id}`, { newPassword: adminNewPassword, oldPassword: adminOldPassword }, {
+                headers: { token: Cookies.get('token') }
+            });
+            setLoading(true)
+            setNotificationBar(true)
+            setPass(true)
+            setNotificationBarMessage(response.data.message)
+            setAdminData(response.data.data)
+            if (props.idInToken === id) {
+                logout()
+            }
+            // console.log(response.data.data);
+        } catch (error) {
+            if (error.response && error.response.data) {
+                setNotificationBar(true)
+                setPass(false)
+                setNotificationBarMessage(error.response.data.message)
+                // console.log(error.response.data.message);
+            }
+        } finally {
+            setInterval(() => {
+                setLoading(false)
+                setNotificationBar(false)
+                setPass(false)
+                setNotificationBarMessage('')
+            }, 4000);
+        }
+    }
+
     return (
         <div className='ww-full h-[75vh] flex flex-col justify-start p-3 gap-4 overflow-auto scrollbar-thin scrollbar-thumb-orange scrollbar-track-dark'>
             <div className='w-11/12 flex justify-between items-center mb-4'>
@@ -91,6 +130,7 @@ const Admin = (props) => {
                 </span>
 
             </div>
+            {/* Email / Username */}
             <form onSubmit={updateAdminInformation}>
                 <input className='w-11/12 h-14 rounded-md px-6 my-1  
                     bg-light outline-none border-2 font-montserrat font-semibold border-orange placeholder:text-dark text-dark'
@@ -121,22 +161,38 @@ const Admin = (props) => {
 
                 </div>
             </form>
-            <div className='flex items-center gap-x-1'>
 
-                <div className='flex justify-between items-center w-11/12 gap-x-1'>
+            {/* Change Password */}
+            <form onSubmit={changePassword}>
 
-                    <input className='w-1/2 h-14 rounded-md p-2  my-1 flex justify-between items-center 
-                bg-light outline-none border-2 border-orange placeholder:text-dark text-dark'
-                        placeholder='Old Password'
-                    />
-                    <input className='w-1/2 h-14 rounded-md p-2  my-1 flex justify-between items-center 
-                bg-light outline-none border-2 border-orange placeholder:text-dark text-dark'
-                        placeholder='New Password'
-                    />
-
+                <div className='flex items-center gap-x-1'>
+                    <div className='flex justify-between items-center w-11/12 gap-x-1'>
+                        <input required type={'password'} className='w-1/2 h-14 rounded-md p-2  my-1 flex justify-between items-center 
+                            bg-light outline-none border-2 border-orange placeholder:text-dark text-dark'
+                            placeholder='Old Password'
+                            onChange={(e) =>
+                                setAdminOldPassword(e.target.value)
+                            }
+                        />
+                        <input required type={'password'} className='w-1/2 h-14 rounded-md p-2  my-1 flex justify-between items-center 
+                            bg-light outline-none border-2 border-orange placeholder:text-dark text-dark'
+                            placeholder='New Password'
+                            onChange={(e) =>
+                                setAdminNewPassword(e.target.value)
+                            }
+                        />
+                    </div>
                 </div>
-                <GiCheckMark color='#4bb543' cursor={'pointer'} />
-            </div>
+
+                <div className='w-11/12 items-center justify-end flex'>
+                    {props.idInToken === id ?
+                        <span className='font-montserrat font-bold text-failed text-lg mx-1'>Logout Required</span>
+                        : null}
+                    <Buttons done text={"Done"} />
+                </div>
+
+            </form>
+
         </div >
     )
 }
