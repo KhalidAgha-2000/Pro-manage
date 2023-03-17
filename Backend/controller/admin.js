@@ -135,7 +135,7 @@ class Controller {
             const admin = await adminModel.findById(req.params.id);
             const isMatch = await bcrypt.compare(req.body.oldPassword, admin.password);
             if (!isMatch) {
-                return res.status(400).json({ success: false, message: "Invalid old password" });
+                return res.status(400).json({ success: false, message: "Incorrect old password" });
             }
 
             //Check length of password && Hash password
@@ -151,7 +151,7 @@ class Controller {
             );
             res.status(200).json({ success: true, message: "Password changed successfully", data: updatedData });
         } catch (err) {
-            next(err)
+            res.status(500).json({ success: false, message: "Failed to Update!", err });
         }
     }
 
