@@ -87,6 +87,10 @@ class Controller {
                 return res.status(400).json({ message: 'Email already exists' });
             }
 
+            // Check if the request body is empty
+            if (!req.body || Object.keys(req.body).length === 0) {
+                return res.status(400).json({ success: false, message: "You must fill input" });
+            }
             // Update the admin by ID
             const newAdminData = await adminModel.findByIdAndUpdate(
                 req.params.id,
@@ -96,7 +100,7 @@ class Controller {
 
             res.status(200).json({ success: true, message: 'Data updated successfully', data: newAdminData });
         } catch (err) {
-            res.status(500).json({ success: false, message: "Failed to Update!" });
+            res.status(500).json({ success: false, message: "Failed to Update!", err });
         }
 
     }

@@ -37,11 +37,11 @@ router.group('/admins', (adminRouter) => {
     });
 
     // ---------- Admin Routes
+    adminRouter.post('/add-admin', upload.single('image'), controller.addAdmin)
     adminRouter.get('/all-admins', controller.allAdmin)
     adminRouter.get('/specific-admin/:id', controller.specificAdmin)
-    adminRouter.post('/add-admin', upload.single('image'), controller.addAdmin)
     adminRouter.put('/change-image/:id', upload.single('image'), controller.changeImage)
-    adminRouter.post('/update-info/:id', controller.UpdateAdminInfo)
+    adminRouter.put('/update-info/:id', controller.UpdateAdminInfo)
     adminRouter.delete('/remove-admin/:id', controller.deleteAdmin)
     adminRouter.put('/change-password/:id', controller.changePassword)
 
