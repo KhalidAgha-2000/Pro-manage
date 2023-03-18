@@ -53,19 +53,19 @@ class Controller {
         const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
         // Upload image to Cloudinary
-        // let imageUploadResult;
-        // try {
-        //     imageUploadResult = await cloudinary.uploader.upload(req.file.path);
-        // } catch (error) {
-        //     return res.status(400).json({ success: false, message: "Image is required" });
-        // }
+        let imageUploadResult;
+        try {
+            imageUploadResult = await cloudinary.uploader.upload(req.file.path);
+        } catch (error) {
+            return res.status(400).json({ success: false, message: "Image is required" });
+        }
 
         // Create new admin
         const newAdmin = new adminModel({
             email: req.body.email,
             username: req.body.username,
             password: hashedPassword,
-            // image: imageUploadResult.secure_url,
+            image: imageUploadResult.secure_url,
         });
 
         // Save new admin to database
@@ -162,7 +162,7 @@ class Controller {
         try {
             imageUploadResult = await cloudinary.uploader.upload(req.file.path);
         } catch (error) {
-            return res.status(400).json({ success: false, message: "Add image to upload image !" });
+            return res.status(400).json({ success: false, message: "Add image to upload !" });
         }
 
         try {
