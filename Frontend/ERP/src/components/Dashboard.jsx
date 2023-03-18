@@ -8,7 +8,7 @@ import axiosInstance from '../constants/axios';
 import Cookies from "js-cookie";
 function Dashboard(props) {
 
-    const { setNotificationBar, setNotificationBarMessage, setPass } = useContext(Context)
+    const { setNotifications } = useContext(Context)
     const [dataSpecificAdmin, setDataSpecificAdmin] = useState([])
 
     const getSpecificAdminData = async () => {
@@ -21,16 +21,20 @@ function Dashboard(props) {
             setDataSpecificAdmin(response.data.data)
         } catch (error) {
             if (error.response && error.response.data) {
-                setNotificationBar(true)
-                setPass(false)
-                setNotificationBarMessage("Oops! Some thing wrong, try to reload")
+                setNotifications({
+                    notificationBar: true,
+                    pass: false,
+                    notificationBarMessage: "Oops! Some thing wrong, try to reload"
+                })
             }
         }
         finally {
             setInterval(() => {
-                setNotificationBar(false)
-                setPass(false)
-                setNotificationBarMessage('')
+                setNotifications({
+                    pass: false,
+                    notificationBarMessage: '',
+                    notificationBar: false,
+                })
             }, 4000);
         }
     }

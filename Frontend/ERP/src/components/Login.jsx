@@ -11,19 +11,8 @@ import Cookies from 'js-cookie';
 
 const Login = () => {
 
-    // Validation
-    // var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    // const checkIfEmpty = (obj) => {
-    //     let status = false
-    //     for (let key in obj) {
-    //         if (obj[key] === "" || !validRegex.test(formValues.email)) {
-    //             status = true
-    //         }
-    //     }
-    //     return status;
-    // }
     const navigate = useNavigate();
-    const { setNotificationBar, setNotificationBarMessage, setPass, setAdminData } = useContext(Context)
+    const { setNotifications } = useContext(Context)
 
     // Initialize state variables
     const [formValues, setFormValues] = useState({ email: '', password: '' });
@@ -37,11 +26,13 @@ const Login = () => {
 
         try {
             const response = await axiosInstance.post('/registration/login', { email, password });
-            setNotificationBar(true)
-            setPass(true)
-            setNotificationBarMessage(response.data.message)
-            Cookies.set('token', response.data.token, { expires: 1 / 24 }); // Expires in 1 hour (1/24 of a day)
-            Cookies.set('id', response.data.data._id, { expires: 1 / 24 }); // Expires in 1 hour (1/24 of a day)
+            setNotifications({
+                notificationBar: true,
+                pass: true,
+                notificationBarMessage: response.data.message
+            })
+            await Cookies.set('token', response.data.token, { expires: 1 / 24 }); // Expires in 1 hour (1/24 of a day)
+            await Cookies.set('id', response.data.data._id, { expires: 1 / 24 }); // Expires in 1 hour (1/24 of a day)
             setTimeout(() => {
                 navigate('/dashboard/Analysis'); // Navigate to home page after 3s delay
                 window.location.reload()
@@ -54,19 +45,22 @@ const Login = () => {
                     email: '',
                     password: ''
                 });
-                setNotificationBar(true)
-                setPass(false)
-                setNotificationBarMessage(error.response.data.message)
+                setNotifications({
+                    notificationBar: true,
+                    pass: false,
+                    notificationBarMessage: error.response.data.message
+                })
             }
         }
         finally {
             setInterval(() => {
-                setNotificationBar(false)
-                setPass(false)
-                setNotificationBarMessage('')
+                setNotifications({
+                    notificationBarMessage: '',
+                    pass: false,
+                    notificationBar: false,
+                })
             }, 4000);
         }
-
     };
 
 

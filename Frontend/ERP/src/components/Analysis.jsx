@@ -13,7 +13,7 @@ import Cookies from 'js-cookie';
 
 const Analysis = (props) => {
     const [analysisDataState, setAnalysisDataState] = useState({})
-    const { setNotificationBar, setNotificationBarMessage, setPass, loading, setLoading } = useContext(Context)
+    const { setNotifications, setLoading } = useContext(Context)
     const iconsArray = [
         { icon: <MdAdminPanelSettings size={70} /> },
         { icon: <GiTeamDowngrade size={70} /> },
@@ -29,23 +29,26 @@ const Analysis = (props) => {
             setLoading(true)
             const response = await axiosInstance.get('/analysis-data', {
                 headers: { token: Cookies.get('token') }
-                // headers: { token: localStorage.getItem('token') }
             })
             // console.log(response.data.data);
             await setAnalysisDataState(response.data.data)
         } catch (error) {
             if (error.response && error.response.data) {
-                setNotificationBar(true)
-                setPass(false)
-                setNotificationBarMessage("Oops! Some thing wrong, try to reload")
+                setNotifications({
+                    notificationBar: true,
+                    pass: false,
+                    notificationBarMessage: "Oops! Some thing wrong, try to reload"
+                })
             }
         }
         finally {
             setLoading(false)
             setInterval(() => {
-                setPass(false)
-                setNotificationBarMessage('')
-                setNotificationBar(false)
+                setNotifications({
+                    pass: false,
+                    notificationBarMessage: '',
+                    notificationBar: false,
+                })
             }, 4000);
         }
     }
@@ -56,7 +59,6 @@ const Analysis = (props) => {
 
     return (
         <>
-
             <div className='flex flex-wrap mt-10 gap-7 p-4'>
 
                 {Object.entries(analysisDataState).map((analys, index) => (

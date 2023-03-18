@@ -12,11 +12,12 @@ const Admin = (props) => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [adminData, setAdminData] = useState({})
-    const { setNotificationBar, setNotificationBarMessage, setPass, setLoading } = useContext(Context)
+    const { setNotifications, setLoading } = useContext(Context)
     const [adminEmail, SetAdminEmail] = useState(adminData.email)
     const [adminUsername, setAdminUsername] = useState(adminData.username)
     const [adminNewPassword, setAdminNewPassword] = useState('')
     const [adminOldPassword, setAdminOldPassword] = useState('')
+    const [image, setImage] = useState(null);
 
     useEffect(() => {
         specificAdmin()
@@ -34,18 +35,22 @@ const Admin = (props) => {
             setAdminData(response.data.data)
         } catch (error) {
             if (error.response && error.response.data) {
-                setNotificationBar(true)
-                setPass(false)
-                setNotificationBarMessage("Oops! Some thing wrong, try to reload")
+                setNotifications({
+                    notificationBar: true,
+                    pass: false,
+                    notificationBarMessage: "Oops! Some thing wrong, try to reload"
+                })
             }
         }
         finally {
             setLoading(false);
             setInterval(() => {
-                setNotificationBar(false)
-                setPass(false)
-                setNotificationBarMessage('')
-            }, 4000);
+                setNotifications({
+                    pass: false,
+                    notificationBarMessage: '',
+                    notificationBar: false,
+                })
+            }, 9000);
         }
 
     }
@@ -58,9 +63,11 @@ const Admin = (props) => {
                 headers: { token: Cookies.get('token') }
             });
             setLoading(true)
-            setNotificationBar(true)
-            setPass(true)
-            setNotificationBarMessage(response.data.message)
+            setNotifications({
+                notificationBar: true,
+                pass: true,
+                notificationBarMessage: response.data.message
+            })
             setAdminData(response.data.data)
             if (props.idInToken === id) {
                 logout()
@@ -68,20 +75,23 @@ const Admin = (props) => {
             // console.log(response.data.data);
         } catch (error) {
             if (error.response && error.response.data) {
-                setNotificationBar(true)
-                setPass(false)
-                setNotificationBarMessage(error.response.data.message)
+                setNotifications({
+                    notificationBar: true,
+                    pass: false,
+                    notificationBarMessage: error.response.data.message
+                })
                 // console.log(error.response.data.message);
             }
         } finally {
             setInterval(() => {
                 setLoading(false)
-                setNotificationBar(false)
-                setPass(false)
-                setNotificationBarMessage('')
-            }, 4000);
+                setNotifications({
+                    pass: false,
+                    notificationBarMessage: '',
+                    notificationBar: false,
+                })
+            }, 9000);
         }
-
     }
 
     // change Password
@@ -92,9 +102,11 @@ const Admin = (props) => {
                 headers: { token: Cookies.get('token') }
             });
             setLoading(true)
-            setNotificationBar(true)
-            setPass(true)
-            setNotificationBarMessage(response.data.message)
+            setNotifications({
+                notificationBar: true,
+                pass: true,
+                notificationBarMessage: response.data.message
+            })
             setAdminData(response.data.data)
             if (props.idInToken === id) {
                 logout()
@@ -102,20 +114,65 @@ const Admin = (props) => {
             // console.log(response.data.data);
         } catch (error) {
             if (error.response && error.response.data) {
-                setNotificationBar(true)
-                setPass(false)
-                setNotificationBarMessage(error.response.data.message)
+                setNotifications({
+                    notificationBar: true,
+                    pass: false,
+                    notificationBarMessage: error.response.data.message
+                })
                 // console.log(error.response.data.message);
             }
         } finally {
             setInterval(() => {
                 setLoading(false)
-                setNotificationBar(false)
-                setPass(false)
-                setNotificationBarMessage('')
-            }, 4000);
+                setNotifications({
+                    pass: false,
+                    notificationBarMessage: '',
+                    notificationBar: false,
+                })
+            }, 9000);
         }
     }
+
+    // Change Image
+    const handleFileChange = (event) => {
+        setImage(event.target.files[0])
+        console.log(image);
+    };
+    const changeImage = async (e) => {
+        e.preventDefault()
+        try {
+            const formData = new FormData();
+            formData.append('image', image);
+            const response = await axiosInstance.put(`/admins/change-image/${id}`, { image: formData }, {
+                headers: { token: Cookies.get('token') }
+            })
+            // setLoading(true)
+            // setNotificationBar(true)
+            // setPass(true)
+            // setNotificationBarMessage(response.data.message)
+            // setAdminData(response.data.data)
+            // if (props.idInToken === id) {
+            //     logout()
+            // }
+            console.log(response);
+        } catch (error) {
+            if (error.response && error.response.data) {
+                // setNotificationBar(true)
+                // setPass(false)
+                // setNotificationBarMessage(error.response.data.message)
+                console.log(error.response.data.message);
+            }
+        } finally {
+            setInterval(() => {
+                // setLoading(false)
+                // setNotificationBar(false)
+                // setPass(false)
+                // setNotificationBarMessage('')
+            }, 4000);
+        }
+
+    }
+
 
     return (
         <div className='ww-full h-[75vh] flex flex-col justify-start p-3 gap-4 overflow-auto scrollbar-thin scrollbar-thumb-orange scrollbar-track-dark'>
@@ -128,7 +185,6 @@ const Admin = (props) => {
                 <span className="w-max h-auto bg-orange text-light font-bold text-lg font-montserrat px-2.5 py-0.5 rounded-lg">
                     {props.idInToken === id ? "Your" : "Admin"} Information
                 </span>
-
             </div>
             {/* Email / Username */}
             <form onSubmit={updateAdminInformation}>
@@ -192,7 +248,16 @@ const Admin = (props) => {
                 </div>
 
             </form>
-
+            {/* Change Image */}
+            <form onSubmit={changeImage} className='my-3 w-11/12 flex justify-between'>
+                <input onChange={handleFileChange} accept="image/*" type="file" required placeholder='admin-image' />
+                <div>
+                    {props.idInToken === id ?
+                        <span className='font-montserrat font-bold text-failed text-lg mx-1'>Logout Required</span>
+                        : null}
+                    <Buttons done text={"Done"} />
+                </div>
+            </form>
         </div >
     )
 }

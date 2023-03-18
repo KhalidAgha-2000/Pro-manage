@@ -9,7 +9,7 @@ import { GiCheckMark } from 'react-icons/gi';
 import { TbLetterX } from 'react-icons/tb';
 import Cookies from 'js-cookie';
 const Admins = (props) => {
-    const { setNotificationBar, setNotificationBarMessage, setPass, setLoading } = useContext(Context)
+    const { setNotifications, setLoading } = useContext(Context)
     const [allAdminsData, setAllAdminsData] = useState([])
     const [prepareToRemove, setPrepareToRemove] = useState(null)
 
@@ -21,23 +21,29 @@ const Admins = (props) => {
                     headers: { token: Cookies.get('token') }
                     // headers: { token: localStorage.getItem('token') }
                 })
-            setNotificationBar(true)
-            setPass(true)
-            setNotificationBarMessage(response.data.message)
+            setNotifications({
+                notificationBar: true,
+                pass: true,
+                notificationBarMessage: response.data.message
+            })
             setAllAdminsData(allAdminsData.filter((admin) => admin._id !== id))
         } catch (error) {
             if (error.response && error.response.data) {
-                setNotificationBar(true)
-                setPass(false)
-                setNotificationBarMessage("Oops! Some thing wrong, try to reload")
+                setNotifications({
+                    notificationBar: true,
+                    pass: false,
+                    notificationBarMessage: "Oops! Some thing wrong, try to reload"
+                })
             }
         }
         finally {
             setLoading(false);
             setInterval(() => {
-                setNotificationBarMessage('')
-                setPass(false)
-                setNotificationBar(false)
+                setNotifications({
+                    pass: false,
+                    notificationBarMessage: '',
+                    notificationBar: false,
+                })
             }, 9000);
         }
     }
@@ -54,17 +60,21 @@ const Admins = (props) => {
             // console.log(response.data.data);
         } catch (error) {
             if (error.response && error.response.data) {
-                setNotificationBar(true)
-                setPass(false)
-                setNotificationBarMessage("Oops! Some thing wrong, try to reload")
+                setNotifications({
+                    notificationBar: true,
+                    pass: false,
+                    notificationBarMessage: "Oops! Some thing wrong, try to reload"
+                })
             }
         }
         finally {
             setLoading(false);
             setInterval(() => {
-                setNotificationBar(false)
-                setPass(false)
-                setNotificationBarMessage('')
+                setNotifications({
+                    pass: false,
+                    notificationBarMessage: '',
+                    notificationBar: false,
+                })
             }, 4000);
         }
     }
