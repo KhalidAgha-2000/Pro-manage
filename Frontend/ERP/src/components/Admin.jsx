@@ -134,16 +134,17 @@ const Admin = (props) => {
     }
 
     // Change Image
-    const handleFileChange = (event) => {
-        setImage(event.target.files[0])
-        console.log(image);
+
+    const handleImageUpload = (e) => {
+        setImage(e.target.files[0].name)
+        console.log('i', image)
     };
     const changeImage = async (e) => {
         e.preventDefault()
         try {
             const formData = new FormData();
             formData.append('image', image);
-            const response = await axiosInstance.put(`/admins/change-image/${id}`, { image: formData }, {
+            const response = await axiosInstance.put(`/admins/change-image/${id}`, image, {
                 headers: { token: Cookies.get('token') }
             })
             // setLoading(true)
@@ -217,7 +218,6 @@ const Admin = (props) => {
 
                 </div>
             </form>
-
             {/* Change Password */}
             <form onSubmit={changePassword}>
 
@@ -250,7 +250,7 @@ const Admin = (props) => {
             </form>
             {/* Change Image */}
             <form onSubmit={changeImage} className='my-3 w-11/12 flex justify-between'>
-                <input onChange={handleFileChange} accept="image/*" type="file" required placeholder='admin-image' />
+                <input type="file" onChange={handleImageUpload} required />
                 <div>
                     {props.idInToken === id ?
                         <span className='font-montserrat font-bold text-failed text-lg mx-1'>Logout Required</span>
@@ -258,6 +258,7 @@ const Admin = (props) => {
                     <Buttons done text={"Done"} />
                 </div>
             </form>
+
         </div >
     )
 }

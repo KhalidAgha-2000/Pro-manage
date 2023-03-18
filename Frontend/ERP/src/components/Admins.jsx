@@ -2,12 +2,14 @@ import React, { useContext, useEffect, useState } from 'react'
 import { AiOutlineUserDelete, AiFillPushpin, AiFillEdit } from "react-icons/ai";
 import axiosInstance from '../constants/axios';
 import { Context } from './Context/Context';
-import { MdAdminPanelSettings } from 'react-icons/md';
+import { MdAdd, MdAdminPanelSettings } from 'react-icons/md';
 import { motion } from "framer-motion";
 import { Link } from 'react-router-dom';
 import { GiCheckMark } from 'react-icons/gi';
 import { TbLetterX } from 'react-icons/tb';
 import Cookies from 'js-cookie';
+import Buttons from './Shared/Buttons';
+import IconButtons from './Shared/IconButtons';
 const Admins = (props) => {
     const { setNotifications, setLoading } = useContext(Context)
     const [allAdminsData, setAllAdminsData] = useState([])
@@ -83,7 +85,7 @@ const Admins = (props) => {
 
     }, [])
     return (
-        <div className='w-full h-[75vh] flex flex-wrap justify-center p-3 gap-x-4 gap-y-4 overflow-auto scrollbar-thin scrollbar-thumb-orange scrollbar-track-dark'>
+        <div className='w-full h-[75vh] relative flex flex-wrap justify-center p-3 gap-x-4 gap-y-4 overflow-auto scrollbar-thin scrollbar-thumb-orange scrollbar-track-dark'>
             {
                 allAdminsData
                     .sort((loggedIn) => {
@@ -139,6 +141,11 @@ const Admins = (props) => {
                         </motion.div>
                     ))
             }
+            {/* Add Button */}
+            <div className="fixed z-[9999] right-6 bottom-6">
+                <IconButtons Icon={MdAdd} />
+            </div>
+
         </div>
     )
 }
