@@ -70,7 +70,9 @@ const Admin = (props) => {
             })
             setAdminData(response.data.data)
             if (props.idInToken === id) {
-                logout()
+                setInterval(() => {
+                    logout()
+                }, 4000);
             }
             // console.log(response.data.data);
         } catch (error) {
@@ -109,7 +111,9 @@ const Admin = (props) => {
             })
             setAdminData(response.data.data)
             if (props.idInToken === id) {
-                logout()
+                setInterval(() => {
+                    logout()
+                }, 4000);
             }
         } catch (error) {
             if (error.response && error.response.data) {
