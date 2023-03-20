@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { AiOutlineUserDelete, AiFillPushpin, AiFillEdit } from "react-icons/ai";
-import axiosInstance from '../constants/axios';
-import { Context } from './Context/Context';
+import axiosInstance from '../../constants/axios'
+import { Context } from '../Context/Context';
 import { MdAdd, MdAdminPanelSettings } from 'react-icons/md';
 import { motion } from "framer-motion";
 import { Link } from 'react-router-dom';
 import { GiCheckMark } from 'react-icons/gi';
 import { TbLetterX } from 'react-icons/tb';
 import Cookies from 'js-cookie';
-import Buttons from './Shared/Buttons';
-import IconButtons from './Shared/IconButtons';
+import IconButtons from '../Shared/IconButtons';
+
 const Admins = (props) => {
     const { setNotifications, setLoading } = useContext(Context)
     const [allAdminsData, setAllAdminsData] = useState([])

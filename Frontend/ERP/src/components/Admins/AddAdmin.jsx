@@ -1,10 +1,10 @@
 import React, { useState, useContext } from 'react'
 import { GiCancel } from 'react-icons/gi'
 import { useNavigate } from 'react-router-dom'
-import axiosInstance from '../constants/axios'
-import Input from './Admins/Input'
-import Buttons from './Shared/Buttons'
-import { Context } from './Context/Context';
+import axiosInstance from '../../constants/axios'
+import Input from './Input'
+import Buttons from '../Shared/Buttons'
+import { Context } from '../Context/Context';
 import Cookies from 'js-cookie'
 
 const AddAdmin = () => {

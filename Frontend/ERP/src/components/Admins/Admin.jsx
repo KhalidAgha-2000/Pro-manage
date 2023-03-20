@@ -1,13 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { IoMdArrowRoundBack } from 'react-icons/io';
-import { GiCheckMark } from 'react-icons/gi';
 import { useNavigate, useParams } from 'react-router-dom';
-import axiosInstance from '../constants/axios';
-import { Context } from './Context/Context';
-import Buttons from './Shared/Buttons';
+import axiosInstance from '../../constants/axios'
+import Buttons from '../Shared/Buttons'
+import { Context } from '../Context/Context';
 import Cookies from 'js-cookie';
-import logout from '../constants/logout';
-import Input from "./Admins/Input";
+import logout from '../../constants/logout';
+import Input from './Input'
 const Admin = (props) => {
     const { id } = useParams();
     const navigate = useNavigate();

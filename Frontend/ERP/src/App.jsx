@@ -1,18 +1,17 @@
-import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import './App.css'
 import Dashboard from './components/Dashboard'
-import Admins from './components/Admins'
 import Login from './components/Login'
 import Notification from './components/Shared/Notification'
 import NotFound from './components/Shared/NotFound'
 import Analysis from './components/Analysis'
-import Admin from './components/Admin'
 import Cookies from 'js-cookie'
-import { useEffect } from 'react'
-import AddAdmin from './components/AddAdmin'
+import Admins from './components/Admins/Admins'
+import Admin from './components/Admins/Admin'
+import AddAdmin from './components/Admins/AddAdmin'
 
 function App() {
-  // const idInToken = localStorage.getItem('id')
+
   const idInToken = Cookies.get('id')
 
   return (
