@@ -9,6 +9,7 @@ import Analysis from './components/Analysis'
 import Admin from './components/Admin'
 import Cookies from 'js-cookie'
 import { useEffect } from 'react'
+import AddAdmin from './components/AddAdmin'
 
 function App() {
   // const idInToken = localStorage.getItem('id')
@@ -24,17 +25,15 @@ function App() {
           <Route path="/login" element={<Login />} />
           {
             Cookies.get('token') ? (
-              // localStorage.getItem('token') !== null || '' ?
               <Route path="/dashboard" element={<Dashboard idInToken={idInToken} />}>
-                <Route path="Analysis" element={<Analysis />} />
-                <Route path="Admins" element={<Admins idInToken={idInToken} />} />
-                <Route path="Admins/admin/:id" element={<Admin idInToken={idInToken} />} />
+                <Route path="analysis" element={<Analysis />} />
+                <Route path="admins" element={<Admins idInToken={idInToken} />} />
+                <Route path="admins/admin/:id" element={<Admin idInToken={idInToken} />} />
                 {/* <Route path="*" element={<NotFound />} /> */}
+                <Route path='add-admin' element={<AddAdmin />} />
               </Route>
             ) : (
               <Route path="/login" element={<Login />} />
-
-              // <Navigate to="/login" />
             )
           }
           < Route path="*" element={<NotFound />} />

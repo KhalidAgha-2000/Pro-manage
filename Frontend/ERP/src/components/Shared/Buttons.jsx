@@ -13,8 +13,6 @@ const Buttons = ({ text, edit, add, done, remove, disabled, onClick }) => {
              ${done && 'bg-orange'}
              `
             }
-            type={'submit'}
-            disabled={disabled}
             onClick={onClick}
         >
             {text}

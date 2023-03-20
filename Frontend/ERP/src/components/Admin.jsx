@@ -7,17 +7,17 @@ import { Context } from './Context/Context';
 import Buttons from './Shared/Buttons';
 import Cookies from 'js-cookie';
 import logout from '../constants/logout';
-
+import Input from "./Admins/Input";
 const Admin = (props) => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [adminData, setAdminData] = useState({})
     const { setNotifications, setLoading } = useContext(Context)
-    const [adminEmail, SetAdminEmail] = useState(adminData.email)
+    const [adminEmail, setAdminEmail] = useState(adminData.email)
     const [adminUsername, setAdminUsername] = useState(adminData.username)
     const [adminNewPassword, setAdminNewPassword] = useState('')
     const [adminOldPassword, setAdminOldPassword] = useState('')
-    const [image, setImage] = useState(null);
+    const [image, setImage] = useState('');
 
     useEffect(() => {
         specificAdmin()
@@ -111,7 +111,6 @@ const Admin = (props) => {
             if (props.idInToken === id) {
                 logout()
             }
-            // console.log(response.data.data);
         } catch (error) {
             if (error.response && error.response.data) {
                 setNotifications({
@@ -119,7 +118,6 @@ const Admin = (props) => {
                     pass: false,
                     notificationBarMessage: error.response.data.message
                 })
-                // console.log(error.response.data.message);
             }
         } finally {
             setInterval(() => {
@@ -136,48 +134,56 @@ const Admin = (props) => {
     // Change Image
 
     const handleImageUpload = (e) => {
-        setImage(e.target.files[0].name)
+        setImage(e.target.files[0])
         console.log('i', image)
     };
     const changeImage = async (e) => {
         e.preventDefault()
         try {
-            const formData = new FormData();
-            formData.append('image', image);
-            const response = await axiosInstance.put(`/admins/change-image/${id}`, image, {
-                headers: { token: Cookies.get('token') }
+            const response = await axiosInstance.put(`/admins/change-image/${id}`, {
+                image: image
+            }, {
+                headers: {
+                    token: Cookies.get('token'),
+                    "content-type": "multipart/form-data",
+                }
             })
-            // setLoading(true)
-            // setNotificationBar(true)
-            // setPass(true)
-            // setNotificationBarMessage(response.data.message)
-            // setAdminData(response.data.data)
-            // if (props.idInToken === id) {
-            //     logout()
-            // }
-            console.log(response);
+            setLoading(true)
+            setNotifications({
+                notificationBar: true,
+                pass: true,
+                notificationBarMessage: response.data.message
+            })
+            if (props.idInToken === id) {
+                setInterval(() => {
+                    logout()
+                }, 4000);
+            }
         } catch (error) {
             if (error.response && error.response.data) {
-                // setNotificationBar(true)
-                // setPass(false)
-                // setNotificationBarMessage(error.response.data.message)
-                console.log(error.response.data.message);
+                setNotifications({
+                    notificationBar: true,
+                    pass: false,
+                    notificationBarMessage: error.response.data.message
+                })
             }
         } finally {
             setInterval(() => {
-                // setLoading(false)
-                // setNotificationBar(false)
-                // setPass(false)
-                // setNotificationBarMessage('')
-            }, 4000);
+                setLoading(false)
+                setNotifications({
+                    pass: false,
+                    notificationBarMessage: '',
+                    notificationBar: false,
+                })
+            }, 9000);
         }
 
     }
 
 
     return (
-        <div className='ww-full h-[75vh] flex flex-col justify-start p-3 gap-4 overflow-auto scrollbar-thin scrollbar-thumb-orange scrollbar-track-dark'>
-            <div className='w-11/12 flex justify-between items-center mb-4'>
+        <div className='w-full flex flex-col justify-start p-3 gap-4 overflow-auto scrollbar-thin scrollbar-thumb-orange scrollbar-track-dark'>
+            <header className='w-11/12 flex justify-between items-center mb-4'>
                 {/* Back */}
                 <IoMdArrowRoundBack
                     onClick={() => navigate(-1)}
@@ -186,27 +192,21 @@ const Admin = (props) => {
                 <span className="w-max h-auto bg-orange text-light font-bold text-lg font-montserrat px-2.5 py-0.5 rounded-lg">
                     {props.idInToken === id ? "Your" : "Admin"} Information
                 </span>
-            </div>
+            </header>
             {/* Email / Username */}
             <form onSubmit={updateAdminInformation}>
-                <input className='w-11/12 h-14 rounded-md px-6 my-1  
-                    bg-light outline-none border-2 font-montserrat font-semibold border-orange placeholder:text-dark text-dark'
+                <Input
+                    type={'text'}
                     defaultValue={adminData.username}
-                    // placeholder={adminData.username}
-                    required
                     onChange={(e) =>
                         setAdminUsername(e.target.value)
                     }
                 />
-
-                <input className='w-11/12 h-14 rounded-md px-6 my-1  
-                    bg-light outline-none border-2 font-montserrat font-semibold border-orange placeholder:text-dark text-dark'
-                    defaultValue={adminData.email}
-                    // placeholder={adminData.email}
-                    required
+                <Input
                     type={'email'}
+                    defaultValue={adminData.email}
                     onChange={(e) =>
-                        SetAdminEmail(e.target.value)
+                        setAdminEmail(e.target.value)
                     }
                 />
 
@@ -223,21 +223,26 @@ const Admin = (props) => {
 
                 <div className='flex items-center gap-x-1'>
                     <div className='flex justify-between items-center w-11/12 gap-x-1'>
-                        <input required type={'password'} className='w-1/2 h-14 rounded-md p-2  my-1 flex justify-between items-center 
-                            bg-light outline-none border-2 border-orange placeholder:text-dark text-dark'
-                            placeholder='Old Password'
+                        <Input
+                            className='w-1/2'
                             onChange={(e) =>
                                 setAdminOldPassword(e.target.value)
                             }
+                            type={'password'}
+                            placeholder='Old Password'
+
                         />
-                        <input required type={'password'} className='w-1/2 h-14 rounded-md p-2  my-1 flex justify-between items-center 
-                            bg-light outline-none border-2 border-orange placeholder:text-dark text-dark'
-                            placeholder='New Password'
+                        <Input
+                            className='w-1/2'
                             onChange={(e) =>
                                 setAdminNewPassword(e.target.value)
                             }
+                            type={'password'}
+                            placeholder='New Password'
+
                         />
                     </div>
+
                 </div>
 
                 <div className='w-11/12 items-center justify-end flex'>
@@ -250,8 +255,14 @@ const Admin = (props) => {
             </form>
             {/* Change Image */}
             <form onSubmit={changeImage} className='my-3 w-11/12 flex justify-between'>
-                <input type="file" onChange={handleImageUpload} required />
-                <div>
+                <Input
+                    onChange={handleImageUpload}
+                    name="image" defaultValue={image}
+                    placeholder='image'
+                    type='file'
+                    className='pt-3 px-1 w-1/2'
+                />
+                <div className='w-11/12 items-center justify-end flex'>
                     {props.idInToken === id ?
                         <span className='font-montserrat font-bold text-failed text-lg mx-1'>Logout Required</span>
                         : null}

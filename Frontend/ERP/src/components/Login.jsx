@@ -34,7 +34,7 @@ const Login = () => {
             await Cookies.set('token', response.data.token, { expires: 1 / 24 }); // Expires in 1 hour (1/24 of a day)
             await Cookies.set('id', response.data.data._id, { expires: 1 / 24 }); // Expires in 1 hour (1/24 of a day)
             setTimeout(() => {
-                navigate('/dashboard/Analysis'); // Navigate to home page after 3s delay
+                navigate('/dashboard/analysis'); // Navigate to home page after 3s delay
                 window.location.reload()
             }, 3000);
         } catch (error) {

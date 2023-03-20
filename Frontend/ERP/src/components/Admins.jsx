@@ -122,7 +122,7 @@ const Admins = (props) => {
                             </div>
                             {/* Tools */}
                             <div className='h-full w-4 absolute top-0 pr-4 right-3 flex flex-col items-start  justify-evenly  text-light'>
-                                <Link to={"/dashboard/Admins/admin/" + admin._id}>
+                                <Link to={"/dashboard/admins/admin/" + admin._id}>
                                     <AiFillEdit className='hover:scale-150  transition duration-200 ease-in-out' size={20} color='#e04e17' cursor={'pointer'} />
                                 </Link>
                                 <AiOutlineUserDelete className={`hover:scale-150  transition duration-200 ease-in-out ${admin._id === props.idInToken && "hidden"}`}
@@ -142,9 +142,9 @@ const Admins = (props) => {
                     ))
             }
             {/* Add Button */}
-            <div className="fixed z-[9999] right-6 bottom-6">
+            <Link className='fixed z-[9999] right-6 bottom-6' to={"/dashboard/add-admin/"}>
                 <IconButtons Icon={MdAdd} />
-            </div>
+            </Link>
 
         </div>
     )

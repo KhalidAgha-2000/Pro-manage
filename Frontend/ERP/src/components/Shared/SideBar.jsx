@@ -48,8 +48,8 @@ const SideBar = (props) => {
             {/* Dashboard Links */}
             <div className="divider relative m-auto h-[1px] w-4/5 bg-light"></div>
 
-            <NavItem title='Analysis' Icon={SiGoogleanalytics} linkTo={'dashboard/Analysis'} setActiveNavItem={setActiveNavItem} activeNavItem={activeNavItem} />
-            <NavItem title='Admins' Icon={MdAdminPanelSettings} linkTo={'dashboard/Admins'} setActiveNavItem={setActiveNavItem} activeNavItem={activeNavItem} />
+            <NavItem title='Analysis' Icon={SiGoogleanalytics} linkTo={'dashboard/analysis'} setActiveNavItem={setActiveNavItem} activeNavItem={activeNavItem} />
+            <NavItem title='Admins' Icon={MdAdminPanelSettings} linkTo={'dashboard/admins'} setActiveNavItem={setActiveNavItem} activeNavItem={activeNavItem} />
             <NavItem title='Employees' Icon={MdGroupAdd} />
             <NavItem title='Teams' Icon={RiTeamFill} />
             <NavItem title='Projects' Icon={FaProjectDiagram} />
