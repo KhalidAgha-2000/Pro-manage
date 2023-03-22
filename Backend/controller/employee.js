@@ -20,13 +20,57 @@ class Controller {
     async allEmployees(req, res, next) {
         try {
             // const employees = await employeeModel.find({});
-            const employees = await employeeModel.find({}, '-kpis -roles');
+            const employees = await employeeModel.find({}, '-kpis -roles')
             res.status(200).json({ success: true, message: 'Employees', data: employees });
         } catch (err) {
             next(err);
         }
     }
+    // -------------------- Fetch All Employees with Pagination
+    async employeesWithPagination(req, res, next) {
+        try {
+            const page = parseInt(req.query.page) || 1;
 
+            // get the number of items to display per page from the query string
+            const perPage = parseInt(req.query.perPage) || 5;
+
+            // calculate the starting and ending indexes for the current page
+            const startIndex = (page - 1) * perPage;
+            const endIndex = startIndex + perPage;
+
+            const employees = await employeeModel.find({}, '-kpis -roles')
+
+                .populate('team')
+                .sort({ first_name: 1 })
+                .skip(startIndex)
+                .limit(perPage);
+
+            const data = employees.map(e => ({
+                id: e.id,
+                first_name: e.first_name,
+                last_name: e.last_name,
+                Employee_Name: e.Employee_Name,
+                email: e.email,
+                phone: e.phone,
+                image: e.image,
+                team: e.team ? e.team.name : null, // replace team ID with team name
+            }))
+            const totalEmployees = await employeeModel.countDocuments();
+
+            res.status(200).json({
+                success: true,
+                message: "Pagination for Employees",
+                data: data,
+                currentPage: page,
+                endIndex: endIndex,
+                perPage: perPage,
+                totalPages: Math.ceil(totalEmployees / perPage),
+            });
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: 'Server error', error });
+        }
+    }
     // -------------------- Fetch Specific Employee
     async specificEmployee(req, res, next) {
         try {
@@ -96,7 +140,7 @@ class Controller {
         try {
             imageUploadResult = await cloudinary.uploader.upload(req.file.path);
         } catch (error) {
-            return res.status(400).json({ success: false, message: "Add image to upload image !" });
+            return res.status(400).json({ success: false, message: "Add image to upload !" });
         }
 
         try {
@@ -107,8 +151,7 @@ class Controller {
             );
             res.status(200).json({ success: true, message: 'Data updated successfully', data: updatedData });
         } catch (err) {
-            // res.status(500).json({ success: false, message: "Failed to Update!" });
-            next(err)
+            res.status(500).json({ success: false, message: "Failed to Update!" });
         }
     }
 
@@ -148,16 +191,17 @@ class Controller {
         }
 
         //Check length of phone number
+        // if (req.body.phone.toString().length < 8) {
         if (!/^\d{8}$/.test(req.body.phone)) {
             return res.status(500).json({ success: false, message: "Please enter a valid phone number (8) digits" })
         }
         // Upload image to Cloudinary
-        // let imageUploadResult;
-        // try {
-        //     imageUploadResult = await cloudinary.uploader.upload(req.file.path);
-        // } catch (error) {
-        //     return res.status(400).json({ success: false, message: "Image is required" });
-        // }
+        let imageUploadResult;
+        try {
+            imageUploadResult = await cloudinary.uploader.upload(req.file.path);
+        } catch (error) {
+            return res.status(400).json({ success: false, message: "Image is required" });
+        }
 
         // Create new admin
         const newEmployee = new employeeModel({
@@ -165,7 +209,8 @@ class Controller {
             last_name: req.body.last_name,
             email: req.body.email,
             phone: req.body.phone,
-            image: req.body.image,
+            // image: req.body.image,
+            image: imageUploadResult.secure_url,
         });
 
         // Save new Employee to database
