@@ -9,6 +9,7 @@ import Cookies from 'js-cookie'
 import Admins from './components/Admins/Admins'
 import Admin from './components/Admins/Admin'
 import AddAdmin from './components/Admins/AddAdmin'
+import Employees from './components/Employees/Employees'
 
 function App() {
 
@@ -28,6 +29,8 @@ function App() {
                 <Route path="analysis" element={<Analysis />} />
                 <Route path="admins" element={<Admins idInToken={idInToken} />} />
                 <Route path="admins/admin/:id" element={<Admin idInToken={idInToken} />} />
+
+                <Route path="employees" element={<Employees />} />
                 {/* <Route path="*" element={<NotFound />} /> */}
                 <Route path='add-admin' element={<AddAdmin />} />
               </Route>

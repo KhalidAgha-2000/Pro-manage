@@ -50,7 +50,7 @@ const SideBar = (props) => {
 
             <NavItem title='Analysis' Icon={SiGoogleanalytics} linkTo={'dashboard/analysis'} setActiveNavItem={setActiveNavItem} activeNavItem={activeNavItem} />
             <NavItem title='Admins' Icon={MdAdminPanelSettings} linkTo={'dashboard/admins'} setActiveNavItem={setActiveNavItem} activeNavItem={activeNavItem} />
-            <NavItem title='Employees' Icon={MdGroupAdd} />
+            <NavItem title='Employees' Icon={MdGroupAdd} linkTo={'dashboard/employees'} setActiveNavItem={setActiveNavItem} activeNavItem={activeNavItem} />
             <NavItem title='Teams' Icon={RiTeamFill} />
             <NavItem title='Projects' Icon={FaProjectDiagram} />
             <NavItem title='Reports' Icon={TbReportAnalytics} />
