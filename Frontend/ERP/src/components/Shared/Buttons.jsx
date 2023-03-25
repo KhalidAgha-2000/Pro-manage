@@ -1,6 +1,5 @@
-import React from 'react'
-
-const Buttons = ({ text, edit, add, done, remove, disabled, onClick }) => {
+// Buttons
+export const Buttons = ({ text, edit, add, done, remove, disabled, onClick }) => {
     return (
         <button
             className={`w-max h-auto items-center px-4 py-2.5 text-sm font-medium font-montserrat text-center text-light rounded-lg cursor-pointer
@@ -21,4 +20,18 @@ const Buttons = ({ text, edit, add, done, remove, disabled, onClick }) => {
     )
 }
 
-export default Buttons
+
+// Icon Buttons
+export const IconButtons = ({ Icon }) => {
+    return (
+        <button
+            className={`w-max h-max items-center bg-orange px-3 py-3  text-center text-light rounded-full cursor-pointer
+             hover:opacity-70 hover:text-dark  hover:scale-90
+             focus:ring-1 focus:outline-none focus:ring-light 
+             transition duration-700 ease-in-out`
+            }
+        >
+            <Icon className={'text-xl text-light'} />
+        </button >
+    )
+}

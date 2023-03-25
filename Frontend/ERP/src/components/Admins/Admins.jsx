@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { GiCheckMark } from 'react-icons/gi';
 import { TbLetterX } from 'react-icons/tb';
 import Cookies from 'js-cookie';
-import IconButtons from '../Shared/IconButtons';
+import { IconButtons } from '../Shared/Buttons';
 
 const Admins = (props) => {
     const { setNotifications, setLoading } = useContext(Context)

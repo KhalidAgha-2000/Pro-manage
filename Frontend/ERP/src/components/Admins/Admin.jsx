@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import { useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../../constants/axios'
-import Buttons from '../Shared/Buttons'
+import { Buttons } from '../Shared/Buttons'
 import { Context } from '../Context/Context';
 import Cookies from 'js-cookie';
 import logout from '../../constants/logout';
