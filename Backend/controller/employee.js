@@ -19,11 +19,20 @@ class Controller {
     // -------------------- Fetch All Employees
     async allEmployees(req, res, next) {
         try {
-            // const employees = await employeeModel.find({});
             const employees = await employeeModel.find({}, '-kpis -roles')
-            res.status(200).json({ success: true, message: 'Employees', data: employees });
+            const data = employees.map(e => ({
+                id: e.id,
+                first_name: e.first_name,
+                last_name: e.last_name,
+                Employee_Name: e.Employee_Name,
+                email: e.email,
+                phone: e.phone,
+                image: e.image,
+                team: e.team ? e.team.name : null, // replace team ID with team name
+            }))
+            res.status(200).json({ success: true, message: 'Employees', data: data });
         } catch (err) {
-            next(err);
+            res.status(500).json({ message: 'Server error', err });
         }
     }
     // -------------------- Fetch All Employees with Pagination
@@ -37,9 +46,8 @@ class Controller {
             // calculate the starting and ending indexes for the current page
             const startIndex = (page - 1) * perPage;
             const endIndex = startIndex + perPage;
-
+            // using a MongoDB $or operator to match documents that contain any of the search terms in any of the fields
             const employees = await employeeModel.find({}, '-kpis -roles')
-
                 .populate('team')
                 .sort({ first_name: 1 })
                 .skip(startIndex)
@@ -55,7 +63,7 @@ class Controller {
                 image: e.image,
                 team: e.team ? e.team.name : null, // replace team ID with team name
             }))
-            const totalEmployees = await employeeModel.countDocuments();
+            const totalEmployees = await employeeModel.countDocuments({})
 
             res.status(200).json({
                 success: true,
@@ -67,7 +75,7 @@ class Controller {
                 totalPages: Math.ceil(totalEmployees / perPage),
             });
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             res.status(500).json({ message: 'Server error', error });
         }
     }
