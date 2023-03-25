@@ -12,21 +12,18 @@ export const ContextBody = ({ children }) => {
     })
     const { notificationBar, pass, notificationBarMessage } = notifications;
 
-    // const [notificationBar, setNotificationBar] = useState(false)
-    // const [pass, setPass] = useState(false)
-    // const [notificationBarMessage, setNotificationBarMessage] = useState('')
     const [adminData, setAdminData] = useState('')
     const [loading, setLoading] = useState(false)
+    const [search, setSearch] = useState('')
+
     return (
         <Context.Provider
             value={{
-                // notificationBar, setNotificationBar,
-                // notificationBarMessage, setNotificationBarMessage,
-                // pass, setPass,
                 notifications, setNotifications,
                 notificationBar, pass, notificationBarMessage,
                 adminData, setAdminData,
-                loading, setLoading
+                loading, setLoading,
+                search, setSearch,
             }}
         >
             {children}

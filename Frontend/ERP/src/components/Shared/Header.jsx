@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import Search from './Search'
 import { motion } from "framer-motion";
+import { Context } from '../Context/Context';
 
 const Header = (props) => {
-
 
     return (
         <motion.div
@@ -16,7 +16,6 @@ const Header = (props) => {
                 <p className='relative ml-10 text-xl 
                 before:absolute before:bg-[#4bb543] before:top-2 before:-left-6 before:w-4 before:h-4 before:rounded-full before:animate-pulse'
                 >{props.dataSpecificAdmin.email && props.dataSpecificAdmin.email || "..."}</p>
-                {/* {props.dataSpecificAdmin.email ? props.dataSpecificAdmin.email : "Admin Email"}</p> */}
 
             </div>
 
