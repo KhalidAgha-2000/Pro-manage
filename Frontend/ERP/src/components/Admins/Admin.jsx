@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { IoMdArrowRoundBack } from 'react-icons/io';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import axiosInstance from '../../constants/axios'
 import { Buttons } from '../Shared/Buttons'
 import { Context } from '../Context/Context';
@@ -9,7 +9,6 @@ import logout from '../../constants/logout';
 import Input from './Input'
 const Admin = (props) => {
     const { id } = useParams();
-    const navigate = useNavigate();
     const [adminData, setAdminData] = useState({})
     const { setNotifications, setLoading } = useContext(Context)
     const [adminEmail, setAdminEmail] = useState(adminData.email)
@@ -185,35 +184,38 @@ const Admin = (props) => {
 
 
     return (
-        <div className='w-full flex flex-col justify-start p-3 gap-4 overflow-auto scrollbar-thin scrollbar-thumb-orange scrollbar-track-dark'>
+        <div className='w-full m-auto flex flex-col justify-start items-center p-3 gap-4 overflow-auto scrollbar-thin scrollbar-thumb-orange scrollbar-track-dark'>
             <header className='w-11/12 flex justify-between items-center mb-4'>
                 {/* Back */}
-                <IoMdArrowRoundBack
-                    onClick={() => navigate(-1)}
-                    cursor={'pointer'} size={40} color="#e04e17"
-                />
+                <Link to={"/dashboard/admins/"}>
+                    <IoMdArrowRoundBack cursor={'pointer'} size={40} color="#e04e17" />
+                </Link>
                 <span className="w-max h-auto bg-orange text-light font-bold text-lg font-montserrat px-2.5 py-0.5 rounded-lg">
                     {props.idInToken === id ? "Your" : "Admin"} Information
                 </span>
             </header>
             {/* Email / Username */}
-            <form onSubmit={updateAdminInformation}>
-                <Input
-                    type={'text'}
-                    defaultValue={adminData.username}
-                    onChange={(e) =>
-                        setAdminUsername(e.target.value)
-                    }
-                />
-                <Input
-                    type={'email'}
-                    defaultValue={adminData.email}
-                    onChange={(e) =>
-                        setAdminEmail(e.target.value)
-                    }
-                />
+            <form className='w-11/12' onSubmit={updateAdminInformation}>
+                <div className='w-full flex gap-4 items-center justify-between '>
+                    <Input
+                        className='w-1/2 '
+                        type={'text'}
+                        defaultValue={adminData.username}
+                        onChange={(e) =>
+                            setAdminUsername(e.target.value)
+                        }
+                    />
+                    <Input
+                        className='w-1/2'
+                        type={'email'}
+                        defaultValue={adminData.email}
+                        onChange={(e) =>
+                            setAdminEmail(e.target.value)
+                        }
+                    />
+                </div>
 
-                <div className='w-11/12 items-center justify-end flex'>
+                <div className='w-full my-2 flex items-center justify-end '>
                     {props.idInToken === id ?
                         <span className='font-montserrat font-bold text-failed text-lg mx-1'>Logout Required</span>
                         : null}
@@ -222,33 +224,31 @@ const Admin = (props) => {
                 </div>
             </form>
             {/* Change Password */}
-            <form onSubmit={changePassword}>
+            <form className='w-11/12' onSubmit={changePassword}>
 
-                <div className='flex items-center gap-x-1'>
-                    <div className='flex justify-between items-center w-11/12 gap-x-1'>
-                        <Input
-                            className='w-1/2'
-                            onChange={(e) =>
-                                setAdminOldPassword(e.target.value)
-                            }
-                            type={'password'}
-                            placeholder='Old Password'
+                <div className='flex justify-between items-center w-full gap-4'>
+                    <Input
+                        className='w-1/2'
+                        onChange={(e) =>
+                            setAdminOldPassword(e.target.value)
+                        }
+                        type={'password'}
+                        placeholder='Old Password'
 
-                        />
-                        <Input
-                            className='w-1/2'
-                            onChange={(e) =>
-                                setAdminNewPassword(e.target.value)
-                            }
-                            type={'password'}
-                            placeholder='New Password'
+                    />
+                    <Input
+                        className='w-1/2'
+                        onChange={(e) =>
+                            setAdminNewPassword(e.target.value)
+                        }
+                        type={'password'}
+                        placeholder='New Password'
 
-                        />
-                    </div>
+                    />
 
                 </div>
 
-                <div className='w-11/12 items-center justify-end flex'>
+                <div className='w-full my-2 flex items-center justify-end '>
                     {props.idInToken === id ?
                         <span className='font-montserrat font-bold text-failed text-lg mx-1'>Logout Required</span>
                         : null}
@@ -257,7 +257,7 @@ const Admin = (props) => {
 
             </form>
             {/* Change Image */}
-            <form onSubmit={changeImage} className='my-3 w-11/12 flex justify-between'>
+            <form onSubmit={changeImage} className='my-3 w-11/12 flex justify-between items-center'>
                 <Input
                     onChange={handleImageUpload}
                     name="image" defaultValue={image}
@@ -265,7 +265,7 @@ const Admin = (props) => {
                     type='file'
                     className='pt-3 px-1 w-1/2'
                 />
-                <div className='w-11/12 items-center justify-end flex'>
+                <div cclassName='w-1/2 my-2 flex items-center justify-end '>
                     {props.idInToken === id ?
                         <span className='font-montserrat font-bold text-failed text-lg mx-1'>Logout Required</span>
                         : null}

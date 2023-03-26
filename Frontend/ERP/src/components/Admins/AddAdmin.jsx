@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { GiCancel } from 'react-icons/gi'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import axiosInstance from '../../constants/axios'
 import Input from './Input'
 import { Buttons } from '../Shared/Buttons'
@@ -9,7 +9,6 @@ import Cookies from 'js-cookie'
 
 const AddAdmin = () => {
 
-    const navigate = useNavigate()
     const { setNotifications, setLoading } = useContext(Context)
     const [adminToAdd, setAdminToAdd] = useState({
         email: '',
@@ -68,18 +67,19 @@ const AddAdmin = () => {
 
 
     return (
-        <div className='w-full flex flex-col justify-start p-3 gap-4 overflow-auto scrollbar-thin scrollbar-thumb-orange scrollbar-track-dark'>
+        <div className='w-full m-auto flex flex-col justify-start items-center p-3 gap-4 overflow-auto scrollbar-thin scrollbar-thumb-orange scrollbar-track-dark'>
             <header className='w-11/12 flex justify-between items-center mb-4'>
+
                 {/* Back */}
-                <GiCancel onClick={() => navigate(-1)}
-                    cursor={'pointer'} size={30} color="#e04e17"
-                />
+                <Link to={"/dashboard/admins/"}>
+                    <GiCancel cursor={'pointer'} size={30} color="#e04e17" />
+                </Link>
                 <span className="w-max h-max bg-orange text-light font-bold text-lg font-montserrat px-2.5 py-0.5 rounded-lg">
                     Add New Admin
                 </span>
             </header>
 
-            <form onSubmit={handleAddAdmin} className='flex flex-col gap-4'>
+            <form onSubmit={handleAddAdmin} className='flex flex-col gap-4 w-11/12'>
                 <Input onChange={handleChangeAddAdmin}
                     name="username" defaultValue={adminToAdd.username}
                     placeholder='admin name'
@@ -101,7 +101,7 @@ const AddAdmin = () => {
                     type='file'
                     className='pt-3 px-1'
                 />
-                <div className='w-11/12 items-center justify-end flex'>
+                <div className='w-full items-center justify-end flex'>
                     <Buttons done text={"Done"} />
                 </div>
 
