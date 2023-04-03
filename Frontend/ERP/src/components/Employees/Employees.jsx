@@ -4,14 +4,70 @@ import React, { useContext, useEffect, useState } from 'react'
 import axiosInstance from '../../constants/axios'
 import { Context } from '../Context/Context'
 import { HiUserCircle } from 'react-icons/hi'
-import { MdNavigateNext, MdNavigateBefore } from 'react-icons/md'
+import { MdNavigateNext, MdNavigateBefore, MdAdd } from 'react-icons/md'
+import { IconButtons } from "../Shared/Buttons";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+// import { fromEvent } from 'rxjs';
+// import { debounceTime } from 'rxjs/operators';
+// import { useEffect } from 'react';
+// import { fromEvent } from 'rxjs';
+// import { debounceTime } from 'rxjs/operators';
 
+
+// function SearchInput() {
+//     useEffect(() => {
+//       const input = document.querySelector('input');
+//       const subscription = fromEvent(input, 'keyup')
+//         .pipe(debounceTime(1000))
+//         .subscribe(() => {
+//           // search function here
+//         });
+
+//       return () => {
+//         subscription.unsubscribe();
+//       };
+//     }, []);
+
+//     return (
+//       <input type="text" />
+//     );
+//   }
 const Employees = () => {
     const { setNotifications, setLoading, search } = useContext(Context)
     const [employees, setEmployees] = useState([]);
+    const [employeestoSearch, setEmployeestoSearch] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
 
+    // const input = document.querySelector('input');
+
+    // fromEvent(input, 'keyup')
+    //   .pipe(debounceTime(1000))
+    //   .subscribe(() => {
+    //     // search function here
+    //   });
+    // Define a debounce function
+    //   const debouncedSearch = _.debounce(async (searchTerm) => {
+    //     try {
+    //       setLoading(true);
+    //       const response = await axiosInstance.get(
+    //         `/employees/all-employees?search=${searchTerm}&page=${currentPage}`,
+    //         {
+    //           headers: { token: Cookies.get('token') },
+    //         }
+    //       );
+    //       setEmployees(response.data.data);
+    //       setCurrentPage(response.data.currentPage);
+    //       setTotalPages(response.data.totalPages);
+    //     } catch (error) {
+    //       if (error.response && error.response.data) {
+    //         console.error(error.response.data);
+    //       }
+    //     } finally {
+    //       setLoading(false);
+    //     }
+    //   }, 1000);
     const getAllEmployees = async () => {
         try {
             setLoading(true)
@@ -20,13 +76,12 @@ const Employees = () => {
                     search === '' || null ?
                         `/employees/all-employees-pagination?page=${currentPage}`
                         : `/employees/all-employees`
-
-                    , {
-                        headers: { token: Cookies.get('token') }
-                    })
+                    , { headers: { token: Cookies.get('token') } }
+                )
             setEmployees(response.data.data);
             setCurrentPage(response.data.currentPage);
             setTotalPages(response.data.totalPages);
+            console.log('ree', response);
         } catch (error) {
             if (error.response && error.response.data) {
                 setNotifications({
@@ -47,6 +102,8 @@ const Employees = () => {
             }, 4000);
         }
     }
+
+    // Filter
     const filteredEmployeesToSearch = employees.filter(val => {
         if (search === '') {
             return employees;
@@ -78,7 +135,11 @@ const Employees = () => {
                         </h1>
                     ) : (
                         filteredEmployeesToSearch.map((employee, index) => (
-                            <div key={index}
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                whileInView={{ y: [100, 50, 0], opacity: [0, 0, 1] }}
+                                transition={{ duration: 0.5 }}
+                                key={index}
                                 className='w-full h-14 flex items-center rounded-lg justify-around font-montserrat cursor-pointer my-2 border-2 border-orange hover:bg-orange hover:text-light transition duration-200 ease-in-out '
                             >
                                 {
@@ -90,7 +151,7 @@ const Employees = () => {
                                 <p className='w-full text-center'>{employee.email}</p>
                                 <p className='w-full text-center'>{employee.phone}</p>
                                 <p className='w-full text-center'>{employee.team && employee.team || "--"}</p>
-                            </div>
+                            </motion.div>
                         ))
                     )
                 }
@@ -131,7 +192,12 @@ const Employees = () => {
                     </div>
                     : null
             }
-        </div >
+
+            {/* Add Button */}
+            <Link className='fixed z-[9999] right-6 bottom-6' to={"/dashboard/employees/add-employee/"}>
+                <IconButtons Icon={MdAdd} />
+            </Link>
+        </div>
     )
 }
 
