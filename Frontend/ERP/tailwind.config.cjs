@@ -10,12 +10,21 @@ module.exports = {
         'montserrat': ['Montserrat', 'sans-serif'],
       },
       colors: {
-        'orange': '#e04e17',
-        // 'orange': '#e14d19',
-        'dark': '#151315',
-        'light': '#f0f0f0',
-        'success': '#4bb543',
-        'failed': '#ff3333',
+        'orange': 'hsl(20, 84%, 50%)',
+        // 'orange': '#e04e17',
+        'light': 'hsl(0, 0%, 94%)',
+        // 'light': '#f0f0f0',
+        'dark': 'hsl(0, 0%, 9%)',
+        // 'dark': '#171717',
+        'success': 'hsl(120, 60%, 41%)',
+        // 'success': '#4bb543',
+        'failed': 'hsl(0, 100%, 60%)',
+        // 'failed': '#ff3333',
+      },
+      boxShadow: {
+        'floating-shadow': '0px 26px 27px 0px #e04e17'
+        // 'floating-shadow': '5px 15px 50px 0px #e04e17' 
+        // 
       },
       animation: {
         spin: 'rotate 3s linear infinite',
