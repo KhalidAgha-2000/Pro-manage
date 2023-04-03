@@ -44,7 +44,7 @@ function Dashboard(props) {
     return (
         <div className='dashboard flex w-full h-[100vh] overflow-hidden '>
             <SideBar dataSpecificAdmin={dataSpecificAdmin} />
-            <div className='dashboard-body w-3/4'>
+            <div className='dashboard-body w-4/5'>
                 <Header dataSpecificAdmin={dataSpecificAdmin} />
                 <Loading />
                 <Outlet />

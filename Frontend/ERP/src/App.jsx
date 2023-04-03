@@ -10,13 +10,14 @@ import Admins from './components/Admins/Admins'
 import Admin from './components/Admins/Admin'
 import AddAdmin from './components/Admins/AddAdmin'
 import Employees from './components/Employees/Employees'
+import Addemployee from './components/Employees/Addemployee'
 
 function App() {
 
   const idInToken = Cookies.get('id')
 
   return (
-    <div className=''>
+    <div className='bg-light'>
 
       <Notification />
       <Router>
@@ -26,13 +27,19 @@ function App() {
           {
             Cookies.get('token') ? (
               <Route path="/dashboard" element={<Dashboard idInToken={idInToken} />}>
+                {/* ANALYSIS */}
                 <Route path="analysis" element={<Analysis />} />
+
+                {/* ADMINS */}
                 <Route path="admins" element={<Admins idInToken={idInToken} />} />
+                <Route path='admins/add-admin' element={<AddAdmin />} />
                 <Route path="admins/admin/:id" element={<Admin idInToken={idInToken} />} />
 
+                {/* EMPLOYEES */}
                 <Route path="employees" element={<Employees />} />
+                <Route path="employees/add-employee" element={<Addemployee />} />
+
                 {/* <Route path="*" element={<NotFound />} /> */}
-                <Route path='add-admin' element={<AddAdmin />} />
               </Route>
             ) : (
               <Route path="/login" element={<Login />} />

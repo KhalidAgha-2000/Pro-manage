@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { FaProjectDiagram } from "react-icons/fa";
 import { TbReportAnalytics } from "react-icons/tb";
 import { IoMdAnalytics } from "react-icons/io";
@@ -6,71 +6,76 @@ import { MdAdminPanelSettings, MdGroupAdd } from "react-icons/md";
 import { RiTeamFill } from "react-icons/ri";
 import { HiOutlineLogout } from 'react-icons/hi'
 import { SiGoogleanalytics } from 'react-icons/si'
-import NavItem from './NavItem';
-import axios from 'axios';
-import { Context } from '../Context/Context';
 import { motion } from "framer-motion";
-import { NavLink, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logout from '../../constants/logout';
 
 
 const SideBar = (props) => {
     const [activeNavItem, setActiveNavItem] = useState('Analysis');
     const navigate = useNavigate()
+    const location = useLocation()
+    const navItems = [
+        { title: "analysis", linkTo: "dashboard/analysis", icon: SiGoogleanalytics },
+        { title: "admins", linkTo: "dashboard/admins", icon: MdAdminPanelSettings },
+        { title: "employees", linkTo: "dashboard/employees", icon: MdGroupAdd },
+        { title: "teams", linkTo: "ZZZ", icon: RiTeamFill },
+        { title: "projects", linkTo: "ZZZ", icon: FaProjectDiagram },
+        { title: "reports", linkTo: "ZZZ", icon: TbReportAnalytics },
+        { title: "KPIs", linkTo: "ZZZ", icon: IoMdAnalytics },
+    ]
+
     return (
 
         <motion.div
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2, duration: 0.5, ease: "easeInOut" }} className='sticky top-0 flex flex-col w-1/4 min-h-max
-         text-light py-1 px-3 overflow-hidden bg-dark rounded-r-3xl 
-         ' >
-
-            {/* SideBar -- SideNav */}
-
-            <header className='relative flex flex-col items-center justify-center gap-3
-             py-2 pb-15 bg-light text-dark rounded-xl my-6 border-4 border-orange'>
-                <div className="profile h-20 aspect-square border-4 border-orange rounded-full ">
-                    {
-                        props.dataSpecificAdmin.image &&
-                        <img
-                            src={props.dataSpecificAdmin.image}
-                            alt="admin-image"
-                            className="profile--image h-full aspect-square rounded-full object-cover" />
-                        || <MdAdminPanelSettings className='text-orange w-full h-full' />
-                    }
-                </div>
-                <span className='text-xl font-semibold font-montserrat text-orange uppercase'>
-                    {props.dataSpecificAdmin.username && props.dataSpecificAdmin.username || "..."}
-                </span>
-            </header>
-
+            transition={{ delay: 0.2, duration: 0.5, ease: "easeInOut" }}
+            className='sticky top-0 flex flex-col justify-center w-[20%] min-h-max text-light pt-10 px-3 overflow-hidden bg-[#dfd6d3]'
+        >
             {/* Dashboard Links */}
-            <div className="divider relative m-auto h-[1px] w-4/5 bg-light"></div>
 
-            <NavItem title='Analysis' Icon={SiGoogleanalytics} linkTo={'dashboard/analysis'} setActiveNavItem={setActiveNavItem} activeNavItem={activeNavItem} />
-            <NavItem title='Admins' Icon={MdAdminPanelSettings} linkTo={'dashboard/admins'} setActiveNavItem={setActiveNavItem} activeNavItem={activeNavItem} />
-            <NavItem title='Employees' Icon={MdGroupAdd} linkTo={'dashboard/employees'} setActiveNavItem={setActiveNavItem} activeNavItem={activeNavItem} />
-            <NavItem title='Teams' Icon={RiTeamFill} />
-            <NavItem title='Projects' Icon={FaProjectDiagram} />
-            <NavItem title='Reports' Icon={TbReportAnalytics} />
-            <NavItem title='KPIs' Icon={IoMdAnalytics} />
+            <div className=''>
+                {navItems.map((n, index) => (
 
-            <div className="divider relative m-auto h-[1px] w-4/5 bg-light"></div>
+                    <Link to={`/${n.linkTo}`} key={index}>
+                        <div
+                            onClick={() => setActiveNavItem(n.linkTo)}
+                            className={`nav__item relative flex justify-start items-center text-light gap-10 py-3 px-10 
+                                         rounded-2xl cursor-pointer transition duration-200 ease-in-out 
+                                          hover:bg-light hover:text-dark hover:scale-105
+                                          ${n.title === activeNavItem || location.pathname.includes(n.linkTo) ? 'bg-light' : ""}`
+                            }
+                        >
+                            {/* {n.icon} */}
+                            <n.icon size={25} color='#e04e17' />
+                            <h2 className='text-base uppercase font-semibold text-dark font-montserrat '>
+                                {n.title}
+                            </h2>
+                        </div>
+                    </Link>
 
+                ))}
+            </div>
 
             <div
                 onClick={logout}
-                className={`nav__item relative flex justify-start items-center text-orange gap-16 py-3 px-10 
+                className={`relative flex justify-start items-center mt-20 text-dark gap-10 py-3 px-10  
                     rounded-xl overflow-hidden cursor-pointer transition duration-200 ease-in-out 
-                     hover:bg-orange hover:text-light`}
+                    hover:bg-light hover:text-orange`
+                }
             >
-                <HiOutlineLogout className='text-lg' />
-                <h2 className={`
-                    text-base font-semibold font-montserrat `}>
+                <HiOutlineLogout size={25} color='#e04e17' />
+                <h2 className={`text-base font-semibold font-montserrat`}>
                     Logut
                 </h2>
             </div>
+
+            {/* ---- */}
+            <span className='absolute -z-10 -left-8 -bottom-2 w-14 h-14 object-cover bg-orange rounded-full'></span>
+            <span className='absolute -z-10 left-4 bottom-10 w-4 h-4 object-cover bg-orange rounded-full'></span>
+            <span className='absolute -z-10 left-2 bottom-12 w-1 h-1 object-cover bg-orange rounded-full'></span>
+
         </motion.div >
     )
 }
