@@ -46,7 +46,6 @@ class Controller {
             // calculate the starting and ending indexes for the current page
             const startIndex = (page - 1) * perPage;
             const endIndex = startIndex + perPage;
-            // using a MongoDB $or operator to match documents that contain any of the search terms in any of the fields
             const employees = await employeeModel.find({}, '-kpis -roles')
                 .populate('team')
                 .sort({ first_name: 1 })

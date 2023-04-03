@@ -23,11 +23,11 @@ class Controller {
                     'Trustworthy Bosses': admin
                     , 'Effective Groups': team
                     , 'Available Ratings': kpi
-                    , 'Enthusiastic Employees': employee
+                    , 'Archived Projects': archivedProject
                     , 'Actual Duties': role
                     , 'Taken Projects ': project
                     , 'Activities Ongoing': inProgressProject
-                    , 'Archived Projects': archivedProject
+                    , 'Enthusiastic Employees': employee
                 }
             });
         } catch (err) {
