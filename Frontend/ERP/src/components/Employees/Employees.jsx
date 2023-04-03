@@ -81,7 +81,7 @@ const Employees = () => {
             setEmployees(response.data.data);
             setCurrentPage(response.data.currentPage);
             setTotalPages(response.data.totalPages);
-            console.log('ree', response);
+            // console.log('ree', response);
         } catch (error) {
             if (error.response && error.response.data) {
                 setNotifications({
@@ -118,16 +118,24 @@ const Employees = () => {
 
 
     return (
-        <div className='w-full h-[75vh] relative flex flex-col items-center justify-start p-3 gap-x-2 gap-y-2 '>
-            <header className='w-11/12 h-14 flex items-center rounded-lg justify-around bg-light border-2 border-orange'>
+        <div className='w-full h-[75vh] relative flex flex-col items-center justify-start p-3 gap-x-2 gap-y-2'>
+
+            <header className='relative overflow-hidden w-11/12 h-14 flex items-center rounded-full justify-around text-sidebar bg-dark'>
                 <p></p>
                 <p className='w-1/5 font-semibold font-montserrat text-center'>Name</p>
                 <p className='w-1/5 font-semibold font-montserrat text-center'>Email</p>
                 <p className='w-1/5 font-semibold font-montserrat text-center'>Phone</p>
                 <p className='w-1/5 font-semibold font-montserrat text-center'>Team</p>
+
+
+                {/* ---- */}
+                <span className='absolute -left-8 -bottom-2 w-14 h-14 bg-sidebar rounded-full' />
+                <span className='absolute left-4 bottom-10 w-4 h-4 bg-sidebar rounded-full' />
+                <span className='absolute left-7 bottom-3 w-1 h-1 bg-sidebar rounded-full' />
+
             </header>
 
-            <div className='w-11/12 h-3/4  overflow-auto scrollbar-thin scrollbar-thumb-orange scrollbar-track-dark'>
+            <div className='w-11/12 h-3/4 overflow-auto pr-2 scrollbar-thin scrollbar-thumb-orange scrollbar-track-dark'>
                 {
                     filteredEmployeesToSearch.length === 0 ? (
                         <h1 className='w-max h-auto m-auto p-3 my-8 rounded-md bg-orange text-lg font-montserrat text-light'>
@@ -140,17 +148,26 @@ const Employees = () => {
                                 whileInView={{ y: [100, 50, 0], opacity: [0, 0, 1] }}
                                 transition={{ duration: 0.5 }}
                                 key={index}
-                                className='w-full h-14 flex items-center rounded-lg justify-around font-montserrat cursor-pointer my-2 border-2 border-orange hover:bg-orange hover:text-light transition duration-200 ease-in-out '
+                                className='w-full h-14 flex items-center rounded-2xl justify-around font-montserrat relative overflow-hidden
+                                            cursor-pointer my-2 border-2 border-sidebar hover:bg-dark hover:text-light hover:border-dark
+                                            transition duration-200 ease-in-out '
                             >
                                 {
                                     employee.image &&
-                                    <img src={employee.image} alt={employee.first_name} className='object-center aspect-square rounded-full border-2 border-dark mx-2 w-9 h-9' />
+                                    <img src={employee.image} alt={employee.Employee_Name}
+                                        className='object-cover object-center aspect-square  rounded-full mx-2 border-2 w-12 h-12' />
                                     || <HiUserCircle size={20} />
                                 }
-                                < p className='w-full text-center'>{employee.Employee_Name}</p>
-                                <p className='w-full text-center'>{employee.email}</p>
-                                <p className='w-full text-center'>{employee.phone}</p>
-                                <p className='w-full text-center'>{employee.team && employee.team || "--"}</p>
+                                <p className='w-full font-semibold text-lg text-center'>{employee.Employee_Name}</p>
+                                <p className='w-full font-semibold text-lg text-center'>{employee.email}</p>
+                                <p className='w-full font-semibold text-lg text-center'>{employee.phone}</p>
+                                <p className='w-full font-semibold text-lg text-center z-10'>{employee.team && employee.team || "---"}</p>
+
+                                {/* ---- */}
+                                <span className='absolute -right-6 -bottom-2 w-10 h-10 bg-orange rounded-full' />
+                                <span className='absolute right-1 bottom-10 w-2 h-2 bg-orange rounded-full' />
+                                <span className='absolute right-2 bottom-8 w-2 h-2 bg-orange rounded-full' />
+
                             </motion.div>
                         ))
                     )
@@ -176,7 +193,7 @@ const Employees = () => {
                                         <span
                                             key={page}
                                             onClick={() => setCurrentPage(page)}
-                                            className={`${i + 1 === currentPage ? 'text-dark bg-orange' : "text-orange"} w-8 h-8 text-center pt-1 rounded-full cursor-pointer transition duration-200 ease-in-out`}
+                                            className={`${i + 1 === currentPage ? 'text-sidebar bg-orange' : "text-orange bg-sidebar"} w-8 h-8 text-center pt-1 rounded-full cursor-pointer transition duration-200 ease-in-out`}
                                         >
                                             {page}
                                         </span>
@@ -194,7 +211,7 @@ const Employees = () => {
             }
 
             {/* Add Button */}
-            <Link className='fixed z-[9999] right-6 bottom-6' to={"/dashboard/employees/add-employee/"}>
+            <Link className='fixed z-[99] right-6 bottom-6' to={"/dashboard/employees/add-employee/"}>
                 <IconButtons Icon={MdAdd} />
             </Link>
         </div>
