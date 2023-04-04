@@ -11,6 +11,7 @@ import Admin from './components/Admins/Admin'
 import AddAdmin from './components/Admins/AddAdmin'
 import Employees from './components/Employees/Employees'
 import Addemployee from './components/Employees/Addemployee'
+import Teams from './components/Teams/Teams'
 
 function App() {
 
@@ -38,6 +39,9 @@ function App() {
                 {/* EMPLOYEES */}
                 <Route path="employees" element={<Employees />} />
                 <Route path="employees/add-employee" element={<Addemployee />} />
+
+                {/* Teams */}
+                <Route path="teams" element={<Teams />} />
 
                 {/* <Route path="*" element={<NotFound />} /> */}
               </Route>

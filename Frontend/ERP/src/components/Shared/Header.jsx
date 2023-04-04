@@ -19,7 +19,7 @@ const Header = (props) => {
                 {/* Profile Image */}
                 <div className='w-1/5'>
                     <div className={`profile relative w-20 h-20 rounded-full my-2
-                ${props.dataSpecificAdmin.image && "after:absolute after:bg-green-500 after:w-3 after:h-3  after:bottom-1 after:right-3 after:rounded-full"}
+                ${props.dataSpecificAdmin.image && "after:absolute after:bg-green-500 after:w-3 after:h-3  after:bottom-1 after:right-3 after:rounded-full after:animate-pulse"}
                 `}
                     >
                         {

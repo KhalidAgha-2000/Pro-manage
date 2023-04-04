@@ -8,8 +8,10 @@ module.exports = {
     extend: {
       fontFamily: {
         'montserrat': ['Montserrat', 'sans-serif'],
+        'alkatra': ['Alkatra', 'cursive'],
       },
       colors: {
+        'sidebar': '#dfd6d3',
         'orange': 'hsl(20, 84%, 50%)',
         // 'orange': '#e04e17',
         'light': 'hsl(0, 0%, 94%)',
@@ -22,9 +24,7 @@ module.exports = {
         // 'failed': '#ff3333',
       },
       boxShadow: {
-        'floating-shadow': '0px 26px 27px 0px #e04e17'
-        // 'floating-shadow': '5px 15px 50px 0px #e04e17' 
-        // 
+        'floating-shadow': '0px 26px 27px 0px #e04e17',
       },
       animation: {
         spin: 'rotate 3s linear infinite',

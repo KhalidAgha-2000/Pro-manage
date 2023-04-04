@@ -154,8 +154,8 @@ const Admins = (props) => {
                                 </div>
 
                                 {/* ---- */}
-                                <span className='absolute  right-2 -bottom-2 w-4 h-4 object-cover bg-[#dfd6d3] bg-opacity-95 rounded-full'></span>
-                                <span className='absolute  right-2 bottom-4 w-1 h-1 object-cover bg-[#dfd6d3] bg-opacity-95 rounded-full'></span>
+                                <span className='absolute  right-2 -bottom-2 w-4 h-4 object-cover bg-[#dfd6d3] bg-opacity-95 rounded-full' />
+                                <span className='absolute  right-2 bottom-4 w-1 h-1 object-cover bg-[#dfd6d3] bg-opacity-95 rounded-full' />
 
                             </motion.div>
                         ))

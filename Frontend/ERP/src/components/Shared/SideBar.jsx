@@ -19,7 +19,7 @@ const SideBar = (props) => {
         { title: "analysis", linkTo: "dashboard/analysis", icon: SiGoogleanalytics },
         { title: "admins", linkTo: "dashboard/admins", icon: MdAdminPanelSettings },
         { title: "employees", linkTo: "dashboard/employees", icon: MdGroupAdd },
-        { title: "teams", linkTo: "ZZZ", icon: RiTeamFill },
+        { title: "teams", linkTo: "dashboard/teams", icon: RiTeamFill },
         { title: "projects", linkTo: "ZZZ", icon: FaProjectDiagram },
         { title: "reports", linkTo: "ZZZ", icon: TbReportAnalytics },
         { title: "KPIs", linkTo: "ZZZ", icon: IoMdAnalytics },
@@ -31,7 +31,7 @@ const SideBar = (props) => {
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2, duration: 0.5, ease: "easeInOut" }}
-            className='sticky top-0 flex flex-col justify-center w-[20%] min-h-max text-light pt-10 px-3 overflow-hidden bg-[#dfd6d3]'
+            className='sticky top-0 flex flex-col justify-center w-[20%] min-h-max text-light pt-10 px-3 overflow-hidden bg-sidebar'
         >
             {/* Dashboard Links */}
 

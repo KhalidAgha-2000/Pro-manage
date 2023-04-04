@@ -8,31 +8,6 @@ import { MdNavigateNext, MdNavigateBefore, MdAdd } from 'react-icons/md'
 import { IconButtons } from "../Shared/Buttons";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-// import { fromEvent } from 'rxjs';
-// import { debounceTime } from 'rxjs/operators';
-// import { useEffect } from 'react';
-// import { fromEvent } from 'rxjs';
-// import { debounceTime } from 'rxjs/operators';
-
-
-// function SearchInput() {
-//     useEffect(() => {
-//       const input = document.querySelector('input');
-//       const subscription = fromEvent(input, 'keyup')
-//         .pipe(debounceTime(1000))
-//         .subscribe(() => {
-//           // search function here
-//         });
-
-//       return () => {
-//         subscription.unsubscribe();
-//       };
-//     }, []);
-
-//     return (
-//       <input type="text" />
-//     );
-//   }
 const Employees = () => {
     const { setNotifications, setLoading, search } = useContext(Context)
     const [employees, setEmployees] = useState([]);
@@ -40,34 +15,7 @@ const Employees = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
 
-    // const input = document.querySelector('input');
 
-    // fromEvent(input, 'keyup')
-    //   .pipe(debounceTime(1000))
-    //   .subscribe(() => {
-    //     // search function here
-    //   });
-    // Define a debounce function
-    //   const debouncedSearch = _.debounce(async (searchTerm) => {
-    //     try {
-    //       setLoading(true);
-    //       const response = await axiosInstance.get(
-    //         `/employees/all-employees?search=${searchTerm}&page=${currentPage}`,
-    //         {
-    //           headers: { token: Cookies.get('token') },
-    //         }
-    //       );
-    //       setEmployees(response.data.data);
-    //       setCurrentPage(response.data.currentPage);
-    //       setTotalPages(response.data.totalPages);
-    //     } catch (error) {
-    //       if (error.response && error.response.data) {
-    //         console.error(error.response.data);
-    //       }
-    //     } finally {
-    //       setLoading(false);
-    //     }
-    //   }, 1000);
     const getAllEmployees = async () => {
         try {
             setLoading(true)
