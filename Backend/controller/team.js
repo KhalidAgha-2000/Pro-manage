@@ -11,7 +11,7 @@ class Controller {
                 name: team.name,
                 numberOfEmployees: team.employees.length,
                 numberOfProjects: team.projects.length,
-                project: team.projects,
+                projects: team.projects,
                 employees: team.employees
             }));
             res.status(200).json({ success: true, message: 'All Teams', data: teamData });
