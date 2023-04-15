@@ -12,6 +12,11 @@ import AddAdmin from './components/Admins/AddAdmin'
 import Employees from './components/Employees/Employees'
 import Addemployee from './components/Employees/Addemployee'
 import Teams from './components/Teams/Teams'
+import Team from './components/Teams/Team'
+import AddTeam from './components/Teams/AddTeam'
+import Projects from './components/Projects/Projects'
+import Project from './components/Projects/Project'
+import Kpis from './components/KPIS/Kpis'
 
 function App() {
 
@@ -42,6 +47,16 @@ function App() {
 
                 {/* Teams */}
                 <Route path="teams" element={<Teams />} />
+                <Route path="teams/add-team" element={<AddTeam />} />
+                <Route path="teams/team/:id" element={<Team />} />
+
+                {/* Projects */}
+                <Route path="projects" element={<Projects />} />
+                <Route path="projects/project/:id" element={<Project />} />
+
+                {/* Kpis */}
+                <Route path="kpis" element={<Kpis />} />
+                {/* <Route path="projects/project/:id" element={<Project />} /> */}
 
                 {/* <Route path="*" element={<NotFound />} /> */}
               </Route>

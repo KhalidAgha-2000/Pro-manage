@@ -20,9 +20,9 @@ const SideBar = (props) => {
         { title: "admins", linkTo: "dashboard/admins", icon: MdAdminPanelSettings },
         { title: "employees", linkTo: "dashboard/employees", icon: MdGroupAdd },
         { title: "teams", linkTo: "dashboard/teams", icon: RiTeamFill },
-        { title: "projects", linkTo: "ZZZ", icon: FaProjectDiagram },
+        { title: "projects", linkTo: "dashboard/projects", icon: FaProjectDiagram },
         { title: "reports", linkTo: "ZZZ", icon: TbReportAnalytics },
-        { title: "KPIs", linkTo: "ZZZ", icon: IoMdAnalytics },
+        { title: "KPIs", linkTo: "dashboard/kpis", icon: IoMdAnalytics },
     ]
 
     return (
