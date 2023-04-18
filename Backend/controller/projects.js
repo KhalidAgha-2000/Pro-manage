@@ -7,21 +7,26 @@ class Controller {
         try {
             //Archived / not Archived
             const isArchived = req.query.isArchived === 'true'; // convert query parameter to boolean
-            const query = isArchived ? { 'archive.archived': true } : { 'archive.archived': false };
-            const projects = await projectModel.find(query, null, { timeout: 20000 }).populate('team');
+            const query = isArchived ? { 'archive.archived': true } : {};
+            // const query = isArchived ? { 'archive.archived': true } : { 'archive.archived': false };
+            const projects = await projectModel.find(query, null, { timeout: 20000 }).populate('team')
+            const projectsCountArchived = await projectModel.find({ 'archive.archived': true }).countDocuments()
+            const projectsCountInProgress = await projectModel.find({ in_progress: true }).countDocuments()
 
-            // const projects = await projectModel.find({}).populate('team');
             const projectData = projects.map(projj => ({
                 _id: projj._id,
                 name: projj.name,
                 archive: projj.archive,
-                status: projj.in_progress,
+                in_progress: projj.in_progress,
                 team: projj.team._id,
                 teamName: projj.team.name,
                 numberOfEmployees: projj.team.employees.length,
-                numberOfProjectOfTheTeam: projj.team.projects.length,
-            }));
-            res.status(200).json({ success: true, message: 'Projects', data: projectData, });
+                // numberOfProjectOfTheTeam: projj.team.projects.length,
+            }))
+            res.status(200).json({
+                success: true, message: 'Projects', data: projectData,
+                projectsCountArchived: projectsCountArchived, projectsCountInProgress: projectsCountInProgress
+            });
         } catch (err) {
             next(err);
         }
