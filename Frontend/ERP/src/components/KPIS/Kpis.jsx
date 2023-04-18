@@ -34,7 +34,7 @@ const Kpis = () => {
                 axiosInstance.get('/kpis/all-kpis'
                     , { headers: { token: Cookies.get('token') } }
                 )
-            setAllKpis(response.data.data.sort(() => Math.random() - 0.5));
+            setAllKpis(response.data.data.sort(() => Math.random() * 100 - 50));// generates a random number between -50 and 50.
             // setAllKpis(response.data.data);
         } catch (error) {
             if (error.response && error.response.data) {
