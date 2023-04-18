@@ -22,7 +22,7 @@ export const Buttons = ({ text, edit, add, done, remove, disabled, onClick }) =>
 
 
 // Icon Buttons
-export const IconButtons = ({ Icon }) => {
+export const IconButtons = ({ Icon, onClick }) => {
     return (
         <button
             className={`w-max h-max items-center bg-orange px-3 py-3  text-center text-light rounded-full cursor-pointer
@@ -30,6 +30,7 @@ export const IconButtons = ({ Icon }) => {
              focus:ring-1 focus:outline-none focus:ring-light 
              transition duration-700 ease-in-out`
             }
+            onClick={onClick}
         >
             <Icon className={'text-xl text-light'} />
         </button >
