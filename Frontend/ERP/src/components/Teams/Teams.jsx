@@ -3,6 +3,9 @@ import { Context } from '../Context/Context';
 import axiosInstance from '../../constants/axios';
 import Cookies from 'js-cookie';
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { IconButtons } from "../Shared/Buttons";
+import { MdAdd } from "react-icons/md";
 const Teams = () => {
     const { setNotifications, setLoading, search } = useContext(Context)
     const [teams, setTeams] = useState([]);
@@ -15,7 +18,6 @@ const Teams = () => {
                     , { headers: { token: Cookies.get('token') } }
                 )
             setTeams(response.data.data);
-            console.log('ree', response);
         } catch (error) {
             if (error.response && error.response.data) {
                 setNotifications({
@@ -52,17 +54,19 @@ const Teams = () => {
                     key={t._id}
                     className='bg-dark w-[32%] relative h-fit max-w-sm p-5 flex flex-col gap-y-1 rounded-lg shadow-lg font-montserrat overflow-hidden shadow-orange cursor-pointer hover:scale-105 hover:z-10 transition-all duration-300'>
 
-                    <div className='w-full h-1/4 my-2 flex items-center'>
-                        <span className='w-20 h-20 text-6xl uppercase font-alkatra flex items-center justify-center rounded-full bg-sidebar'>{t.name.charAt(0)}</span>
-                        {/* Numbers */}
-                        <div className='flex flex-col p-4 w-auto h-fit '>
-                            <h1 className='text-sidebar text-xl'><span className='bg-orange w-1 h-1 px-2 mx-1 rounded-full'> {t.numberOfEmployees}</span>Employees</h1>
-                            <h1 className='text-sidebar text-xl'><span className='bg-orange w-1 h-1 px-2 mx-1 rounded-full'> {t.numberOfProjects}</span>Projects</h1>
+                    <Link to={"/dashboard/teams/team/" + t._id}>
+                        <div className='w-full h-1/4 my-2 flex items-center'>
+                            <span className='w-20 h-20 text-6xl uppercase font-alkatra flex items-center justify-center rounded-full bg-sidebar'>{t.name.charAt(0)}</span>
+                            {/* Numbers */}
+                            <div className='flex flex-col p-4 w-auto h-fit '>
+                                <h1 className='text-sidebar text-xl font-montserrat'><span className='w-1 h-1 px-2 mx-1 rounded-full'> {t.numberOfEmployees}</span>Employees</h1>
+                                <h1 className='text-orange text-xl font-montserrat'><span className='w-1 h-1 px-2 mx-1 rounded-full'> {t.numberOfProjects}</span>Projects</h1>
+                            </div>
                         </div>
-                    </div>
 
-                    <h1 className='text-sidebar font-semibold font-montserrat text-2xl text-center uppercase'>{t.name}</h1>
+                        <h1 className='text-sidebar font-semibold font-montserrat text-2xl text-center uppercase'>{t.name}</h1>
 
+                    </Link>
                     {/* ------ */}
                     <span className='absolute -right-1 -bottom-2 w-10 h-10 object-cover bg-[#dfd6d3] rounded-full' />
                     <span className='absolute -right-2 bottom-8 w-4 h-4 object-cover bg-[#dfd6d3] rounded-full' />
@@ -71,6 +75,11 @@ const Teams = () => {
 
                 </motion.div >
             ))}
+
+            {/* Add Button */}
+            <Link className='fixed z-[99] right-6 bottom-6' to={"/dashboard/teams/add-team"}>
+                <IconButtons Icon={MdAdd} />
+            </Link>
         </div >
     )
 }
