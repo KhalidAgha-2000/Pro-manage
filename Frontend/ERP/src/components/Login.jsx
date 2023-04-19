@@ -1,13 +1,12 @@
 import React, { useContext } from 'react'
-import logo from '../assets/logo.png'
+import logo from '../assets/logo.jpg'
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { Context } from './Context/Context';
 import axiosInstance from '../constants/axios';
 import checkIfEmpty from '../constants/validation';
 import Cookies from 'js-cookie';
-
-
+import landing_Shape from "../assets/landing_Shape.png";
 
 const Login = () => {
 
@@ -65,26 +64,19 @@ const Login = () => {
 
 
     return (
-        <div className='Login flex h-screen'>
+        <div className='Login flex h-screen relative'>
+            {/* Background */}
+            <img src={landing_Shape} className='w-1/2 h-screen absolute right-0' alt="landing_Shape" />
 
-            {/* Right */}
-            <div className="left-side w-2/5 h-screen bg-light  flex flex-col items-center justify-center ">
-                <img src={logo} alt="Logo" className='w-52 h-auto aspect-square p-2' />
-                <h1 className='w-full text-center font-extrabold transition-all duration-1000 font-montserrat text-4xl my-2 text-orange'>ERP_System</h1>
-            </div>
+            {/* Form */}
+            <section className='leftt w-1/2 h-screen flex items-center'>
+                <form class="login-form relative w-1/2 p-1 h-2/3 m-auto flex flex-col items-center ju
+               backdrop-blur-lg bg-gradient-to-b from-light to-sidebar shadow-orange/70 shadow-floating-shadow "
+                >
+                    <h1 className='w-full h-fit p-1 mt-4 font-alkatra text-orange text-center font-bold text-3xl'>Welcome</h1>
+                    <em className='w-full h-fit my-4 mb-10 text-orange text-center text-lg'>Log In as Administrator</em>
 
-            {/* Left */}
-            <div className="right-side w-3/5 flex flex-col items-center py-16 h-screen bg-orange">
-                {/* <img src={logo} alt="Logo" className='w-10' /> */}
-                {/* <h1 className='w-[80%] h-auto m font-semibold text-2xl  text-light text-center m-auto'>Sign In as Administrator</h1> */}
-                <h5 className='text-light my-1 font-montserrat text-2xl '>Facilitate your HR management</h5>
-                <h5 className='text-light my-1 font-montserrat text-2xl '>Fast and Precise Results</h5>
-
-                <form
-                    onSubmit={handleLogin}
-                    className='w-[80%] h-2/3 flex flex-col gap-y-3 justify-center items-center'>
-
-                    <div className="login__input">
+                    <div className="login__input my-4">
                         <input className="login__input-input"
                             value={email}
                             onChange={(e) =>
@@ -93,8 +85,7 @@ const Login = () => {
                             type="text" placeholder=" " />
                         <label className="login__input-label">Email</label>
                     </div>
-
-                    <div className="login__input">
+                    <div className="login__input my-4">
                         <input className="login__input-input"
                             value={password}
                             onChange={(e) =>
@@ -106,12 +97,32 @@ const Login = () => {
 
                     <button
                         disabled={checkIfEmpty(formValues, formValues.email)}
-                        className='btnbtn disabled:cursor-not-allowed disabled:opacity-25'
+                        className='bg-orange w-[90%] mt-6
+                        rounded-md px-24 py-2.5 text-sidebar font-alkatra font-bold text-xs tracking-widest uppercase transition-colors transition-timing-ease-in duration-270 hover:text-orange hover:bg-light   focus:outline-sidebar
+                        disabled:cursor-not-allowed disabled:opacity-25'
                         type="submit" name='login'>Continue
                     </button>
-
                 </form>
-            </div>
+            </section>
+
+
+            <section className='right w-1/2 h-screen z-10 flex flex-col p-10 overflow-hidden'>
+                {/* Logo */}
+                <div
+
+
+                    className="relative px-1">
+                    <img
+                        src={logo} alt="logo" className='w-72' />
+                    <p className='absolute top-28 left-[105px] text-orange font-alkatra text-5xl'>ERP</p>
+                </div>
+                <div className=' w-fit h-fit m-auto p-2  '>
+                    <p className='text-4xl text-light leading-snug font-alkatra ' id='landing_text'>Facilitate your HR management</p>
+                    <p className='text-4xl text-light leading-snug font-alkatra ' id='landing_text'>Fast and Precise Results</p>
+                </div>
+
+            </section>
+
         </div>
     )
 }
