@@ -48,57 +48,6 @@
 
 }
 
-.btnbtn {
-    position: relative;
-    width: 60%;
-    border-radius: 5px;
-    padding-left: 24px;
-    padding-right: 24px;
-    padding-top: 8px;
-    padding-bottom: 8px;
-    border-width: 2px;
-    border-color: #f0f0f0;
-    color: #f0f0f0;
-    font-weight: 700;
-    font-size: 12px;
-    line-height: 16px;
-    line-height: 1.25;
-    text-transform: uppercase;
-    transition-property: #3A8891;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 270ms;
-}
-
-.btnbtn::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    border-radius: 5;
-    z-index: -1;
-    margin: auto;
-    width: 100%;
-    height: 100%;
-    transform: scaleX(0);
-    transform-origin: top;
-    transition: transform 1s;
-
-}
-
-.btnbtn:focus {
-    outline: 1px solid #f0f0f0;
-}
-
-.btnbtn:hover::before {
-    transform: scaleX(1);
-}
-
-.btnbtn:hover {
-    color: #df5b28;
-    background-color: #f0f0f0;
-}
-
-
 #general__search::-webkit-search-cancel-button {
     display: none;
 }
