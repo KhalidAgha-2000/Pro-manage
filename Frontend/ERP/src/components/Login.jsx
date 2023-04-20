@@ -7,7 +7,7 @@ import axiosInstance from '../constants/axios';
 import checkIfEmpty from '../constants/validation';
 import Cookies from 'js-cookie';
 import landing_Shape from "../assets/landing_Shape.png";
-
+import { motion } from "framer-motion";
 const Login = () => {
 
     const navigate = useNavigate();
@@ -30,11 +30,11 @@ const Login = () => {
                 pass: true,
                 notificationBarMessage: response.data.message
             })
-            await Cookies.set('token', response.data.token, { expires: 1 / 24 }); // Expires in 1 hour (1/24 of a day)
-            await Cookies.set('id', response.data.data._id, { expires: 1 / 24 }); // Expires in 1 hour (1/24 of a day)
+            Cookies.set('token', response.data.token, { expires: 1 / 24 }); // Expires in 1 hour (1/24 of a day)
+            Cookies.set('id', response.data.data._id, { expires: 1 / 24 }); // Expires in 1 hour (1/24 of a day)
             setTimeout(() => {
                 navigate('/dashboard/analysis'); // Navigate to home page after 3s delay
-                window.location.reload()
+                // window.location.reload()
             }, 3000);
         } catch (error) {
             if (error.response && error.response.data) {
@@ -66,11 +66,21 @@ const Login = () => {
     return (
         <div className='Login flex h-screen relative'>
             {/* Background */}
-            <img src={landing_Shape} className='w-1/2 h-screen absolute right-0' alt="landing_Shape" />
+            <motion.img
+                initial={{ opacity: 0, y: 100 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.5, ease: "easeInOut" }}
+                src={landing_Shape} className='w-1/2 h-screen overflow-hidden absolute right-0' alt="landing_Shape" />
 
             {/* Form */}
-            <section className='leftt w-1/2 h-screen flex items-center'>
-                <form class="login-form relative w-1/2 p-1 h-2/3 m-auto flex flex-col items-center ju
+            <motion.section
+                initial={{ opacity: 0, x: -100 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2, duration: 0.5, ease: "easeInOut" }}
+                className='leftt w-1/2 h-screen flex items-center'>
+                <form
+                    onSubmit={handleLogin}
+                    class="login-form relative w-1/2 p-1 h-2/3 m-auto flex flex-col items-center ju
                backdrop-blur-lg bg-gradient-to-b from-light to-sidebar shadow-orange/70 shadow-floating-shadow "
                 >
                     <h1 className='w-full h-fit p-1 mt-4 font-alkatra text-orange text-center font-bold text-3xl'>Welcome</h1>
@@ -103,19 +113,21 @@ const Login = () => {
                         type="submit" name='login'>Continue
                     </button>
                 </form>
-            </section>
+            </motion.section>
 
 
             <section className='right w-1/2 h-screen z-10 flex flex-col p-10 overflow-hidden'>
                 {/* Logo */}
-                <div
-
+                <motion.div
+                    initial={{ opacity: 0, y: -100 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2, duration: 0.5, ease: "easeInOut" }}
 
                     className="relative px-1">
                     <img
                         src={logo} alt="logo" className='w-72' />
                     <p className='absolute top-28 left-[105px] text-orange font-alkatra text-5xl'>ERP</p>
-                </div>
+                </motion.div>
                 <div className=' w-fit h-fit m-auto p-2  '>
                     <p className='text-4xl text-light leading-snug font-alkatra ' id='landing_text'>Facilitate your HR management</p>
                     <p className='text-4xl text-light leading-snug font-alkatra ' id='landing_text'>Fast and Precise Results</p>
