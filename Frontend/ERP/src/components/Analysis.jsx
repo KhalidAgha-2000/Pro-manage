@@ -11,11 +11,12 @@ import { motion } from "framer-motion";
 import { Context } from './Context/Context';
 import axiosInstance from '../constants/axios';
 import Cookies from 'js-cookie';
-import bubbles from "../assets/bubbles.jpg";
+
 const Analysis = () => {
 
     const [analysisDataState, setAnalysisDataState] = useState({})
     const { setNotifications, setLoading } = useContext(Context)
+
     const iconsArray = [
         { icon: <MdAdminPanelSettings size={70} /> },
         { icon: <GiTeamDowngrade size={70} /> },
@@ -26,6 +27,7 @@ const Analysis = () => {
         { icon: <GiProgression size={70} /> },
         { icon: <BsPersonLinesFill size={70} /> },
     ]
+
     const getAllAnalysisData = async () => {
         try {
             setLoading(true)

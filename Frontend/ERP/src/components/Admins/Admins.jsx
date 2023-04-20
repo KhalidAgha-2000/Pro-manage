@@ -10,7 +10,7 @@ import { TbLetterX } from 'react-icons/tb';
 import Cookies from 'js-cookie';
 import { IconButtons } from '../Shared/Buttons';
 
-const Admins = (props) => {
+const Admins = () => {
     const { setNotifications, setLoading, search } = useContext(Context)
     const [allAdminsData, setAllAdminsData] = useState([])
     const [prepareToRemove, setPrepareToRemove] = useState(null)
@@ -56,10 +56,8 @@ const Admins = (props) => {
             const response = await
                 axiosInstance.get('/admins/all-admins', {
                     headers: { token: Cookies.get('token') }
-                    // headers: { token: localStorage.getItem('token') }
                 })
             setAllAdminsData(response.data.data)
-            // console.log(response.data.data);
         } catch (error) {
             if (error.response && error.response.data) {
                 setNotifications({
@@ -91,20 +89,20 @@ const Admins = (props) => {
     });
     useEffect(() => {
         getAllAdmins()
-
+        Cookies.get('id')
     }, [search])
+
     return (
         <div className='w-full h-[75vh] relative flex flex-wrap justify-center p-3 gap-x-4 gap-y-4 overflow-auto scrollbar-thin scrollbar-thumb-orange scrollbar-track-dark'>
             {
 
-                filteredAdminsToSearch.length === 0 ? (
+                filteredAdminsToSearch.length === 0 ?
                     <h1 className='w-max h-max m-auto p-3 my-8 rounded-md bg-orange text-lg font-montserrat text-light'>
                         No value match your search input
                     </h1>
-                ) : (
-                    filteredAdminsToSearch
+                    : filteredAdminsToSearch
                         .sort((loggedIn) => {
-                            if (loggedIn._id === props.idInToken) {
+                            if (loggedIn._id === Cookies.get('id')) {
                                 return -1; // admin1 should come first
                             } else {
                                 return 0; // keep the same order
@@ -139,13 +137,13 @@ const Admins = (props) => {
                                     <Link to={"/dashboard/admins/admin/" + admin._id}>
                                         <AiFillEdit className='hover:scale-150  transition duration-200 ease-in-out' size={20} color='#f0f0f0' cursor={'pointer'} />
                                     </Link>
-                                    <AiOutlineUserDelete className={`hover:scale-150  transition duration-200 ease-in-out ${admin._id === props.idInToken && "hidden"}`}
+                                    <AiOutlineUserDelete className={`hover:scale-150  transition duration-200 ease-in-out ${admin._id === Cookies.get('id') && "hidden"}`}
                                         size={20} color='#f0f0f0' cursor={'pointer'} onClick={() => { setPrepareToRemove(admin._id) }}
                                     />
                                 </div>
                                 {/* Pinned */}
                                 <AiFillPushpin size={20} color="#f0f0f0"
-                                    className={`absolute -rotate-90 top-1 left-1 ${admin._id !== props.idInToken && "hidden"}`}
+                                    className={`absolute -rotate-90 top-1 left-1 ${admin._id !== Cookies.get('id') && "hidden"}`}
                                 />
                                 {/* Delete */}
                                 <div className={`flex justify-around items-center w-full h-full absolute top-0 z-30 bg-light opacity-70  ${prepareToRemove === admin._id ? "flex" : "hidden"} `}>
@@ -159,7 +157,6 @@ const Admins = (props) => {
 
                             </motion.div>
                         ))
-                )
             }
             {/* Add Button */}
             <Link className='fixed z-[9999] right-6 bottom-6' to={"/dashboard/admins/add-admin/"}>

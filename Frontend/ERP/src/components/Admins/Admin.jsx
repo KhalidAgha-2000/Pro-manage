@@ -7,7 +7,7 @@ import { Context } from '../Context/Context';
 import Cookies from 'js-cookie';
 import logout from '../../constants/logout';
 import Input from './Input'
-const Admin = (props) => {
+const Admin = () => {
     const { id } = useParams();
     const [adminData, setAdminData] = useState({})
     const { setNotifications, setLoading } = useContext(Context)
@@ -67,7 +67,7 @@ const Admin = (props) => {
                 notificationBarMessage: response.data.message
             })
             setAdminData(response.data.data)
-            if (props.idInToken === id) {
+            if (Cookies.get('id') === id) {
                 setInterval(() => {
                     logout()
                 }, 4000);
@@ -108,7 +108,7 @@ const Admin = (props) => {
                 notificationBarMessage: response.data.message
             })
             setAdminData(response.data.data)
-            if (props.idInToken === id) {
+            if (Cookies.get('id') === id) {
                 setInterval(() => {
                     logout()
                 }, 4000);
@@ -156,7 +156,7 @@ const Admin = (props) => {
                 pass: true,
                 notificationBarMessage: response.data.message
             })
-            if (props.idInToken === id) {
+            if (Cookies.get('id') === id) {
                 setInterval(() => {
                     logout()
                 }, 4000);
@@ -191,7 +191,7 @@ const Admin = (props) => {
                     <IoMdArrowRoundBack cursor={'pointer'} size={40} color="#e04e17" />
                 </Link>
                 <span className="w-max h-auto bg-orange text-light font-bold text-lg font-montserrat px-2.5 py-0.5 rounded-lg">
-                    {props.idInToken === id ? "Your" : "Admin"} Information
+                    {Cookies.get('id') === id ? "Your" : "Admin"} Information
                 </span>
             </header>
             {/* Email / Username */}
@@ -216,7 +216,7 @@ const Admin = (props) => {
                 </div>
 
                 <div className='w-full my-2 flex items-center justify-end '>
-                    {props.idInToken === id ?
+                    {Cookies.get('id') === id ?
                         <span className='font-montserrat font-bold text-failed text-lg mx-1'>Logout Required</span>
                         : null}
                     <Buttons done text={"Done"} />
@@ -249,7 +249,7 @@ const Admin = (props) => {
                 </div>
 
                 <div className='w-full my-2 flex items-center justify-end '>
-                    {props.idInToken === id ?
+                    {Cookies.get('id') === id ?
                         <span className='font-montserrat font-bold text-failed text-lg mx-1'>Logout Required</span>
                         : null}
                     <Buttons done text={"Done"} />
@@ -266,7 +266,7 @@ const Admin = (props) => {
                     className='pt-3 px-1 w-1/2'
                 />
                 <div cclassName='w-1/2 my-2 flex items-center justify-end '>
-                    {props.idInToken === id ?
+                    {Cookies.get('id') === id ?
                         <span className='font-montserrat font-bold text-failed text-lg mx-1'>Logout Required</span>
                         : null}
                     <Buttons done text={"Done"} />

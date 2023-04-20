@@ -1,10 +1,44 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Search from './Search'
 import { motion } from "framer-motion";
 import { Context } from '../Context/Context';
 import { MdAdminPanelSettings } from 'react-icons/md';
+import axiosInstance from '../../constants/axios';
+import Cookies from 'js-cookie';
 
-const Header = (props) => {
+const Header = () => {
+    const { setNotifications } = useContext(Context)
+    const [dataSpecificAdmin, setDataSpecificAdmin] = useState([])
+
+    const getSpecificAdminData = async () => {
+        try {
+            const response = await
+                axiosInstance.get(`/admins/specific-admin/${Cookies.get('id')}`, {
+                    headers: { token: Cookies.get('token') }
+                })
+            setDataSpecificAdmin(response.data.data)
+        } catch (error) {
+            if (error.response && error.response.data) {
+                setNotifications({
+                    notificationBar: true,
+                    pass: false,
+                    notificationBarMessage: "Oops! Some thing wrong, try to reload"
+                })
+            }
+        }
+        finally {
+            setInterval(() => {
+                setNotifications({
+                    pass: false,
+                    notificationBarMessage: '',
+                    notificationBar: false,
+                })
+            }, 4000);
+        }
+    }
+    useEffect(() => {
+        getSpecificAdminData()
+    }, [])
 
     return (
         <motion.div
@@ -19,13 +53,13 @@ const Header = (props) => {
                 {/* Profile Image */}
                 <div className='w-1/5'>
                     <div className={`profile relative w-20 h-20 rounded-full my-2
-                ${props.dataSpecificAdmin.image && "after:absolute after:bg-green-500 after:w-3 after:h-3  after:bottom-1 after:right-3 after:rounded-full after:animate-pulse"}
+                ${dataSpecificAdmin.image && "after:absolute after:bg-green-500 after:w-3 after:h-3  after:bottom-1 after:right-3 after:rounded-full after:animate-pulse"}
                 `}
                     >
                         {
-                            props.dataSpecificAdmin.image &&
+                            dataSpecificAdmin.image &&
                             <img
-                                src={props.dataSpecificAdmin.image}
+                                src={dataSpecificAdmin.image}
                                 alt="admin-image"
                                 className="profile--image relative border-2 h-full w-full rounded-full object-cover object-center"
                             />
@@ -37,10 +71,10 @@ const Header = (props) => {
                 {/* Profile Data */}
                 <div className="flex flex-col w-4/5 p-2 font-montserrat font-semibold  h-auto">
                     <span className='uppercase'>
-                        {props.dataSpecificAdmin.username && props.dataSpecificAdmin.username || "..."}
+                        {dataSpecificAdmin.username && dataSpecificAdmin.username || "..."}
                     </span>
                     <span className='whitespace-normal  break-words'>
-                        {props.dataSpecificAdmin.email && props.dataSpecificAdmin.email || "..."}
+                        {dataSpecificAdmin.email && dataSpecificAdmin.email || "..."}
                     </span>
                 </div>
 

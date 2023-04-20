@@ -11,7 +11,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logout from '../../constants/logout';
 
 
-const SideBar = (props) => {
+const SideBar = () => {
     const [activeNavItem, setActiveNavItem] = useState('Analysis');
     const navigate = useNavigate()
     const location = useLocation()
