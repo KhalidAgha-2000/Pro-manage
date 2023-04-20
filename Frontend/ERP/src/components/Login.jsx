@@ -77,7 +77,7 @@ const Login = () => {
                 initial={{ opacity: 0, x: -100 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2, duration: 0.5, ease: "easeInOut" }}
-                className='leftt w-1/2 h-screen flex items-center'>
+                className='leftt w-1/2 h-screen flex items-center '>
                 <form
                     onSubmit={handleLogin}
                     class="login-form relative w-1/2 p-1 h-2/3 m-auto flex flex-col items-center ju
@@ -112,7 +112,12 @@ const Login = () => {
                         disabled:cursor-not-allowed disabled:opacity-25'
                         type="submit" name='login'>Continue
                     </button>
+                    {/* ---- */}
+                    <span className='absolute left-2 -top-2 w-4 h-4 object-cover bg-orange bg-opacity-95 rounded-full' />
+                    <span className='absolute left-2 top-4 w-1 h-1 object-cover bg-orange bg-opacity-95 rounded-full' />
+                    <span className='absolute left-6 top-0 w-2 h-2 object-cover bg-orange bg-opacity-95 rounded-full' />
                 </form>
+
             </motion.section>
 
 
