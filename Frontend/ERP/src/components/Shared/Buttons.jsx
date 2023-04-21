@@ -1,5 +1,5 @@
 // Buttons
-export const Buttons = ({ text, edit, add, done, remove, disabled, onClick }) => {
+export const Buttons = ({ text, edit, done, remove, type, onClick }) => {
     return (
         <button
             className={`w-max h-auto items-center px-4 py-2.5 text-sm font-medium font-montserrat text-center text-light rounded-lg cursor-pointer
@@ -13,6 +13,7 @@ export const Buttons = ({ text, edit, add, done, remove, disabled, onClick }) =>
              `
             }
             onClick={onClick}
+            type={type}
         >
             {text}
         </button >
@@ -22,10 +23,10 @@ export const Buttons = ({ text, edit, add, done, remove, disabled, onClick }) =>
 
 
 // Icon Buttons
-export const IconButtons = ({ Icon, onClick }) => {
+export const IconButtons = ({ Icon, onClick, className }) => {
     return (
         <button
-            className={`w-max h-max items-center bg-orange px-3 py-3  text-center text-light rounded-full cursor-pointer
+            className={`${className} || w-max h-max items-center bg-orange px-3 py-3  text-center text-light rounded-full cursor-pointer
              hover:opacity-70 hover:text-dark  hover:scale-90
              focus:ring-1 focus:outline-none focus:ring-light 
              transition duration-700 ease-in-out`

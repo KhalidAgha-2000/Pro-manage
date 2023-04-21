@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { AiOutlineUserDelete, AiFillPushpin, AiFillEdit } from "react-icons/ai";
 import axiosInstance from '../../constants/axios'
 import { Context } from '../Context/Context';
@@ -9,11 +9,13 @@ import { GiCheckMark } from 'react-icons/gi';
 import { TbLetterX } from 'react-icons/tb';
 import Cookies from 'js-cookie';
 import { IconButtons } from '../Shared/Buttons';
+import AddAdmin from './AddAdmin';
 
 const Admins = () => {
     const { setNotifications, setLoading, search } = useContext(Context)
     const [allAdminsData, setAllAdminsData] = useState([])
     const [prepareToRemove, setPrepareToRemove] = useState(null)
+    const [isOpen, setIsOpen] = useState(false)
 
     const removeAdmin = async (id) => {
         try {
@@ -94,6 +96,7 @@ const Admins = () => {
 
     return (
         <div className='w-full h-[75vh] relative flex flex-wrap justify-center p-3 gap-x-4 gap-y-4 overflow-auto scrollbar-thin scrollbar-thumb-orange scrollbar-track-dark'>
+
             {
 
                 filteredAdminsToSearch.length === 0 ?
@@ -152,17 +155,25 @@ const Admins = () => {
                                 </div>
 
                                 {/* ---- */}
-                                <span className='absolute  right-2 -bottom-2 w-4 h-4 object-cover bg-[#dfd6d3] bg-opacity-95 rounded-full' />
-                                <span className='absolute  right-2 bottom-4 w-1 h-1 object-cover bg-[#dfd6d3] bg-opacity-95 rounded-full' />
+                                <span className='absolute right-2 -bottom-2 w-4 h-4 object-cover bg-sidebar bg-opacity-95 rounded-full' />
+                                <span className='absolute right-2 bottom-4 w-1 h-1 object-cover bg-sidebar bg-opacity-95 rounded-full' />
 
                             </motion.div>
                         ))
             }
             {/* Add Button */}
-            <Link className='fixed z-[9999] right-6 bottom-6' to={"/dashboard/admins/add-admin/"}>
-                <IconButtons Icon={MdAdd} />
-            </Link>
+            <IconButtons
+                Icon={MdAdd}
+                onClick={() => setIsOpen(true)}
+                className={'fixed right-6 bottom-6'}
+            />
 
+            <AddAdmin
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+                setAllAdminsData={setAllAdminsData}
+                allAdminsData={allAdminsData}
+            />
         </div>
     )
 }
