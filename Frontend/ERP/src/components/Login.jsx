@@ -80,7 +80,7 @@ const Login = () => {
                 className='leftt w-1/2 h-screen flex items-center '>
                 <form
                     onSubmit={handleLogin}
-                    class="login-form relative w-1/2 p-1 h-2/3 m-auto flex flex-col items-center ju
+                    className="login-form relative w-1/2 p-1 h-2/3 m-auto flex flex-col items-center ju
                backdrop-blur-lg bg-gradient-to-b from-light to-sidebar shadow-orange/70 shadow-floating-shadow "
                 >
                     <h1 className='w-full h-fit p-1 mt-4 font-alkatra text-orange text-center font-bold text-3xl'>Welcome</h1>
@@ -139,7 +139,14 @@ const Login = () => {
                 </div>
 
             </section>
-
+            {/* Copyright */}
+            <span className='fixed bottom-1 right-1 z-10 w-fit h-fit p-1 text-sidebar font-alkatra'>
+                Copyright &copy;  {new Date().getFullYear()}
+                <a className='mx-1 underline' target='_blank' rel='noreferrer' href="https://www.linkedin.com/in/khalid-agha/">
+                    M.KHALID.K.AGHA
+                </a>
+                All Rights Reserved
+            </span>
         </div>
     )
 }
