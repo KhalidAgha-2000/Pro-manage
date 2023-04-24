@@ -171,7 +171,7 @@ class Controller {
                 { $set: { image: imageUploadResult.secure_url, } },
                 { new: true }
             );
-            res.status(200).json({ success: true, message: 'Data updated successfully', data: updatedData });
+            res.status(200).json({ success: true, message: 'Data updated successfully', id: req.params.id, data: { image: imageUploadResult.secure_url } });
         } catch (err) {
             res.status(500).json({ success: false, message: "Failed to Update!" });
         }
