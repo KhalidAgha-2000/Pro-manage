@@ -199,7 +199,7 @@ class Controller {
 
         //Check length of phone number
         // if (req.body.phone.toString().length < 8) {
-        if (!/^\d{8}$/.test(req.body.phone)) {
+        if (!/^\d{8}$/.test(req.body.phone.toString())) {
             return res.status(500).json({ success: false, message: "Please enter a valid phone number (8) digits" })
         }
         // Upload image to Cloudinary
@@ -216,7 +216,6 @@ class Controller {
             last_name: req.body.last_name,
             email: req.body.email,
             phone: req.body.phone,
-            // image: req.body.image,
             image: imageUploadResult.secure_url,
         });
 
@@ -226,7 +225,7 @@ class Controller {
             return res.status(201).json({ success: true, message: "Employee added successfully", employee: savedEmployee });
         } catch (error) {
             next(error)
-            // return res.status(500).json({ success: false, message: "Failed to add Employee" });
+            return res.status(400).json({ success: false, message: "Fields are required" });
         }
     }
 
