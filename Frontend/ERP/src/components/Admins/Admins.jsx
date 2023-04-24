@@ -1,21 +1,22 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { AiOutlineUserDelete, AiFillPushpin, AiFillEdit } from "react-icons/ai";
 import axiosInstance from '../../constants/axios'
 import { Context } from '../Context/Context';
 import { MdAdd, MdAdminPanelSettings } from 'react-icons/md';
-import { motion } from "framer-motion";
-import { Link } from 'react-router-dom';
+import { AnimatePresence, motion } from "framer-motion";
 import { GiCheckMark } from 'react-icons/gi';
 import { TbLetterX } from 'react-icons/tb';
 import Cookies from 'js-cookie';
 import { IconButtons } from '../Shared/Buttons';
 import AddAdmin from './AddAdmin';
+import Admin from './Admin';
 
 const Admins = () => {
     const { setNotifications, setLoading, search } = useContext(Context)
     const [allAdminsData, setAllAdminsData] = useState([])
     const [prepareToRemove, setPrepareToRemove] = useState(null)
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpenToAdd, setIsOpenToAdd] = useState(false)
+    const [isOpenToEdit, setIsOpenToEdit] = useState({ id: '', opened: false })
 
     const removeAdmin = async (id) => {
         try {
@@ -137,9 +138,12 @@ const Admins = () => {
                                 </div>
                                 {/* Tools */}
                                 <div className='h-full w-4 absolute top-0 pr-4 right-3 flex flex-col items-start  justify-evenly  text-light'>
-                                    <Link to={"/dashboard/admins/admin/" + admin._id}>
-                                        <AiFillEdit className='hover:scale-150  transition duration-200 ease-in-out' size={20} color='#f0f0f0' cursor={'pointer'} />
-                                    </Link>
+                                    {/* <Link to={"/dashboard/admins/admin/" + admin._id}> */}
+                                    <AiFillEdit className='hover:scale-150  transition duration-200 ease-in-out'
+                                        onClick={() => setIsOpenToEdit({ id: admin._id, opened: true })}
+                                        size={20} color='#f0f0f0' cursor={'pointer'}
+                                    />
+                                    {/* </Link> */}
                                     <AiOutlineUserDelete className={`hover:scale-150  transition duration-200 ease-in-out ${admin._id === Cookies.get('id') && "hidden"}`}
                                         size={20} color='#f0f0f0' cursor={'pointer'} onClick={() => { setPrepareToRemove(admin._id) }}
                                     />
@@ -164,16 +168,36 @@ const Admins = () => {
             {/* Add Button */}
             <IconButtons
                 Icon={MdAdd}
-                onClick={() => setIsOpen(true)}
+                onClick={() => setIsOpenToAdd(true)}
                 className={'fixed right-6 bottom-6'}
             />
-
+            {/* Add Admin */}
             <AddAdmin
-                isOpen={isOpen}
-                setIsOpen={setIsOpen}
+                isOpenToAdd={isOpenToAdd}
+                setIsOpenToAdd={setIsOpenToAdd}
                 setAllAdminsData={setAllAdminsData}
                 allAdminsData={allAdminsData}
             />
+
+            {/* Edit Admin */}
+            <AnimatePresence>
+                {isOpenToEdit.opened &&
+                    <motion.div
+                        initial={{ opacity: 0, y: 50 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 50 }}
+                        transition={{ duration: 0.5 }}
+                        className="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex items-center justify-center"
+                    >
+                        <Admin
+                            isOpenToEdit={isOpenToEdit}
+                            setIsOpenToEdit={setIsOpenToEdit}
+                            setAllAdminsData={setAllAdminsData}
+                            allAdminsData={allAdminsData}
+                        />
+                    </motion.div>
+                }
+            </AnimatePresence>
         </div>
     )
 }

@@ -1,14 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { IoMdArrowRoundBack } from 'react-icons/io';
-import { Link, useParams } from 'react-router-dom';
 import axiosInstance from '../../constants/axios'
 import { Buttons } from '../Shared/Buttons'
 import { Context } from '../Context/Context';
 import Cookies from 'js-cookie';
 import logout from '../../constants/logout';
 import Input from './Input'
-const Admin = () => {
-    const { id } = useParams();
+import { AiFillCloseCircle } from 'react-icons/ai';
+
+const Admin = ({ isOpenToEdit, setIsOpenToEdit, setAllAdminsData }) => {
+
+    const { id } = isOpenToEdit
     const [adminData, setAdminData] = useState({})
     const { setNotifications, setLoading } = useContext(Context)
     const [adminEmail, setAdminEmail] = useState(adminData.email)
@@ -72,7 +73,20 @@ const Admin = () => {
                     logout()
                 }, 4000);
             }
-            // console.log(response.data.data);
+            setTimeout(() => {
+                setIsOpenToEdit(isOpenToEdit => ({ ...isOpenToEdit, opened: false }))
+            }, 2000)
+            // Get The Updated Admin Data
+            setAllAdminsData(prevAdminsData => {
+                const updatedAdminsData = prevAdminsData.map(admin => {
+                    if (admin._id === response.data.data._id) {
+                        return response.data.data;
+                    }
+                    return admin;
+                });
+                return updatedAdminsData;
+            })
+
         } catch (error) {
             if (error.response && error.response.data) {
                 setNotifications({
@@ -80,7 +94,6 @@ const Admin = () => {
                     pass: false,
                     notificationBarMessage: error.response.data.message
                 })
-                // console.log(error.response.data.message);
             }
         } finally {
             setInterval(() => {
@@ -113,6 +126,9 @@ const Admin = () => {
                     logout()
                 }, 4000);
             }
+            setTimeout(() => {
+                setIsOpenToEdit(isOpenToEdit => ({ ...isOpenToEdit, opened: false }))
+            }, 2000);
         } catch (error) {
             if (error.response && error.response.data) {
                 setNotifications({
@@ -137,8 +153,7 @@ const Admin = () => {
 
     const handleImageUpload = (e) => {
         setImage(e.target.files[0])
-        console.log('i', image)
-    };
+    }
     const changeImage = async (e) => {
         e.preventDefault()
         try {
@@ -161,6 +176,19 @@ const Admin = () => {
                     logout()
                 }, 4000);
             }
+            setTimeout(() => {
+                setIsOpenToEdit(isOpenToEdit => ({ ...isOpenToEdit, opened: false }))
+            }, 2000)
+            // Get The Updated Admin Data
+            setAllAdminsData(prevAdminsData => {
+                const updatedAdminsData = prevAdminsData.map(admin => {
+                    if (admin._id === response.data.id) {
+                        return { ...admin, image: response.data.data.image };
+                    }
+                    return admin;
+                });
+                return updatedAdminsData;
+            })
         } catch (error) {
             if (error.response && error.response.data) {
                 setNotifications({
@@ -184,96 +212,88 @@ const Admin = () => {
 
 
     return (
-        <div className='w-full m-auto flex flex-col justify-start items-center p-3 gap-4 overflow-auto scrollbar-thin scrollbar-thumb-orange scrollbar-track-dark'>
-            <header className='w-11/12 flex justify-between items-center mb-4'>
-                {/* Back */}
-                <Link to={"/dashboard/admins/"}>
-                    <IoMdArrowRoundBack cursor={'pointer'} size={40} color="#e04e17" />
-                </Link>
-                <span className="w-max h-auto bg-orange text-light font-bold text-lg font-montserrat px-2.5 py-0.5 rounded-lg">
-                    {Cookies.get('id') === id ? "Your" : "Admin"} Information
-                </span>
-            </header>
+
+        <div
+            className='w-1/2 h-2/3 mt-24 max-h-fit m-auto bg-light relative overflow-hidden'>
+            {/* Header */}
+
+            {/* ---- */}
+            <span className='absolute -left-2 bottom-0 w-6 h-6 object-cover bg-orange bg-opacity-95 rounded-full' />
+            <span className='absolute left-6 bottom-2 w-4 h-4 object-cover bg-sidebar  rounded-full' />
+            <span className='absolute left-4 bottom-6 w-1 h-1 object-cover bg-orange bg-opacity-95 rounded-full' />
+
+            <AiFillCloseCircle
+                onClick={() => setIsOpenToEdit(isOpenToEdit => ({ ...isOpenToEdit, opened: false }))}
+                className='absolute top-2 right-2' cursor='pointer' size={25} color='#e04e17'
+            />
+            <h1 className='font-alkatra text-xl text-orange font-semibold w-full p-2 my-1 mb-6 text-center'>
+                Update {Cookies.get('id') === id ? "Your" : "Admin"} Information
+                <br />
+                {Cookies.get('id') === id &&
+                    <p>Logout Required</p>}
+            </h1>
+
             {/* Email / Username */}
-            <form className='w-11/12' onSubmit={updateAdminInformation}>
-                <div className='w-full flex gap-4 items-center justify-between '>
-                    <Input
-                        className='w-1/2 '
-                        type={'text'}
-                        defaultValue={adminData.username}
-                        onChange={(e) =>
-                            setAdminUsername(e.target.value)
-                        }
-                    />
-                    <Input
-                        className='w-1/2'
-                        type={'email'}
-                        defaultValue={adminData.email}
-                        onChange={(e) =>
-                            setAdminEmail(e.target.value)
-                        }
-                    />
-                </div>
-
-                <div className='w-full my-2 flex items-center justify-end '>
-                    {Cookies.get('id') === id ?
-                        <span className='font-montserrat font-bold text-failed text-lg mx-1'>Logout Required</span>
-                        : null}
-                    <Buttons done text={"Done"} />
-
-                </div>
+            <form
+                onSubmit={updateAdminInformation}
+                className='w-[90%] m-auto my-14 h-fit flex items-center justify-evenly gap-x-4 mt-4 '
+            >
+                <Input
+                    type={'text'} placeholder='username'
+                    defaultValue={adminData.username}
+                    onChange={(e) =>
+                        setAdminUsername(e.target.value)
+                    }
+                />
+                <Input
+                    type={'email'} placeholder='email'
+                    defaultValue={adminData.email}
+                    onChange={(e) =>
+                        setAdminEmail(e.target.value)
+                    }
+                />
+                <Buttons done text={"Done"} />
             </form>
             {/* Change Password */}
-            <form className='w-11/12' onSubmit={changePassword}>
+            <form
+                onSubmit={changePassword}
+                className='w-[90%] m-auto my-14 h-fit flex items-center justify-evenly gap-x-4 mt-4 '
+            >
+                <Input
+                    onChange={(e) =>
+                        setAdminOldPassword(e.target.value)
+                    }
+                    type={'password'}
+                    placeholder='Old Password'
+                />
+                <Input
 
-                <div className='flex justify-between items-center w-full gap-4'>
-                    <Input
-                        className='w-1/2'
-                        onChange={(e) =>
-                            setAdminOldPassword(e.target.value)
-                        }
-                        type={'password'}
-                        placeholder='Old Password'
-
-                    />
-                    <Input
-                        className='w-1/2'
-                        onChange={(e) =>
-                            setAdminNewPassword(e.target.value)
-                        }
-                        type={'password'}
-                        placeholder='New Password'
-
-                    />
-
-                </div>
-
-                <div className='w-full my-2 flex items-center justify-end '>
-                    {Cookies.get('id') === id ?
-                        <span className='font-montserrat font-bold text-failed text-lg mx-1'>Logout Required</span>
-                        : null}
-                    <Buttons done text={"Done"} />
-                </div>
-
+                    onChange={(e) =>
+                        setAdminNewPassword(e.target.value)
+                    }
+                    type={'password'}
+                    placeholder='New Password'
+                />
+                <Buttons done text={"Done"} />
             </form>
+
             {/* Change Image */}
-            <form onSubmit={changeImage} className='my-3 w-11/12 flex justify-between items-center'>
+            <form
+                onSubmit={changeImage}
+                className='w-[90%] m-auto my-14 h-fit flex items-center justify-evenly gap-x-4 mt-4 '
+            >
                 <Input
                     onChange={handleImageUpload}
                     name="image" defaultValue={image}
                     placeholder='image'
                     type='file'
-                    className='pt-3 px-1 w-1/2'
+                    className='pt-3 px-1 '
                 />
-                <div cclassName='w-1/2 my-2 flex items-center justify-end '>
-                    {Cookies.get('id') === id ?
-                        <span className='font-montserrat font-bold text-failed text-lg mx-1'>Logout Required</span>
-                        : null}
-                    <Buttons done text={"Done"} />
-                </div>
+                <Buttons done text={"Done"} />
             </form>
+        </div>
 
-        </div >
+
     )
 }
 
