@@ -8,13 +8,14 @@ import { MdNavigateNext, MdNavigateBefore, MdAdd } from 'react-icons/md'
 import { IconButtons } from "../Shared/Buttons";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import AddEmployee from './Addemployee'
 const Employees = () => {
     const { setNotifications, setLoading, search } = useContext(Context)
     const [employees, setEmployees] = useState([]);
     const [employeestoSearch, setEmployeestoSearch] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-
+    const [isOpenToAdd, setIsOpenToAdd] = useState(false)
 
     const getAllEmployees = async () => {
         try {
@@ -29,7 +30,6 @@ const Employees = () => {
             setEmployees(response.data.data);
             setCurrentPage(response.data.currentPage);
             setTotalPages(response.data.totalPages);
-            // console.log('ree', response);
         } catch (error) {
             if (error.response && error.response.data) {
                 setNotifications({
@@ -159,9 +159,20 @@ const Employees = () => {
             }
 
             {/* Add Button */}
-            <Link className='fixed z-[99] right-6 bottom-6' to={"/dashboard/employees/add-employee/"}>
-                <IconButtons Icon={MdAdd} />
-            </Link>
+            <IconButtons Icon={MdAdd}
+                onClick={() => setIsOpenToAdd(true)}
+                className={'fixed right-6 bottom-6'}
+            />
+
+            {/* Add Employee */}
+            <AddEmployee
+                getAllEmployees={getAllEmployees}
+                employees={employees}
+                setEmployees={setEmployees}
+                isOpenToAdd={isOpenToAdd}
+                setIsOpenToAdd={setIsOpenToAdd}
+            />
+
         </div>
     )
 }
