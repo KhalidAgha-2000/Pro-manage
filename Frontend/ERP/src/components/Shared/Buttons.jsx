@@ -1,5 +1,5 @@
 // Buttons
-export const Buttons = ({ text, edit, done, remove, type, onClick }) => {
+export const Buttons = ({ text, edit, done, remove, type, onClick, className }) => {
     return (
         <button
             className={`w-fit h-fit items-center px-4 py-2.5 text-sm font-medium font-montserrat text-center text-light rounded-lg cursor-pointer
@@ -10,6 +10,7 @@ export const Buttons = ({ text, edit, done, remove, type, onClick }) => {
              ${edit && 'bg-success'}
              ${remove && 'bg-failed'}
              ${done && 'bg-orange'}
+             ${className}
              `
             }
             onClick={onClick}

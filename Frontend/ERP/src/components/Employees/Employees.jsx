@@ -7,16 +7,19 @@ import { HiUserCircle } from 'react-icons/hi'
 import { MdNavigateNext, MdNavigateBefore, MdAdd } from 'react-icons/md'
 import { IconButtons } from "../Shared/Buttons";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import AddEmployee from './Addemployee'
+import Employee from './Employee'
 const Employees = () => {
     const { setNotifications, setLoading, search } = useContext(Context)
     const [employees, setEmployees] = useState([]);
-    const [employeestoSearch, setEmployeestoSearch] = useState([]);
+    const [teamsData, setTeamsData] = useState({})
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [isOpenToAdd, setIsOpenToAdd] = useState(false)
+    const [isOpenToEdit, setIsOpenToEdit] = useState({ id: '', opened: false })
 
+    // Get All Employees
     const getAllEmployees = async () => {
         try {
             setLoading(true)
@@ -51,6 +54,37 @@ const Employees = () => {
         }
     }
 
+    // Get All Teams
+    const getAllTeams = async () => {
+        try {
+            setLoading(true)
+            const response = await
+                axiosInstance.get('/teams/all-teams/', {
+                    headers: { token: Cookies.get('token') }
+                })
+            // console.log('rr', response);
+            setTeamsData(response.data.data)
+        } catch (error) {
+            if (error.response && error.response.data) {
+                setNotifications({
+                    notificationBar: true,
+                    pass: false,
+                    notificationBarMessage: "Oops! Some thing wrong, try to reload"
+                })
+            }
+        }
+        finally {
+            setLoading(false);
+            setInterval(() => {
+                setNotifications({
+                    pass: false,
+                    notificationBarMessage: '',
+                    notificationBar: false,
+                })
+            }, 9000);
+        }
+
+    }
     // Filter
     const filteredEmployeesToSearch = employees.filter(val => {
         if (search === '') {
@@ -61,6 +95,7 @@ const Employees = () => {
     });
 
     useEffect(() => {
+        getAllTeams()
         getAllEmployees()
     }, [currentPage, search]);
 
@@ -90,12 +125,13 @@ const Employees = () => {
                             No value match your search input
                         </h1>
                     ) : (
-                        filteredEmployeesToSearch.map((employee, index) => (
+                        filteredEmployeesToSearch.map((employee) => (
                             <motion.div
                                 initial={{ opacity: 0, y: 10 }}
                                 whileInView={{ y: [100, 50, 0], opacity: [0, 0, 1] }}
                                 transition={{ duration: 0.5 }}
-                                key={index}
+                                key={employee.id}
+                                onClick={() => setIsOpenToEdit({ id: employee.id, opened: true })}
                                 className='w-full h-14 flex items-center rounded-2xl justify-around font-montserrat relative overflow-hidden
                                             cursor-pointer my-2 border-2 border-sidebar hover:bg-dark hover:text-light hover:border-dark
                                             transition duration-200 ease-in-out '
@@ -106,10 +142,10 @@ const Employees = () => {
                                         className='object-cover object-center aspect-square  rounded-full mx-2 border-2 w-12 h-12' />
                                     || <HiUserCircle size={20} />
                                 }
-                                <p className='w-full font-semibold text-lg text-center'>{employee.Employee_Name}</p>
+                                <p className='w-full font-semibold text-lg text-center truncate'>{employee.Employee_Name}</p>
                                 <p className='w-full font-semibold text-lg text-center'>{employee.email}</p>
                                 <p className='w-full font-semibold text-lg text-center'>{employee.phone}</p>
-                                <p className='w-full font-semibold text-lg text-center z-10'>{employee.team && employee.team || "---"}</p>
+                                <p className='w-full font-semibold text-lg text-center '>{employee.team && employee.team || "---"}</p>
 
                                 {/* ---- */}
                                 <span className='absolute -right-6 -bottom-2 w-10 h-10 bg-orange rounded-full' />
@@ -172,6 +208,26 @@ const Employees = () => {
                 isOpenToAdd={isOpenToAdd}
                 setIsOpenToAdd={setIsOpenToAdd}
             />
+
+            {/* Edit Admin */}
+            <AnimatePresence>
+                {isOpenToEdit.opened &&
+                    <motion.div
+                        initial={{ opacity: 0, y: 50 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 50 }}
+                        transition={{ duration: 0.5 }}
+                        className="fixed top-0 left-0 w-full h-full z-10 bg-gray-900 bg-opacity-50 flex items-center justify-center"
+                    >
+                        <Employee
+                            isOpenToEdit={isOpenToEdit}
+                            setIsOpenToEdit={setIsOpenToEdit}
+                            teamsData={teamsData}
+                            getAllEmployees={getAllEmployees}
+                        />
+                    </motion.div>
+                }
+            </AnimatePresence>
 
         </div>
     )

@@ -25,6 +25,14 @@ const AddEmployee = ({ isOpenToAdd, setIsOpenToAdd, getAllEmployees }) => {
         setEmployeeToAdd({ ...employeeToAdd, image: e.target.files[0] })
     }
     const handleAddEmployee = async (e) => {
+        if (!employeeToAdd.firstname || !employeeToAdd.lastname || !employeeToAdd.email) {
+            setNotifications({
+                notificationBar: true,
+                pass: false,
+                notificationBarMessage: 'Fields are required'
+            })
+            return
+        }
         e.preventDefault();
         try {
             const response = await axiosInstance.post('/employees/add-employee', {
@@ -84,6 +92,11 @@ const AddEmployee = ({ isOpenToAdd, setIsOpenToAdd, getAllEmployees }) => {
                         className='w-1/3 h-fit py-4 m-auto bg-light relative overflow-hidden'>
 
                         {/* Header */}
+                        {/* ---- */}
+                        <span className='absolute -left-2 top-0 w-6 h-6 object-cover bg-orange bg-opacity-95 rounded-full' />
+                        <span className='absolute left-6 top-2 w-4 h-4 object-cover bg-sidebar  rounded-full' />
+                        <span className='absolute left-4 top-6 w-1 h-1 object-cover bg-orange bg-opacity-95 rounded-full' />
+
                         <h1 className='font-alkatra text-xl text-orange font-semibold w-full p-2 my-1 mb-6 text-center'>
                             Add New Employee To The System
                         </h1>
@@ -117,7 +130,7 @@ const AddEmployee = ({ isOpenToAdd, setIsOpenToAdd, getAllEmployees }) => {
                                 onChange={handleChangeAddEmployee}
                                 defaultValue={employeeToAdd.phone}
                                 name="phone" type='number'
-                                placeholder='Phone Number'
+                                placeholder='enter a valid phone number (8) digits'
                                 className={'-my-1'}
                             />
                             <Input
