@@ -31,6 +31,7 @@ const Employees = () => {
                     , { headers: { token: Cookies.get('token') } }
                 )
             setEmployees(response.data.data);
+            console.log('emp', response.data.data);
             setCurrentPage(response.data.currentPage);
             setTotalPages(response.data.totalPages);
         } catch (error) {
@@ -142,7 +143,7 @@ const Employees = () => {
                                         className='object-cover object-center aspect-square  rounded-full mx-2 border-2 w-12 h-12' />
                                     || <HiUserCircle size={20} />
                                 }
-                                <p className='w-full font-semibold text-lg text-center truncate'>{employee.Employee_Name}</p>
+                                <p className='w-full font-semibold text-lg text-center truncate mr-4'>{employee.Employee_Name}</p>
                                 <p className='w-full font-semibold text-lg text-center'>{employee.email}</p>
                                 <p className='w-full font-semibold text-lg text-center'>{employee.phone}</p>
                                 <p className='w-full font-semibold text-lg text-center '>{employee.team && employee.team || "---"}</p>
@@ -224,6 +225,8 @@ const Employees = () => {
                             setIsOpenToEdit={setIsOpenToEdit}
                             teamsData={teamsData}
                             getAllEmployees={getAllEmployees}
+                            employees={employees}
+                            setEmployees={setEmployees}
                         />
                     </motion.div>
                 }

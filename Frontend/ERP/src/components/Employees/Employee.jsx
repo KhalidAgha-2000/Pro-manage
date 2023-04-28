@@ -6,11 +6,12 @@ import Cookies from 'js-cookie';
 import Input from '../Admins/Input';
 import { Buttons } from '../Shared/Buttons';
 
-const Employee = ({ isOpenToEdit, setIsOpenToEdit, teamsData, getAllEmployees }) => {
+const Employee = ({ isOpenToEdit, setIsOpenToEdit, teamsData, getAllEmployees, employees, setEmployees }) => {
 
     const { id } = isOpenToEdit
     const [employeeData, setEmployeeData] = useState({})
     const [selectedTeam, setSelectedTeam] = useState('');
+    const [image, setImage] = useState('');
 
     const { setNotifications, setLoading } = useContext(Context)
 
@@ -22,7 +23,6 @@ const Employee = ({ isOpenToEdit, setIsOpenToEdit, teamsData, getAllEmployees })
                 axiosInstance.get(`/employees/specific-employee/${id}`, {
                     headers: { token: Cookies.get('token') }
                 })
-            // console.log('rr', response);
             setEmployeeData(response.data.data)
         } catch (error) {
             if (error.response && error.response.data) {
@@ -32,7 +32,6 @@ const Employee = ({ isOpenToEdit, setIsOpenToEdit, teamsData, getAllEmployees })
                     notificationBarMessage: "Oops! Some thing wrong, try to reload"
                 })
             }
-            // console.log(error);
         }
         finally {
             setLoading(false);
@@ -64,6 +63,16 @@ const Employee = ({ isOpenToEdit, setIsOpenToEdit, teamsData, getAllEmployees })
                 pass: true,
                 notificationBarMessage: response.data.message
             })
+            // Get The Updated Admin Data
+            setEmployees(prevemployeeData => {
+                const updatedAdminsData = prevemployeeData.map(emp => {
+                    if (emp.id === response.data.id) {
+                        return { ...emp, team: response.data.team };
+                    }
+                    return emp;
+                });
+                return updatedAdminsData;
+            })
         } catch (error) {
             if (error.response && error.response.data) {
                 setNotifications({
@@ -85,6 +94,57 @@ const Employee = ({ isOpenToEdit, setIsOpenToEdit, teamsData, getAllEmployees })
         }
     }
 
+    // Change Image
+    const handleImageUpload = (e) => {
+        setImage(e.target.files[0])
+    }
+    const changeImage = async (e) => {
+        e.preventDefault()
+        try {
+            const response = await axiosInstance.put(`/employees/change-image/${id}`, { image: image }, {
+                headers: {
+                    token: Cookies.get('token'),
+                    "content-type": "multipart/form-data",
+                }
+            })
+            setLoading(true)
+            setNotifications({
+                notificationBar: true,
+                pass: true,
+                notificationBarMessage: response.data.message
+            })
+            // Get The Updated Admin Data
+            setEmployees(prevemployeeData => {
+                const updatedAdminsData = prevemployeeData.map(emp => {
+                    if (emp.id === response.data.id) {
+                        return { ...emp, image: response.data.data.image };
+                    }
+                    return emp;
+                });
+                return updatedAdminsData;
+            })
+        } catch (error) {
+            if (error.response && error.response.data) {
+                setNotifications({
+                    notificationBar: true,
+                    pass: false,
+                    notificationBarMessage: error.response.data.message
+                })
+            }
+        } finally {
+            setInterval(() => {
+                setLoading(false)
+                setNotifications({
+                    pass: false,
+                    notificationBarMessage: '',
+                    notificationBar: false,
+                })
+            }, 9000);
+        }
+
+    }
+
+    // Close & Update
     const closeAndUpdate = () => {
         setIsOpenToEdit(isOpenToEdit => ({ ...isOpenToEdit, opened: false }))
         getAllEmployees()
@@ -105,7 +165,10 @@ const Employee = ({ isOpenToEdit, setIsOpenToEdit, teamsData, getAllEmployees })
             <span className='absolute left-4 bottom-6 w-1 h-1 object-cover bg-orange bg-opacity-95 rounded-full' />
 
             <AiFillCloseCircle
-                onClick={() => closeAndUpdate()}
+                onClick={() => {
+                    setIsOpenToEdit(isOpenToEdit => ({ ...isOpenToEdit, opened: false }))
+                }}
+                // onClick={() => closeAndUpdate()}
                 className='absolute top-2 right-2' cursor='pointer' size={25} color='#e04e17'
             />
             <h1 className='font-alkatra text-xl text-orange font-semibold w-full p-2 my-1 mb-6 text-center'>
@@ -160,8 +223,12 @@ const Employee = ({ isOpenToEdit, setIsOpenToEdit, teamsData, getAllEmployees })
                         </form>
 
                         {/* Image*/}
-                        <form className=' flex justify-between items-center mb-6' >
+                        <form
+                            onSubmit={changeImage}
+                            className=' flex justify-between items-center mb-6'
+                        >
                             <Input
+                                onChange={handleImageUpload}
                                 name="image"
                                 defaultValue={employeeData.image}
                                 placeholder='image'
