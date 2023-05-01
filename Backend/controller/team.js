@@ -89,11 +89,12 @@ class Controller {
             }
         } catch (err) {
             next(err);
+            return res.status(500).json({ success: false, message: "Failed to add Team", error: err });
         }
     };
 
-    // -------------------- Assign employees To Team
-    async assignEmployeeToTeam(req, res, next) {
+    // -------------------- Assign Team To Employees
+    async assignTeamToemployee(req, res, next) {
         try {
             let { id } = req.params;
             const teamm = await teamModel.findById(id);
@@ -107,17 +108,18 @@ class Controller {
                 return res.status(404).json({ success: false, message: "Team not found" });
             }
 
-            if (employee.team && employee.team !== id) {
-                const assignedTeam = await teamModel.findById(employee.team);
-                return res.status(409).json({ success: false, message: `Employee ${employee.Employee_Name} is already assigned to team: ${assignedTeam.name}`, employeeData: employee });
-            }
+            // if (employee.team && employee.team !== id) {
+            //     const assignedTeam = await teamModel.findById(employee.team);
+            //     return res.status(409).json({ success: false, message: `Employee ${employee.Employee_Name} is already assigned to team: ${assignedTeam.name}`, employeeData: employee });
+            // }
 
             employee.team = id;
             await employee.save();
 
-            return res.status(200).json({ success: true, data: employee, message: `Employee ${employee.Employee_Name} has been successfully assigned to team: ${teamm.name}` });
+            return res.status(200).json({ success: true, data: employee, id: req.body.employeeId, team: teamm.name, message: `Employee ${employee.Employee_Name} has been successfully assigned to team: ${teamm.name}` });
         } catch (err) {
             next(err)
+            return res.status(500).json({ success: false, message: "Failed to add Team", error: err });
         }
     }
 

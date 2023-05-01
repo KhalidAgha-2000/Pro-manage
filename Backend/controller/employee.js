@@ -74,7 +74,6 @@ class Controller {
                 totalPages: Math.ceil(totalEmployees / perPage),
             });
         } catch (error) {
-            // console.log(error);
             res.status(500).json({ message: 'Server error', error });
         }
     }
@@ -93,26 +92,26 @@ class Controller {
                 email: employee.email,
                 phone: employee.phone,
                 image: employee.image,
-                team: employee.team._id,
-                teamName: employee.team.name,
-                teamEmployeeCount: employee.team.employees.length,
+                team: employee.team ? employee.team._id : null,
+                teamName: employee.team ? employee.team.name : null,
+                teamEmployeeCount: employee.team ? employee.team.employees.length : null,
+                teamProjectCount: employee.team ? employee.team.projects.length : null,
 
-                teamProjectCount: employee.team.projects.length,
-                kpis: employee.kpis.map(kk => ({
+                kpis: employee.kpis ? employee.kpis.map(kk => ({
                     kpi: kk.kpi,
                     rate: kk.rate,
                     kpiDate: kk.kpiDate
-                })),
+                })) : null,
 
-                roles: employee.roles.map(rr => ({
+                roles: employee.roles ? employee.roles.map(rr => ({
                     role: rr.role,
                     project: {
                         id: rr.project._id,
                         name: rr.project.name
                     }
-                }))
+                })) : null
+            };
 
-            }
             res.status(200).json({ success: true, message: 'Employee Information!', data: data });
         } catch (err) {
             next(err);
@@ -156,7 +155,7 @@ class Controller {
                 { $set: { image: imageUploadResult.secure_url, } },
                 { new: true }
             );
-            res.status(200).json({ success: true, message: 'Data updated successfully', data: updatedData });
+            res.status(200).json({ success: true, message: 'Data updated successfully', id: req.params.id, data: { image: imageUploadResult.secure_url } });
         } catch (err) {
             res.status(500).json({ success: false, message: "Failed to Update!" });
         }
@@ -172,17 +171,23 @@ class Controller {
                 return res.status(400).json({ message: 'Email already exists' });
             }
 
+            // Check if phone number is exactly 8 digits
+            // const phone = req.body.phone;
+            // if (!/^\d{8}$/.test(phone)) {
+            //     return res.status(400).json({ message: 'Phone, Enter (8) digits' });
+            // }
+
             // Update the employee by ID
-            const newemployeeData = await employeeModel.findByIdAndUpdate(
+            const newEmployeeData = await employeeModel.findByIdAndUpdate(
                 req.params.id,
                 { $set: req.body },
                 { new: true }
             );
 
-            res.status(200).json({ success: true, message: 'Data updated successfully', data: newemployeeData });
+            res.status(200).json({ success: true, message: 'Data updated successfully', data: newEmployeeData });
         } catch (err) {
             next(err)
-            // res.status(500).json({ success: false, message: "Failed to Update!" });
+            res.status(500).json({ success: false, message: "Failed to Update!", err });
         }
 
     }

@@ -43,6 +43,7 @@ router.group('/employees', (employeeRouter) => {
     employeeRouter.get('/specific-employee/:id', controller.specificEmployee)
     employeeRouter.put('/add-kpi-to-employee/:id', controller.addKpiToEmployee)
     employeeRouter.put('/assign-role-to-employee/:id', controller.assignRoleToEmployee)
+    employeeRouter.put('/update-info/:id', controller.UpdateEmployeeInfo)
 })
 
 module.exports = router
