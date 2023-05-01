@@ -6,12 +6,17 @@ import Cookies from 'js-cookie';
 import Input from '../Admins/Input';
 import { Buttons } from '../Shared/Buttons';
 
-const Employee = ({ isOpenToEdit, setIsOpenToEdit, teamsData, getAllEmployees, employees, setEmployees }) => {
+const Employee = ({ isOpenToEdit, setIsOpenToEdit, teamsData, setEmployees, getAllEmployees }) => {
 
     const { id } = isOpenToEdit
     const [employeeData, setEmployeeData] = useState({})
     const [selectedTeam, setSelectedTeam] = useState('');
     const [image, setImage] = useState('');
+    const [first_name, setFirst_name] = useState('' || employeeData.first_name)
+    const [last_name, setLast_name] = useState('' || employeeData.last_name)
+    const [email, setEmail] = useState('' || employeeData.email)
+    const [phone, setPhone] = useState('' || employeeData.phone)
+    const [phoneError, setPhoneError] = useState('');
 
     const { setNotifications, setLoading } = useContext(Context)
 
@@ -144,12 +149,74 @@ const Employee = ({ isOpenToEdit, setIsOpenToEdit, teamsData, getAllEmployees, e
 
     }
 
-    // Close & Update
-    const closeAndUpdate = () => {
-        setIsOpenToEdit(isOpenToEdit => ({ ...isOpenToEdit, opened: false }))
-        getAllEmployees()
+    // Update email / name / phone
+    const handleChangeToUpdate = (e) => {
+        e.preventDefault();
+        setUpdateEmployeeInfo({ ...updateEmployeeInfo, [e.target.name]: e.target.value })
+        // const { name, value } = e.target
+        // setUpdateEmployeeInfo(prevState => ({ ...prevState, [name]: value }))
+        console.log('updateEmployeeInfo', updateEmployeeInfo)
+    }
+    const handleChangeToUpdatePhone = (e) => {
+        const phoneRegex = /^\d{8}$/;
+        const value = e.target.value.trim();
+        if (value.length === 0) {
+            setPhoneError('Phone number is required');
+        } else if (!phoneRegex.test(value)) {
+            setPhoneError('Phone number must be exactly 8 digits');
+        } else {
+            setPhoneError('');
+            setPhone(value);
+        }
     }
 
+    const updateEmployeeInformation = async (e) => {
+        e.preventDefault()
+        // Check if length of phone number = 8
+        const phoneRegex = /^\d{8}$/
+        if (!phoneRegex.test(phone || employeeData.phone)) {
+            setNotifications({
+                notificationBar: true,
+                pass: false,
+                notificationBarMessage: 'Please enter a valid 8-digit phone number.'
+            })
+            return
+        }
+        try {
+            const response = await axiosInstance.put(`/employees/update-info/${id}`, {
+                first_name: first_name,
+                last_name: last_name,
+                email: email,
+                phone: phone
+            }, {
+                headers: { token: Cookies.get('token') }
+            })
+            setLoading(true)
+            setNotifications({
+                notificationBar: true,
+                pass: true,
+                notificationBarMessage: response.data.message
+            })
+            getAllEmployees()
+        } catch (error) {
+            if (error.response && error.response.data) {
+                setNotifications({
+                    notificationBar: true,
+                    pass: false,
+                    notificationBarMessage: error.response.data.message
+                })
+            }
+        } finally {
+            setInterval(() => {
+                setLoading(false)
+                setNotifications({
+                    pass: false,
+                    notificationBarMessage: '',
+                    notificationBar: false,
+                })
+            }, 9000);
+        }
+    }
     useEffect(() => {
         specificEmployee()
     }, [])
@@ -182,40 +249,41 @@ const Employee = ({ isOpenToEdit, setIsOpenToEdit, teamsData, getAllEmployees, e
                 <div className='w-1/2 h-full bg-slate-100'>
                     <div className='w-full h-fit p-1'>
                         {/* Basic */}
-                        <form className='mb-10' >
+                        <form className='mb-10'
+                            onSubmit={updateEmployeeInformation}
+                        >
                             <div className='flex gap-x-2 gap-y-2 mb-4'>
 
                                 <Input
                                     type={'text'} placeholder='first_name'
+                                    name={'first_name'} className={'w-1/2'}
                                     defaultValue={employeeData.first_name}
-                                    // onChange={(e) =>
-                                    //     setAdminEmail(e.target.value)
-                                    // }
-                                    className={'w-1/2'} />
+                                    onChange={(e) => { setFirst_name(e.target.value), console.log('first_name', first_name); }}
+                                />
+
                                 <Input
                                     type={'text'} placeholder='last_name'
+                                    name={'last_name'} className={'w-1/2'}
                                     defaultValue={employeeData.last_name}
-                                    // onChange={(e) =>
-                                    //     setAdminEmail(e.target.value)
-                                    // }
-                                    className={'w-1/2'} />
+                                    onChange={(e) => { setLast_name(e.target.value) }}
+
+                                />
                             </div>
                             <div className='flex gap-x-2 gap-y-2 my-4'>
 
                                 <Input
                                     type={'email'} placeholder='email'
+                                    name={'email'} className={'w-1/2'}
                                     defaultValue={employeeData.email}
-                                    // onChange={(e) =>
-                                    //     setAdminEmail(e.target.value)
-                                    // }
-                                    className={'w-1/2'} />
+                                    onChange={(e) => { setEmail(e.target.value) }}
+
+                                />
                                 <Input
-                                    type={'number'} placeholder='Phone,Enter (8) digits'
+                                    type={'number'} placeholder='Phone, Enter (8)digits'
+                                    name={'phone'} className={'w-1/2'}
                                     defaultValue={employeeData.phone}
-                                    // onChange={(e) =>
-                                    //     setAdminEmail(e.target.value)
-                                    // }
-                                    className={'w-1/2'} />
+                                    onChange={(e) => { setPhone(e.target.value.trim()) }}
+                                />
                             </div>
                             <div className='flex flex-col items-end'>
                                 <Buttons done text={'done'} />
@@ -233,7 +301,7 @@ const Employee = ({ isOpenToEdit, setIsOpenToEdit, teamsData, getAllEmployees, e
                                 defaultValue={employeeData.image}
                                 placeholder='image'
                                 type='file'
-                                className='pt-3 px-1 w-[64%]' />
+                                className={'pt-3 px-1 w-[60%]'} />
 
                             <Buttons done text={'done'} />
 
@@ -242,10 +310,10 @@ const Employee = ({ isOpenToEdit, setIsOpenToEdit, teamsData, getAllEmployees, e
                         <form className='flex justify-between items-center'
                             onSubmit={assignTeamToemployee}
                         >
-
                             <select name="team"
-                                className='h-14 rounded-md w-[65%] p-1 bg-light outline-none border-4 border-sidebar font-montserrat font-semibold text-dark placeholder:text-dark placeholder:opacity-60 focus:shadow-lg focus:shadow-orange '
+                                className='h-14 rounded-md w-[65%] p-1 bg-light outline-none border-4 border-sidebar font-montserrat font-semibold text-dark placeholder:text-dark placeholder:opacity-60 focus:shadow-lg focus:shadow-orange'
                                 onChange={handleChange}
+
                             >
                                 <option selected>{employeeData.teamName && employeeData.teamName || "No Team"}</option>
                                 {
@@ -256,6 +324,8 @@ const Employee = ({ isOpenToEdit, setIsOpenToEdit, teamsData, getAllEmployees, e
                                     ))
                                 }
                             </select>
+
+
 
                             <Buttons done text={'done'} />
 

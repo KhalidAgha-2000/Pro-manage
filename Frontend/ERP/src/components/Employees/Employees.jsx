@@ -6,7 +6,6 @@ import { Context } from '../Context/Context'
 import { HiUserCircle } from 'react-icons/hi'
 import { MdNavigateNext, MdNavigateBefore, MdAdd } from 'react-icons/md'
 import { IconButtons } from "../Shared/Buttons";
-import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import AddEmployee from './Addemployee'
 import Employee from './Employee'
@@ -31,7 +30,7 @@ const Employees = () => {
                     , { headers: { token: Cookies.get('token') } }
                 )
             setEmployees(response.data.data);
-            console.log('emp', response.data.data);
+            // console.log('emp', response.data.data);
             setCurrentPage(response.data.currentPage);
             setTotalPages(response.data.totalPages);
         } catch (error) {
