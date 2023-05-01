@@ -83,6 +83,11 @@ const AddAdmin = ({ isOpenToAdd, setIsOpenToAdd, setAllAdminsData, allAdminsData
                         className='w-1/3 h-3/4 max-h-fit m-auto bg-light relative overflow-hidden'>
 
                         {/* Header */}
+                        {/* ---- */}
+                        <span className='absolute -left-2 bottom-0 w-6 h-6 object-cover bg-orange bg-opacity-95 rounded-full' />
+                        <span className='absolute left-6 bottom-2 w-4 h-4 object-cover bg-sidebar  rounded-full' />
+                        <span className='absolute left-4 bottom-6 w-1 h-1 object-cover bg-orange bg-opacity-95 rounded-full' />
+
                         <h1 className='font-alkatra text-orange font-semibold w-full p-2 my-1 text-center'>Add New Admin To The System</h1>
                         <form
                             className='w-full m-auto h-full flex flex-col items-center gap-y-8 mt-4 '
