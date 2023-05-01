@@ -38,12 +38,9 @@ function App() {
 
               {/* ADMINS */}
               <Route path="admins" element={<Admins />} />
-              <Route path='admins/add-admin' element={<AddAdmin />} />
-              <Route path="admins/admin/:id" element={<Admin />} />
 
               {/* EMPLOYEES */}
               <Route path="employees" element={<Employees />} />
-              <Route path="employees/add-employee" element={<Addemployee />} />
 
               {/* Teams */}
               <Route path="teams" element={<Teams />} />
