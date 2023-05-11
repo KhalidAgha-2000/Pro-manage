@@ -8,10 +8,13 @@ import { AiFillCloseCircle } from 'react-icons/ai';
 import Circles from '../Shared/Circles';
 import Inputs from '../Shared/Inputs';
 import { MdAdminPanelSettings } from 'react-icons/md';
+import { AdminContext } from '../Context/AdminContext';
 
-const Admin = ({ isOpenToEdit, setIsOpenToEdit, setAllAdminsData }) => {
+const Admin = ({ setAllAdminsData }) => {
 
-    const { id } = isOpenToEdit
+    const { setIsOpenToEdit, idToEdit } = useContext(AdminContext);
+
+    // const { id } = idToEdit
     const [adminData, setAdminData] = useState({})
     const { setNotifications, setLoading } = useContext(Context)
     const [adminEmail, setAdminEmail] = useState(adminData.email)
@@ -29,7 +32,7 @@ const Admin = ({ isOpenToEdit, setIsOpenToEdit, setAllAdminsData }) => {
         try {
             setLoading(true)
             const response = await
-                axiosInstance.get(`/admins/specific-admin/${id}`, {
+                axiosInstance.get(`/admins/specific-admin/${idToEdit}`, {
                     headers: { token: Cookies.get('token') }
                 })
             setAdminData(response.data.data)
@@ -59,7 +62,7 @@ const Admin = ({ isOpenToEdit, setIsOpenToEdit, setAllAdminsData }) => {
     const updateAdminInformation = async (e) => {
         e.preventDefault()
         try {
-            const response = await axiosInstance.put(`/admins/update-info/${id}`, { email: adminEmail, username: adminUsername }, {
+            const response = await axiosInstance.put(`/admins/update-info/${idToEdit}`, { email: adminEmail, username: adminUsername }, {
                 headers: { token: Cookies.get('token') }
             });
             setLoading(true)
@@ -69,7 +72,7 @@ const Admin = ({ isOpenToEdit, setIsOpenToEdit, setAllAdminsData }) => {
                 notificationBarMessage: response.data.message
             })
             setAdminData(response.data.data)
-            if (Cookies.get('id') === id) {
+            if (Cookies.get('id') === idToEdit) {
                 setInterval(() => {
                     logout()
                 }, 4000);
@@ -109,7 +112,7 @@ const Admin = ({ isOpenToEdit, setIsOpenToEdit, setAllAdminsData }) => {
     const changePassword = async (e) => {
         e.preventDefault()
         try {
-            const response = await axiosInstance.put(`/admins/change-password/${id}`, { newPassword: adminNewPassword, oldPassword: adminOldPassword }, {
+            const response = await axiosInstance.put(`/admins/change-password/${idToEdit}`, { newPassword: adminNewPassword, oldPassword: adminOldPassword }, {
                 headers: { token: Cookies.get('token') }
             });
             setLoading(true)
@@ -119,7 +122,7 @@ const Admin = ({ isOpenToEdit, setIsOpenToEdit, setAllAdminsData }) => {
                 notificationBarMessage: response.data.message
             })
             setAdminData(response.data.data)
-            if (Cookies.get('id') === id) {
+            if (Cookies.get('id') === idToEdit) {
                 setInterval(() => {
                     logout()
                 }, 4000);
@@ -152,7 +155,7 @@ const Admin = ({ isOpenToEdit, setIsOpenToEdit, setAllAdminsData }) => {
     const changeImage = async (e) => {
         e.preventDefault()
         try {
-            const response = await axiosInstance.put(`/admins/change-image/${id}`, {
+            const response = await axiosInstance.put(`/admins/change-image/${idToEdit}`, {
                 image: image
             }, {
                 headers: {
@@ -166,7 +169,7 @@ const Admin = ({ isOpenToEdit, setIsOpenToEdit, setAllAdminsData }) => {
                 pass: true,
                 notificationBarMessage: response.data.message
             })
-            if (Cookies.get('id') === id) {
+            if (Cookies.get('id') === idToEdit) {
                 setInterval(() => {
                     logout()
                 }, 4000);
@@ -209,13 +212,13 @@ const Admin = ({ isOpenToEdit, setIsOpenToEdit, setAllAdminsData }) => {
 
             {/* Header */}
             <AiFillCloseCircle
-                onClick={() => setIsOpenToEdit(isOpenToEdit => ({ ...isOpenToEdit, opened: false }))}
+                onClick={() => setIsOpenToEdit(false)}
                 className='absolute top-2 right-2' cursor='pointer' size={25} color='#e04e17'
             />
             <h1 className='font-alkatra text-orange font-semibold w-full p-2 my-1 text-center text-xl'>
-                Update {Cookies.get('id') === id ? "Your" : "Admin"} Profile
+                Update {Cookies.get('id') === idToEdit ? "Your" : "Admin"} Profile
                 <br />
-                {Cookies.get('id') === id &&
+                {Cookies.get('id') === idToEdit &&
                     <p className='text-failed'>Logout Required</p>}
             </h1>
 
@@ -236,7 +239,8 @@ const Admin = ({ isOpenToEdit, setIsOpenToEdit, setAllAdminsData }) => {
                         defaultValue={adminData.email}
                         onChange={(e) => setAdminEmail(e.target.value)}
                     />
-                    <Buttons done text={"Done"} className={'w-10/12'} />
+                    <Buttons done
+                        text={"Done"} className={'w-10/12'} />
 
 
 

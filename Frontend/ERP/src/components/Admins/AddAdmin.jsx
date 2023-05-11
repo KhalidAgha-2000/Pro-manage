@@ -6,8 +6,11 @@ import Cookies from 'js-cookie'
 import { motion, AnimatePresence } from "framer-motion";
 import Circles from '../Shared/Circles';
 import Inputs from '../Shared/Inputs';
+import { AdminContext } from '../Context/AdminContext';
 
-const AddAdmin = ({ isOpenToAdd, setIsOpenToAdd, setAllAdminsData, allAdminsData }) => {
+const AddAdmin = ({ setAllAdminsData, allAdminsData }) => {
+
+    const { isOpenToAdd, setIsOpenToAdd } = useContext(AdminContext)
 
     const { setNotifications, setLoading } = useContext(Context)
     const [adminToAdd, setAdminToAdd] = useState({
@@ -78,22 +81,22 @@ const AddAdmin = ({ isOpenToAdd, setIsOpenToAdd, setAllAdminsData, allAdminsData
                         <form className='w-full m-auto h-full flex flex-col items-center gap-y-8 mt-4 '>
 
                             <Inputs className={'w-5/6'} onChange={handleChangeAddAdmin}
-                                name="username" defaultValue={adminToAdd.username}
+                                name="username" value={adminToAdd.username}
                                 placeholder='admin name' type='text'
                             />
 
                             <Inputs className={'w-5/6'} onChange={handleChangeAddAdmin}
-                                name="email" defaultValue={adminToAdd.email}
+                                name="email" value={adminToAdd.email}
                                 placeholder='email' type='email'
                             />
 
                             <Inputs className={'w-5/6'} onChange={handleChangeAddAdmin}
-                                name="password" defaultValue={adminToAdd.password}
+                                name="password" value={adminToAdd.password}
                                 placeholder='generate password' type='password'
                             />
 
                             <Inputs className={'w-5/6 py-3 px-1'} onChange={handleFileChangeAddAdmin}
-                                name="image" defaultValue={adminToAdd.image}
+                                name="image" value={adminToAdd.image}
                                 placeholder='image' type='file'
                             />
 

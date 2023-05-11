@@ -9,13 +9,16 @@ import AddAdmin from './AddAdmin';
 import Admin from './Admin';
 import NoValueMatchSeaarch, { filteredArrayToSearch } from '../../constants/search'
 import AdminCard from './AdminCard';
+import { AdminContext } from '../Context/AdminContext';
 
 const Admins = () => {
     const { setNotifications, setLoading, search } = useContext(Context)
+    const { setIsOpenToAdd, isOpenToEdit } = useContext(AdminContext);
+
     const [allAdminsData, setAllAdminsData] = useState([])
     const [prepareToRemove, setPrepareToRemove] = useState(null)
-    const [isOpenToAdd, setIsOpenToAdd] = useState(false)
-    const [isOpenToEdit, setIsOpenToEdit] = useState({ id: '', opened: false })
+    // const [isOpenToAdd, setIsOpenToAdd] = useState(false)
+    // const [isOpenToEdit, setIsOpenToEdit] = useState({ id: '', opened: false })
 
     // Delete Admin
     const removeAdmin = async (id) => {
@@ -97,8 +100,7 @@ const Admins = () => {
                     }).map((admin) => (
                         <AdminCard key={admin._id}
                             _id={admin._id} image={admin.image} username={admin.username} email={admin.email}
-                            setIsOpenToEdit={setIsOpenToEdit} removeAdmin={removeAdmin}
-                            setPrepareToRemove={setPrepareToRemove} prepareToRemove={prepareToRemove}
+                            removeAdmin={removeAdmin} setPrepareToRemove={setPrepareToRemove} prepareToRemove={prepareToRemove}
                         />
                     ))
             }
@@ -107,16 +109,16 @@ const Admins = () => {
             <IconButtons Icon={MdAdd} onClick={() => setIsOpenToAdd(true)} className={'fixed right-6 bottom-6'} />
 
             {/* Add Admin */}
-            <AddAdmin isOpenToAdd={isOpenToAdd} setIsOpenToAdd={setIsOpenToAdd} setAllAdminsData={setAllAdminsData} allAdminsData={allAdminsData} />
+            <AddAdmin setAllAdminsData={setAllAdminsData} allAdminsData={allAdminsData} />
 
             {/* Edit Admin */}
             <AnimatePresence>
-                {isOpenToEdit.opened &&
+                {isOpenToEdit &&
                     <motion.div
                         initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }} transition={{ duration: 0.5 }}
                         className="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex items-center justify-center"
                     >
-                        <Admin isOpenToEdit={isOpenToEdit} setIsOpenToEdit={setIsOpenToEdit} setAllAdminsData={setAllAdminsData} allAdminsData={allAdminsData} />
+                        <Admin setAllAdminsData={setAllAdminsData} />
                     </motion.div>
                 }
             </AnimatePresence>
