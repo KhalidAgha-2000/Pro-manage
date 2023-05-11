@@ -87,7 +87,7 @@ const Admins = () => {
     }, [search])
 
     return (
-        <div className='w-full h-[75vh] relative flex flex-wrap justify-center p-3 gap-x-4 gap-y-4 overflow-auto scrollbar-thin scrollbar-thumb-orange scrollbar-track-dark'>
+        <div className='w-full h-[75vh] relative flex flex-wrap justify-center p-3 gap-x-4 gap-y-4 overflow-auto'>
 
             {filteredAdminsToSearch.length === 0 ?
                 <NoValueMatchSeaarch /> : filteredAdminsToSearch
