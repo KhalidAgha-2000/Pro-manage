@@ -4,8 +4,10 @@ import { Buttons } from '../Shared/Buttons'
 import { Context } from '../Context/Context';
 import Cookies from 'js-cookie';
 import logout from '../../constants/logout';
-import Input from './Input'
 import { AiFillCloseCircle } from 'react-icons/ai';
+import Circles from '../Shared/Circles';
+import Inputs from '../Shared/Inputs';
+import { MdAdminPanelSettings } from 'react-icons/md';
 
 const Admin = ({ isOpenToEdit, setIsOpenToEdit, setAllAdminsData }) => {
 
@@ -29,7 +31,6 @@ const Admin = ({ isOpenToEdit, setIsOpenToEdit, setAllAdminsData }) => {
             const response = await
                 axiosInstance.get(`/admins/specific-admin/${id}`, {
                     headers: { token: Cookies.get('token') }
-                    // headers: { token: localStorage.getItem('token') }
                 })
             setAdminData(response.data.data)
         } catch (error) {
@@ -73,9 +74,6 @@ const Admin = ({ isOpenToEdit, setIsOpenToEdit, setAllAdminsData }) => {
                     logout()
                 }, 4000);
             }
-            setTimeout(() => {
-                setIsOpenToEdit(isOpenToEdit => ({ ...isOpenToEdit, opened: false }))
-            }, 2000)
             // Get The Updated Admin Data
             setAllAdminsData(prevAdminsData => {
                 const updatedAdminsData = prevAdminsData.map(admin => {
@@ -126,9 +124,6 @@ const Admin = ({ isOpenToEdit, setIsOpenToEdit, setAllAdminsData }) => {
                     logout()
                 }, 4000);
             }
-            setTimeout(() => {
-                setIsOpenToEdit(isOpenToEdit => ({ ...isOpenToEdit, opened: false }))
-            }, 2000);
         } catch (error) {
             if (error.response && error.response.data) {
                 setNotifications({
@@ -176,9 +171,6 @@ const Admin = ({ isOpenToEdit, setIsOpenToEdit, setAllAdminsData }) => {
                     logout()
                 }, 4000);
             }
-            setTimeout(() => {
-                setIsOpenToEdit(isOpenToEdit => ({ ...isOpenToEdit, opened: false }))
-            }, 2000)
             // Get The Updated Admin Data
             setAllAdminsData(prevAdminsData => {
                 const updatedAdminsData = prevAdminsData.map(admin => {
@@ -213,84 +205,85 @@ const Admin = ({ isOpenToEdit, setIsOpenToEdit, setAllAdminsData }) => {
 
     return (
 
-        <div
-            className='w-1/2 h-2/3 mt-24 max-h-fit m-auto bg-light relative overflow-hidden'>
+        <div className='w-3/4 h-3/5 py-4 mt-24 m-auto flex flex-col items-center bg-light relative overflow-hidden'>
+
             {/* Header */}
-
-            {/* ---- */}
-            <span className='absolute -left-2 bottom-0 w-6 h-6 object-cover bg-orange bg-opacity-95 rounded-full' />
-            <span className='absolute left-6 bottom-2 w-4 h-4 object-cover bg-sidebar  rounded-full' />
-            <span className='absolute left-4 bottom-6 w-1 h-1 object-cover bg-orange bg-opacity-95 rounded-full' />
-
             <AiFillCloseCircle
                 onClick={() => setIsOpenToEdit(isOpenToEdit => ({ ...isOpenToEdit, opened: false }))}
                 className='absolute top-2 right-2' cursor='pointer' size={25} color='#e04e17'
             />
-            <h1 className='font-alkatra text-xl text-orange font-semibold w-full p-2 my-1 mb-6 text-center'>
-                Update {Cookies.get('id') === id ? "Your" : "Admin"} Information
+            <h1 className='font-alkatra text-orange font-semibold w-full p-2 my-1 text-center text-xl'>
+                Update {Cookies.get('id') === id ? "Your" : "Admin"} Profile
                 <br />
                 {Cookies.get('id') === id &&
-                    <p>Logout Required</p>}
+                    <p className='text-failed'>Logout Required</p>}
             </h1>
 
-            {/* Email / Username */}
-            <form
-                onSubmit={updateAdminInformation}
-                className='w-[90%] m-auto my-14 h-fit flex items-center justify-evenly gap-x-4 mt-4 '
-            >
-                <Input
-                    type={'text'} placeholder='username'
-                    defaultValue={adminData.username}
-                    onChange={(e) =>
-                        setAdminUsername(e.target.value)
-                    }
-                />
-                <Input
-                    type={'email'} placeholder='email'
-                    defaultValue={adminData.email}
-                    onChange={(e) =>
-                        setAdminEmail(e.target.value)
-                    }
-                />
-                <Buttons done text={"Done"} />
-            </form>
-            {/* Change Password */}
-            <form
-                onSubmit={changePassword}
-                className='w-[90%] m-auto my-14 h-fit flex items-center justify-evenly gap-x-4 mt-4 '
-            >
-                <Input
-                    onChange={(e) =>
-                        setAdminOldPassword(e.target.value)
-                    }
-                    type={'password'}
-                    placeholder='Old Password'
-                />
-                <Input
+            <div className='w-full flex h-full '>
 
-                    onChange={(e) =>
-                        setAdminNewPassword(e.target.value)
-                    }
-                    type={'password'}
-                    placeholder='New Password'
-                />
-                <Buttons done text={"Done"} />
-            </form>
+                {/* Email / Username */}
+                <form
+                    onSubmit={updateAdminInformation}
+                    className='w-1/3 m-auto h-full flex flex-col items-center  gap-y-8 mt-10 '
+                >
+                    <Inputs
+                        className={'w-11/12'} type={'text'} placeholder='username'
+                        defaultValue={adminData.username}
+                        onChange={(e) => setAdminUsername(e.target.value)}
+                    />
+                    <Inputs
+                        className={'w-11/12'} type={'email'} placeholder='email'
+                        defaultValue={adminData.email}
+                        onChange={(e) => setAdminEmail(e.target.value)}
+                    />
+                    <Buttons done text={"Done"} className={'w-10/12'} />
 
-            {/* Change Image */}
-            <form
-                onSubmit={changeImage}
-                className='w-[90%] m-auto my-14 h-fit flex items-center justify-evenly gap-x-4 mt-4 '
-            >
-                <Input
-                    onChange={handleImageUpload}
-                    name="image" defaultValue={image}
-                    placeholder='image'
-                    type='file'
-                    className='pt-3 px-1 '
-                />
-                <Buttons done text={"Done"} />
-            </form>
+
+
+
+                </form>
+                {/* Change Password */}
+                <form
+                    onSubmit={changePassword}
+                    className='w-1/3 m-auto h-full flex flex-col items-center  gap-y-8 mt-10 '
+                >
+                    <Inputs
+                        className={'w-11/12'} type={'password'} placeholder='Old Password'
+                        onChange={(e) => setAdminOldPassword(e.target.value)}
+                    />
+                    <Inputs
+                        className={'w-11/12'} type={'password'} placeholder='New Password'
+                        onChange={(e) => setAdminNewPassword(e.target.value)}
+                    />
+                    <Buttons done text={"Done"} className={'w-10/12'} />
+
+                </form>
+
+                {/* Change Image */}
+                <form
+                    onSubmit={changeImage}
+                    className='w-1/3 m-auto h-full flex flex-col items-center  gap-y-2 mt-3 '
+                >
+                    {adminData.image &&
+                        <img src={adminData.image} alt="admin-image"
+                            className="w-24 h-24 mb-3 object-cover object-center border-orange shadow-lg shadow-light rounded-full"
+                        /> ||
+                        <MdAdminPanelSettings className='text-orange w-24 h-24 ' />
+                    }
+                    <Inputs
+                        className={'w-11/12 pt-3 px-1 mt-1'} name="image" defaultValue={image}
+                        placeholder='image' type='file'
+                        onChange={handleImageUpload}
+                    />
+                    <Buttons done text={"Upload"} className={'w-10/12 mt-5'} />
+                </form>
+
+            </div>
+
+
+            {/* Circles */}
+            <Circles className1={"-left-2 top-0 w-6 h-6 bg-orange"} className2={"left-6 top-2 w-4 h-4 bg-sidebar"} className3={"left-4 top-6 w-1 h-1 bg-orange"} />
+
         </div>
 
 

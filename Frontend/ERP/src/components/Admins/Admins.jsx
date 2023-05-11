@@ -1,15 +1,14 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { AiOutlineUserDelete, AiFillPushpin, AiFillEdit } from "react-icons/ai";
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import axiosInstance from '../../constants/axios'
 import { Context } from '../Context/Context';
-import { MdAdd, MdAdminPanelSettings } from 'react-icons/md';
+import { MdAdd } from 'react-icons/md';
 import { AnimatePresence, motion } from "framer-motion";
-import { GiCheckMark } from 'react-icons/gi';
-import { TbLetterX } from 'react-icons/tb';
 import Cookies from 'js-cookie';
 import { IconButtons } from '../Shared/Buttons';
 import AddAdmin from './AddAdmin';
 import Admin from './Admin';
+import NoValueMatchSeaarch, { filteredArrayToSearch } from '../../constants/search'
+import AdminCard from './AdminCard';
 
 const Admins = () => {
     const { setNotifications, setLoading, search } = useContext(Context)
@@ -18,14 +17,12 @@ const Admins = () => {
     const [isOpenToAdd, setIsOpenToAdd] = useState(false)
     const [isOpenToEdit, setIsOpenToEdit] = useState({ id: '', opened: false })
 
+    // Delete Admin
     const removeAdmin = async (id) => {
         try {
             setLoading(true)
             const response = await
-                axiosInstance.delete(`/admins/remove-admin/${id}`, {
-                    headers: { token: Cookies.get('token') }
-                    // headers: { token: localStorage.getItem('token') }
-                })
+                axiosInstance.delete(`/admins/remove-admin/${id}`, { headers: { token: Cookies.get('token') } })
             setNotifications({
                 notificationBar: true,
                 pass: true,
@@ -53,13 +50,12 @@ const Admins = () => {
         }
     }
 
+    // Get Admins Data
     const getAllAdmins = async () => {
         try {
             setLoading(true)
             const response = await
-                axiosInstance.get('/admins/all-admins', {
-                    headers: { token: Cookies.get('token') }
-                })
+                axiosInstance.get('/admins/all-admins', { headers: { token: Cookies.get('token') } })
             setAllAdminsData(response.data.data)
         } catch (error) {
             if (error.response && error.response.data) {
@@ -83,13 +79,8 @@ const Admins = () => {
     }
 
     // Search
-    const filteredAdminsToSearch = allAdminsData.filter(val => {
-        if (search === '') {
-            return allAdminsData;
-        } else if (val.username.toLocaleLowerCase().includes(search.toLocaleLowerCase())) {
-            return val;
-        }
-    });
+    const filteredAdminsToSearch = filteredArrayToSearch(allAdminsData, 'username', search)
+
     useEffect(() => {
         getAllAdmins()
         Cookies.get('id')
@@ -98,106 +89,38 @@ const Admins = () => {
     return (
         <div className='w-full h-[75vh] relative flex flex-wrap justify-center p-3 gap-x-4 gap-y-4 overflow-auto scrollbar-thin scrollbar-thumb-orange scrollbar-track-dark'>
 
-            {
-
-                filteredAdminsToSearch.length === 0 ?
-                    <h1 className='w-max h-max m-auto p-3 my-8 rounded-md bg-orange text-lg font-montserrat text-light'>
-                        No value match your search input
-                    </h1>
-                    : filteredAdminsToSearch
-                        .sort((loggedIn) => {
-                            if (loggedIn._id === Cookies.get('id')) {
-                                return -1; // admin1 should come first
-                            } else {
-                                return 0; // keep the same order
-                            }
-                        })
-                        .map((admin) => (
-
-                            <motion.div
-                                initial={{ opacity: 0, y: 100 }}
-                                whileInView={{ y: [100, 50, 0], opacity: [0, 0, 1] }}
-                                transition={{ duration: 0.5 }}
-                                key={admin._id}
-                                className={`relative w-[32%] h-[200px] max-w-sm py-5 rounded-lg shadow-lg font-montserrat overflow-hidden shadow-orange bg-dark `
-                                }
-                            >
-                                <div className="flex flex-col items-center">
-
-                                    {
-                                        admin.image &&
-                                        <img
-                                            src={admin.image} alt="admin-image"
-                                            className="w-24 h-24 mb-3 object-cover object-center border-orange shadow-lg shadow-light rounded-full"
-                                        /> ||
-                                        <MdAdminPanelSettings className='text-orange w-24 h-24 ' />
-                                    }
-
-                                    <h5 className="mb-1 text-2xl font-bold  text-light">{admin.username}</h5>
-                                    <span className="text-sm text-light">{admin.email}</span>
-                                </div>
-                                {/* Tools */}
-                                <div className='h-full w-4 absolute top-0 pr-4 right-3 flex flex-col items-start  justify-evenly  text-light'>
-                                    {/* <Link to={"/dashboard/admins/admin/" + admin._id}> */}
-                                    <AiFillEdit className='hover:scale-150  transition duration-200 ease-in-out'
-                                        onClick={() => setIsOpenToEdit({ id: admin._id, opened: true })}
-                                        size={20} color='#f0f0f0' cursor={'pointer'}
-                                    />
-                                    {/* </Link> */}
-                                    <AiOutlineUserDelete className={`hover:scale-150  transition duration-200 ease-in-out ${admin._id === Cookies.get('id') && "hidden"}`}
-                                        size={20} color='#f0f0f0' cursor={'pointer'} onClick={() => { setPrepareToRemove(admin._id) }}
-                                    />
-                                </div>
-                                {/* Pinned */}
-                                <AiFillPushpin size={20} color="#f0f0f0"
-                                    className={`absolute -rotate-90 top-1 left-1 ${admin._id !== Cookies.get('id') && "hidden"}`}
-                                />
-                                {/* Delete */}
-                                <div className={`flex justify-around items-center w-full h-full absolute top-0 z-30 bg-light opacity-70  ${prepareToRemove === admin._id ? "flex" : "hidden"} `}>
-                                    <GiCheckMark size={40} cursor={'pointer'} color="#4bb543" onClick={() => { removeAdmin(admin._id) }} />
-                                    <TbLetterX size={40} cursor={'pointer'} color="#ff3333" onClick={() => { setPrepareToRemove('') }} />
-                                </div>
-
-                                {/* ---- */}
-                                <span className='absolute right-2 -bottom-2 w-4 h-4 object-cover bg-sidebar bg-opacity-95 rounded-full' />
-                                <span className='absolute right-2 bottom-4 w-1 h-1 object-cover bg-sidebar bg-opacity-95 rounded-full' />
-
-                            </motion.div>
-                        ))
+            {filteredAdminsToSearch.length === 0 ?
+                <NoValueMatchSeaarch /> : filteredAdminsToSearch
+                    .sort((loggedIn) => {
+                        if (loggedIn._id === Cookies.get('id')) { return -1; }// Logedin admin should come first
+                        else { return 0; }// keep the same order
+                    }).map((admin) => (
+                        <AdminCard key={admin._id}
+                            _id={admin._id} image={admin.image} username={admin.username} email={admin.email}
+                            setIsOpenToEdit={setIsOpenToEdit} removeAdmin={removeAdmin}
+                            setPrepareToRemove={setPrepareToRemove} prepareToRemove={prepareToRemove}
+                        />
+                    ))
             }
+
             {/* Add Button */}
-            <IconButtons
-                Icon={MdAdd}
-                onClick={() => setIsOpenToAdd(true)}
-                className={'fixed right-6 bottom-6'}
-            />
+            <IconButtons Icon={MdAdd} onClick={() => setIsOpenToAdd(true)} className={'fixed right-6 bottom-6'} />
+
             {/* Add Admin */}
-            <AddAdmin
-                isOpenToAdd={isOpenToAdd}
-                setIsOpenToAdd={setIsOpenToAdd}
-                setAllAdminsData={setAllAdminsData}
-                allAdminsData={allAdminsData}
-            />
+            <AddAdmin isOpenToAdd={isOpenToAdd} setIsOpenToAdd={setIsOpenToAdd} setAllAdminsData={setAllAdminsData} allAdminsData={allAdminsData} />
 
             {/* Edit Admin */}
             <AnimatePresence>
                 {isOpenToEdit.opened &&
                     <motion.div
-                        initial={{ opacity: 0, y: 50 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 50 }}
-                        transition={{ duration: 0.5 }}
+                        initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }} transition={{ duration: 0.5 }}
                         className="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex items-center justify-center"
                     >
-                        <Admin
-                            isOpenToEdit={isOpenToEdit}
-                            setIsOpenToEdit={setIsOpenToEdit}
-                            setAllAdminsData={setAllAdminsData}
-                            allAdminsData={allAdminsData}
-                        />
+                        <Admin isOpenToEdit={isOpenToEdit} setIsOpenToEdit={setIsOpenToEdit} setAllAdminsData={setAllAdminsData} allAdminsData={allAdminsData} />
                     </motion.div>
                 }
             </AnimatePresence>
+
         </div>
     )
 }
