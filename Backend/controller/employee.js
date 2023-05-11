@@ -82,7 +82,7 @@ class Controller {
         try {
             const employee = await employeeModel.findById(req.params.id)
                 // .populate('team')
-                .populate(['roles.role', 'roles.project', 'team'])
+                .populate(['roles.role', 'roles.project', 'team', 'kpis.kpi'])
                 .exec()
 
             let data = {
@@ -97,11 +97,29 @@ class Controller {
                 teamEmployeeCount: employee.team ? employee.team.employees.length : null,
                 teamProjectCount: employee.team ? employee.team.projects.length : null,
 
-                kpis: employee.kpis ? employee.kpis.map(kk => ({
-                    kpi: kk.kpi,
-                    rate: kk.rate,
-                    kpiDate: kk.kpiDate
-                })) : null,
+                // kpis: employee.kpis ? employee.kpis.map(k => ({
+                //     id: k.kpi._id,
+                //     name: k.kpi.name,
+                //     rate: k.rate,
+                //     kpiDate: k.kpiDate
+                // })) : null,
+
+                // Combination of Map and values to remove the duplicates
+                // while keeping only the last occurrence based on kpiDate.
+                // The sort method is used to order the KPIs by date, with the latest KPI first.
+
+                kpis: employee.kpis
+                    ? [...new Map(employee.kpis.map(k => [k.kpi._id, k])).values()]
+                        .sort((a, b) => new Date(b.kpiDate) - new Date(a.kpiDate))
+                        .map(k => ({
+                            id: k.kpi._id,
+                            name: k.kpi.name,
+                            rate: k.rate,
+                            kpiDate: k.kpiDate,
+                        }))
+                    : null,
+
+
 
                 roles: employee.roles ? employee.roles.map(rr => ({
                     role: rr.role,
@@ -260,8 +278,7 @@ class Controller {
             next(error)
         }
     };
-
-    // -------------------- Get All KPIs Of Specific Employee with date sorting 
+    // -------------------- Get All KPIs Of Specific Employee with date sorting
     async getKPIsOfspecificEmployee(req, res, next) {
         try {
             let objectId = new ObjectID(req.params.id);
@@ -292,12 +309,17 @@ class Controller {
                 // Group the documents by the employee ID again and create a new kpis array with all kpis elements
                 { $group: { _id: "$_id", fullName: { $first: "$fullName" }, kpis: { $push: "$kpis" } } }
 
-            ]);
-            if (employee.length === 0) {
-                return res.status(500).json({ success: true, message: 'No KPI for this employee yet' });
-            }
+            ])
+            // if (employee.length === 0) {
+            //     return res.status(200).json({ success: true, message: 'No KPI for this employee yet' });
+            // }
 
-            return res.status(200).json({ success: true, message: "KPI(S) of the employee", data: employee[0] });
+            return res.status(200).json({
+                success: true,
+                message: "KPI(S) of the employee",
+                // data: employee[0]
+                data: employee.length === 0 ? 'No KPI for this employee yet' : employee[0]
+            });
         } catch (err) {
             next(err)
         }
