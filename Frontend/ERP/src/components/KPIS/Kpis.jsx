@@ -94,31 +94,12 @@ const Kpis = () => {
             }
 
             {/* Add Kpi*/}
-            <div className='fixed z-[999] right-6 bottom-6'
-                onClick={() => {
-                    setAddKpi(true)
-                }}
-            >
-                <IconButtons
-                    Icon={MdAdd}
-                />
-            </div>
+            <IconButtons Icon={MdAdd} onClick={() => { setAddKpi(true) }} />
 
-            <AddKpi
-                allKpis={allKpis}
-                setAllKpis={setAllKpis}
-                addKpi={addKpi}
-                setAddKpi={setAddKpi}
-            />
-
+            <AddKpi allKpis={allKpis} setAllKpis={setAllKpis} addKpi={addKpi} setAddKpi={setAddKpi} />
 
             {/* Update Kpi */}
-            <UpdateKpi
-                allKpis={allKpis}
-                setAllKpis={setAllKpis}
-                editKpi={editKpi}
-                setEditKpi={setEditKpi}
-            />
+            <UpdateKpi allKpis={allKpis} setAllKpis={setAllKpis} editKpi={editKpi} setEditKpi={setEditKpi} />
 
 
         </div>

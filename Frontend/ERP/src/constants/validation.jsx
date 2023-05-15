@@ -12,3 +12,5 @@ const checkIfEmpty = (obj, email) => {
     return status;
 }
 export default checkIfEmpty
+
+

@@ -253,7 +253,7 @@ class Controller {
     }
 
     // -------------------- Add KPI to Employee
-    async addKpiToEmployee(req, res) {
+    async addKpiToEmployee(req, res, next) {
 
         try {
             const employeeWithKpi = await employeeModel.findByIdAndUpdate(
@@ -266,16 +266,27 @@ class Controller {
                             kpiDate: new Date().toLocaleString()
                         }
                     }
-                },
-                { new: true }
-            ).populate('kpis.kpi');
+                }, { new: true }).populate('kpis.kpi');
 
-            return res.status(200).json({ success: true, message: 'KPI added to employee', employee: employeeWithKpi });
+            const updatedKpis = employeeWithKpi.kpis.map(k => ({
+                id: k.kpi._id,
+                name: k.kpi.name,
+                rate: k.rate,
+                kpiDate: k.kpiDate
+            }));
+
+
+            return res.status(200).json({
+                success: true,
+                message: 'KPI added to employee',
+                updatedKpis,
+                id: req.params.id
+            });
 
         } catch (error) {
             // console.error(error);
-            // return res.status(500).json({ success: false, message: 'Server error' });
             next(error)
+            return res.status(500).json({ success: false, message: 'Server error', error });
         }
     };
     // -------------------- Get All KPIs Of Specific Employee with date sorting

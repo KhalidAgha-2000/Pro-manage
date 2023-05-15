@@ -5,10 +5,14 @@ import { Buttons } from '../Shared/Buttons'
 import { Context } from '../Context/Context';
 import Cookies from 'js-cookie'
 import { AnimatePresence, motion } from 'framer-motion'
+import Circles from '../Shared/Circles';
+import { EmployeeContext } from '../Context/EmployeeeContext';
 
-const AddEmployee = ({ isOpenToAdd, setIsOpenToAdd, getAllEmployees }) => {
+const AddEmployee = ({ getAllEmployees }) => {
 
     const { setNotifications, setLoading } = useContext(Context)
+    const { isOpenToAdd, setIsOpenToAdd } = useContext(EmployeeContext);
+
     const [employeeToAdd, setEmployeeToAdd] = useState({
         firstname: '',
         lastname: '',
@@ -81,21 +85,12 @@ const AddEmployee = ({ isOpenToAdd, setIsOpenToAdd, getAllEmployees }) => {
     return (
         <AnimatePresence>
             {isOpenToAdd && (
-                <motion.div
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 50 }}
-                    transition={{ duration: 0.5 }}
+                <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }} transition={{ duration: 0.5 }}
                     className="fixed top-0 left-0 z-[99] w-full h-full bg-gray-900 bg-opacity-50 flex items-center justify-center"
                 >
-                    <div
-                        className='w-1/3 h-fit py-4 m-auto bg-light relative overflow-hidden'>
-
-                        {/* Header */}
-                        {/* ---- */}
-                        <span className='absolute -left-2 top-0 w-6 h-6 object-cover bg-orange bg-opacity-95 rounded-full' />
-                        <span className='absolute left-6 top-2 w-4 h-4 object-cover bg-sidebar  rounded-full' />
-                        <span className='absolute left-4 top-6 w-1 h-1 object-cover bg-orange bg-opacity-95 rounded-full' />
+                    <div className='w-1/3 h-fit py-4 m-auto bg-light relative overflow-hidden'>
+                        {/* Circles */}
+                        <Circles className1={'--left-2 top-0 w-6 h-6 bg-orange'} className2={'left-6 top-2 w-4 h-4 bg-sidebar'} className3={'left-4 top-6 w-1 h-1 bg-orange'} />
 
                         <h1 className='font-alkatra text-xl text-orange font-semibold w-full p-2 my-1 mb-6 text-center'>
                             Add New Employee To The System
@@ -105,15 +100,14 @@ const AddEmployee = ({ isOpenToAdd, setIsOpenToAdd, getAllEmployees }) => {
 
                             <Input
                                 onChange={handleChangeAddEmployee}
-                                defaultValue={employeeToAdd.firstname}
+                                value={employeeToAdd.firstname}
                                 name="firstname" placeholder='First Name'
                                 type='text' className={'-my-1'}
                             />
 
-
                             <Input
                                 onChange={handleChangeAddEmployee}
-                                defaultValue={employeeToAdd.lastname}
+                                value={employeeToAdd.lastname}
                                 name="lastname"
                                 placeholder='Last Name'
                                 type='text'
@@ -122,17 +116,19 @@ const AddEmployee = ({ isOpenToAdd, setIsOpenToAdd, getAllEmployees }) => {
 
                             <Input
                                 onChange={handleChangeAddEmployee}
-                                defaultValue={employeeToAdd.email}
+                                value={employeeToAdd.email}
                                 name="email" placeholder='Email'
                                 type='email' className={'-my-1'}
                             />
+
                             <Input
                                 onChange={handleChangeAddEmployee}
-                                defaultValue={employeeToAdd.phone}
+                                value={employeeToAdd.phone}
                                 name="phone" type='number'
                                 placeholder='enter a valid phone number (8) digits'
                                 className={'-my-1'}
                             />
+
                             <Input
                                 onChange={handleFileChangeAddEmployee}
                                 name="image" defaultValue={employeeToAdd.image}

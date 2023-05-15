@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom"
 
 // Buttons
-export const Buttons = ({ text, edit, done, remove, type, onClick, className }) => {
+export const Buttons = ({ text, edit, done, remove, type, disabled, onClick, className }) => {
     return (
         <button
-            className={`w-fit h-fit items-center px-4 py-2.5 text-sm font-medium font-montserrat text-center text-light rounded-lg cursor-pointer
+            className={`h-fit items-center px-4 py-2.5 text-sm font-medium font-montserrat text-center text-light rounded-lg cursor-pointer
              hover:opacity-70 hover:text-dark 
              focus:ring-1 focus:outline-none   focus:opacity-70 focus:text-dark
              transition duration-700 ease-in-out 
@@ -17,6 +17,7 @@ export const Buttons = ({ text, edit, done, remove, type, onClick, className }) 
             }
             onClick={onClick}
             type={type}
+            disabled={disabled}
         >
             {text}
         </button >

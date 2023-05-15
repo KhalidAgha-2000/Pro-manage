@@ -21,3 +21,14 @@ const Loading = () => {
 }
 
 export default Loading
+
+
+
+// Falid To Fetch
+export const falidtoFetch = () => {
+    return (
+        <h1 className='w-fit h-fit m-auto p-3 my-8 rounded-md bg-orange text-lg font-alkatra text-light'>
+            Getting Data, Try to reload !
+        </h1>
+    )
+}

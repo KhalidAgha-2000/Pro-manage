@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { IconButtons } from "../Shared/Buttons";
 import { MdAdd } from "react-icons/md";
+import Circles from '../Shared/Circles';
 const Teams = () => {
     const { setNotifications, setLoading, search } = useContext(Context)
     const [teams, setTeams] = useState([]);
@@ -67,19 +68,16 @@ const Teams = () => {
                         <h1 className='text-sidebar font-semibold font-montserrat text-2xl text-center uppercase'>{t.name}</h1>
 
                     </Link>
-                    {/* ------ */}
-                    <span className='absolute -right-1 -bottom-2 w-10 h-10 object-cover bg-[#dfd6d3] rounded-full' />
-                    <span className='absolute -right-2 bottom-8 w-4 h-4 object-cover bg-[#dfd6d3] rounded-full' />
-                    <span className='absolute -right-1 bottom-14 w-4 h-4 object-cover bg-[#dfd6d3] rounded-full' />
 
+                    {/* Circles */}
+                    <Circles className1={'-right-1 -bottom-2 w-10 h-10 bg-sidebar'} className2={'-right-2 bottom-8 w-4 h-4 bg-sidebar'} />
 
                 </motion.div >
             ))}
 
             {/* Add Button */}
-            <Link className='fixed z-[99] right-6 bottom-6' to={"/dashboard/teams/add-team"}>
-                <IconButtons Icon={MdAdd} />
-            </Link>
+            <IconButtons Icon={MdAdd} linkTo={'dashboard/teams/add-team'} />
+
         </div >
     )
 }
