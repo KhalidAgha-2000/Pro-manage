@@ -37,9 +37,10 @@ router.group('/employees', (employeeRouter) => {
         imageRouter.put('/change-image/:id', controller.changeImage)
     });
     // ---------- Employee Routes
-    employeeRouter.get('/all-employees-pagination', controller.employeesWithPagination)
     employeeRouter.get('/all-employees', controller.allEmployees)
-    employeeRouter.get('/kpis-of-specific-employee/:id', controller.getKPIsOfspecificEmployee)
+    employeeRouter.get('/all-employees-pagination', controller.employeesWithPagination)
+    employeeRouter.get('/kpis-of-employee-report/:id', controller.KPIsOfEmployeeReport)
+    employeeRouter.get('/kpis-of-employee-update/:id', controller.KPIsOfEmployeeUpdate)
     employeeRouter.get('/specific-employee/:id', controller.specificEmployee)
     employeeRouter.put('/add-kpi-to-employee/:id', controller.addKpiToEmployee)
     employeeRouter.put('/assign-role-to-employee/:id', controller.assignRoleToEmployee)

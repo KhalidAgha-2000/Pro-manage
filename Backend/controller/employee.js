@@ -19,7 +19,7 @@ class Controller {
     // -------------------- Fetch All Employees
     async allEmployees(req, res, next) {
         try {
-            const employees = await employeeModel.find({}, '-kpis -roles')
+            const employees = await employeeModel.find({}, '-kpis -roles').populate('team')
             const data = employees.map(e => ({
                 id: e.id,
                 first_name: e.first_name,
@@ -30,6 +30,8 @@ class Controller {
                 image: e.image,
                 team: e.team ? e.team.name : null, // replace team ID with team name
             }))
+
+
             res.status(200).json({ success: true, message: 'Employees', data: data });
         } catch (err) {
             res.status(500).json({ message: 'Server error', err });
@@ -96,30 +98,6 @@ class Controller {
                 teamName: employee.team ? employee.team.name : null,
                 teamEmployeeCount: employee.team ? employee.team.employees.length : null,
                 teamProjectCount: employee.team ? employee.team.projects.length : null,
-
-                // kpis: employee.kpis ? employee.kpis.map(k => ({
-                //     id: k.kpi._id,
-                //     name: k.kpi.name,
-                //     rate: k.rate,
-                //     kpiDate: k.kpiDate
-                // })) : null,
-
-                // Combination of Map and values to remove the duplicates
-                // while keeping only the last occurrence based on kpiDate.
-                // The sort method is used to order the KPIs by date, with the latest KPI first.
-
-                kpis: employee.kpis
-                    ? [...new Map(employee.kpis.map(k => [k.kpi._id, k])).values()]
-                        .sort((a, b) => new Date(b.kpiDate) - new Date(a.kpiDate))
-                        .map(k => ({
-                            id: k.kpi._id,
-                            name: k.kpi.name,
-                            rate: k.rate,
-                            kpiDate: k.kpiDate,
-                        }))
-                    : null,
-
-
 
                 roles: employee.roles ? employee.roles.map(rr => ({
                     role: rr.role,
@@ -277,20 +255,52 @@ class Controller {
 
 
             return res.status(200).json({
+                id: req.params.id,
                 success: true,
                 message: 'KPI added to employee',
-                updatedKpis,
-                id: req.params.id
+                kpis: updatedKpis,
             });
 
+
         } catch (error) {
-            // console.error(error);
             next(error)
             return res.status(500).json({ success: false, message: 'Server error', error });
         }
     };
-    // -------------------- Get All KPIs Of Specific Employee with date sorting
-    async getKPIsOfspecificEmployee(req, res, next) {
+    // -------------------- Get All KPIs Of  Employee with date sorting to update
+    async KPIsOfEmployeeUpdate(req, res, next) {
+        try {
+            const employee = await employeeModel.findById(req.params.id)
+                // .populate('team')
+                .populate(['kpis.kpi'])
+                .exec()
+
+            let data = {
+                id: employee._id,
+                // Combination of Map and values to remove the duplicates
+                // while keeping only the last occurrence based on kpiDate.
+                // The sort method is used to order the KPIs by date, with the latest KPI first.
+
+                kpis: employee.kpis
+                    ? [...new Map(employee.kpis.map(k => [k.kpi._id, k])).values()]
+                        .sort((a, b) => new Date(b.kpiDate) - new Date(a.kpiDate))
+                        .map(k => ({
+                            id: k.kpi._id,
+                            name: k.kpi.name,
+                            rate: k.rate,
+                            kpiDate: k.kpiDate,
+                        }))
+                    : null,
+            };
+
+            res.status(200).json({ success: true, message: 'Employee Information!', data: data });
+        } catch (err) {
+            next(err);
+            res.status(500).json({ success: false, message: 'Server Error!', err });
+        }
+    }
+    // -------------------- Get All KPIs Of  Employee with date sorting to make reports
+    async KPIsOfEmployeeReport(req, res, next) {
         try {
             let objectId = new ObjectID(req.params.id);
             const employee = await employeeModel.aggregate([
