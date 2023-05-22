@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 'orange': '#df5b28',
-'dark': '#020202',
-'light': '#f0f0f0', */
-
 .login__input {
     position: relative;
     width: 90%;

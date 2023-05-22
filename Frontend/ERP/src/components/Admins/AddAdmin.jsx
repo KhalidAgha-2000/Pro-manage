@@ -1,24 +1,20 @@
 import React, { useState, useContext } from 'react'
-import axiosInstance from '../../constants/axios'
+import axiosInstance from '../../utils/axios'
 import { Buttons } from '../Shared/Buttons'
-import { Context } from '../Context/Context';
+import { Context } from '../../Context/Context';
 import Cookies from 'js-cookie'
 import { motion, AnimatePresence } from "framer-motion";
 import Circles from '../Shared/Circles';
 import Inputs from '../Shared/Inputs';
-import { AdminContext } from '../Context/AdminContext';
+import { AdminContext } from '../../Context/AdminContext';
+import GlobalToast from '../Shared/Toast';
 
 const AddAdmin = ({ setAllAdminsData, allAdminsData }) => {
 
     const { isOpenToAdd, setIsOpenToAdd } = useContext(AdminContext)
 
-    const { setNotifications, setLoading } = useContext(Context)
-    const [adminToAdd, setAdminToAdd] = useState({
-        email: '',
-        username: '',
-        password: '',
-        image: '',
-    })
+    const { setLoading } = useContext(Context)
+    const [adminToAdd, setAdminToAdd] = useState({ email: '', username: '', password: '', image: '', })
 
     // Add Admin
     const handleChangeAddAdmin = (e) => {
@@ -37,34 +33,18 @@ const AddAdmin = ({ setAllAdminsData, allAdminsData }) => {
                 image: adminToAdd.image,
             }, { headers: { token: Cookies.get('token'), "content-type": "multipart/form-data", } })
             setLoading(true)
-            setNotifications({
-                notificationBar: true,
-                pass: true,
-                notificationBarMessage: response.data.message
-            })
+            GlobalToast('success', response.data.message)
             setAllAdminsData([...allAdminsData, response.data.admin]);
-            setTimeout(() => {
-                setIsOpenToAdd(false)
-            }, 2000);
+            setTimeout(() => { setIsOpenToAdd(false) }, 2000);
         } catch (error) {
             if (error.response && error.response.data) {
-                setNotifications({
-                    notificationBar: true,
-                    pass: false,
-                    notificationBarMessage: error.response.data.message
-                })
+                GlobalToast('warn', error.response.data.message)
             }
-        } finally {
-            setInterval(() => {
-                setNotifications({
-                    pass: false,
-                    notificationBarMessage: '',
-                    notificationBar: false,
-                })
-
-            }, 9000);
-            setLoading(false)
         }
+        setTimeout(() => {
+            setLoading(false)
+        }, 2000);
+
     }
 
     return (
@@ -108,7 +88,6 @@ const AddAdmin = ({ setAllAdminsData, allAdminsData }) => {
 
                                 <Buttons onClick={handleAddAdmin} done text={"Done"} />
                             </div>
-
 
                             {/* Circles */}
                             <Circles className1={'-left-2 bottom-0 w-6 h-6 bg-orange'} className2={'left-6 bottom-2 w-4 h-4 bg-sidebar'} className3={'left-4 bottom-6 w-1 h-1 bg-orange'} />

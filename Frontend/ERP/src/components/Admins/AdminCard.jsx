@@ -5,7 +5,7 @@ import { GiCheckMark } from 'react-icons/gi'
 import { MdAdminPanelSettings } from 'react-icons/md'
 import { TbLetterX } from 'react-icons/tb'
 import Circles from '../Shared/Circles'
-import { AdminContext } from "../Context/AdminContext";
+import { AdminContext } from "../../Context/AdminContext";
 import { useContext } from "react";
 
 const AdminCard = ({ _id, image, username, email, setPrepareToRemove, removeAdmin, prepareToRemove }) => {
@@ -17,13 +17,9 @@ const AdminCard = ({ _id, image, username, email, setPrepareToRemove, removeAdmi
             className='relative w-[32%] h-[200px] max-w-sm py-5 rounded-lg shadow-lg font-montserrat overflow-hidden shadow-orange bg-dark'
         >
             <div className="flex flex-col items-center">
-                {image &&
-                    <img src={image} alt="admin-image"
-                        className="w-24 h-24 mb-3 object-cover object-center border-orange shadow-lg shadow-light rounded-full"
-                    /> ||
-                    <MdAdminPanelSettings className='text-orange w-24 h-24 ' />
+                {image && <img src={image} alt="admin-image" className="w-24 h-24 mb-3 object-cover object-center border-orange shadow-lg shadow-light rounded-full" />
+                    || <MdAdminPanelSettings className='text-orange w-24 h-24 ' />
                 }
-
                 <h5 className="mb-1 text-2xl font-bold  text-light">{username}</h5>
                 <span className="text-sm text-light">{email}</span>
             </div>

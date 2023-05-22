@@ -6,15 +6,16 @@ import { AiFillProject } from "react-icons/ai";
 import { VscSymbolVariable } from "react-icons/vsc";
 import { IoMdArchive } from "react-icons/io";
 import { motion } from "framer-motion";
-import { Context } from './Context/Context';
-import axiosInstance from '../constants/axios';
+import { Context } from '../../Context/Context';
+import axiosInstance from '../../utils/axios';
 import Cookies from 'js-cookie';
-import Circles from "./Shared/Circles";
+import Circles from "../Shared/Circles";
+import GlobalToast from '../Shared/Toast';
 
 const Analysis = () => {
 
     const [analysisDataState, setAnalysisDataState] = useState({})
-    const { setNotifications, setLoading } = useContext(Context)
+    const { setLoading } = useContext(Context)
 
     const iconsArray = [
         { icon: <MdAdminPanelSettings size={70} /> },
@@ -27,6 +28,7 @@ const Analysis = () => {
         { icon: <BsPersonLinesFill size={70} /> },
     ]
 
+    // Get All Analysis
     const getAllAnalysisData = async () => {
         try {
             setLoading(true)
@@ -36,23 +38,10 @@ const Analysis = () => {
             setAnalysisDataState(response.data.data)
         } catch (error) {
             if (error.response && error.response.data) {
-                setNotifications({
-                    notificationBar: true,
-                    pass: false,
-                    notificationBarMessage: "Oops! Some thing wrong, try to reload"
-                })
+                GlobalToast('error', 'Oops! Some thing wrong, try to reload')
             }
         }
-        finally {
-            setLoading(false)
-            setInterval(() => {
-                setNotifications({
-                    pass: false,
-                    notificationBarMessage: '',
-                    notificationBar: false,
-                })
-            }, 4000);
-        }
+        finally { setLoading(false) }
     }
     useEffect(() => {
         getAllAnalysisData()
@@ -63,26 +52,19 @@ const Analysis = () => {
 
             {Object.entries(analysisDataState)
                 .map((analys, index) => (
-                    <motion.div
-                        initial={{ opacity: 0, y: 100 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2, duration: 0.5, ease: "easeInOut" }}
-                        key={index}
-                        className={`w-[30%] h-28 p-4 relative flex overflow-hidden gap-1 items-center my-1 rounded-3xl bg-dark
-                            ${index >= Object.entries(analysisDataState).length - 2 ? 'w-[40%]' : ''}`
-                        }
+                    <motion.div initial={{ opacity: 0, y: 100 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.5, ease: "easeInOut" }}
+                        key={index} className={`w-[30%] h-28 p-4 relative flex overflow-hidden gap-1 items-center my-1 rounded-3xl bg-dark
+                            ${index >= Object.entries(analysisDataState).length - 2 ? 'w-[40%]' : ''}`}
                     >
-                        <span className='w-12 h-12 p-2 rounded-lg flex items-center justify-center text-orange bg-[#dfd6d3] '>{/**skew-y-6 skew-x-1 */}
+                        <span className='w-12 h-12 p-2 rounded-lg flex items-center justify-center text-orange bg-[#dfd6d3] '>
                             {iconsArray[index] && iconsArray[index].icon}
                         </span>
 
-                        <div className='w-full h-full flex flex-col gap-y-1 mx-2 '>
+                        <div className='w-full h-full flex flex-col gap-y-1 mx-2'>
                             <h1 className='mt-3 text-xl font-black text-[#e87338] font-montserrat'>{analys[0]}</h1>
-
                             <span className="w-max h-auto text-2xl text-light font-montserrat px-2.5 py-0.5 rounded-lg">
                                 {analys[1]}
                             </span>
-
                         </div>
 
                         {/* Circles */}

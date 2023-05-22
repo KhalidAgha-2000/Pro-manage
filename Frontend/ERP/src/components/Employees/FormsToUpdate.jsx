@@ -33,7 +33,7 @@ export const Image = ({ image, employeeData, changeImage, handleImageUpload }) =
 export const Profile = ({ updateEmployeeInformation, employeeData, setFirst_name, setLast_name, setEmail, setPhone }) => {
 
     return (
-        <form onSubmit={updateEmployeeInformation} className=' w-full  flex flex-col items-center gap-y-6 '        >
+        <form onSubmit={updateEmployeeInformation} className=' w-full flex flex-col items-center gap-y-6 '        >
             <Inputs
                 type={'text'} placeholder='first_name' name={'first_name'} className={'w-5/6'}
                 defaultValue={employeeData.first_name}
@@ -65,25 +65,29 @@ export const Profile = ({ updateEmployeeInformation, employeeData, setFirst_name
 // Employee Team
 export const Team = ({ assignTeamToemployee, handleChangeTeam, employeeData, teamsData }) => {
     return (
-        <form onSubmit={assignTeamToemployee} className='w-full h-full flex flex-col justify-start items-center gap-16 mt-32 '>
+        <form onSubmit={assignTeamToemployee} className='w-full h-full flex flex-col justify-start items-center gap-12 mt-20 '>
+
+            <h1 className="font-alkatra text-xl">
+                {employeeData.teamName ? `Assigned To ${employeeData.teamName}` : "No Team"}
+            </h1>
             <select name="team" onChange={handleChangeTeam}
-                className='h-14 rounded-md w-5/6 p-1 bg-light outline-none border-4 border-sidebar font-montserrat font-semibold text-dark placeholder:text-dark placeholder:opacity-60 focus:shadow-lg focus:shadow-orange'>
-                <option selected>{employeeData.teamName && employeeData.teamName || "No Team"}</option>
+                className='h-14 rounded-md w-2/3 p-1 bg-light outline-none border-4 border-sidebar font-montserrat font-semibold text-dark placeholder:text-dark placeholder:opacity-60 focus:shadow-lg focus:shadow-orange'>
+                <option >choose a team</option>
                 {teamsData.map(team => (
                     <option className='text-orange hover:bg-dark hover:text-light'
-                        value={team._id}>{team.name}
+                        value={team._id} key={team._id} >{team.name}
                     </option>
                 ))}
             </select>
-            <Buttons className={'w-4/6'} done text={'done'} />
+            <Buttons className={'w-2/3'} done text={'assign'} />
         </form>)
 }
 
 // Employee KPIs
-export const KPI = ({ employeeData, kpiData, updateEmployeeKPIs, handleChangeKPIName, handleChangeKPIRate }) => {
+export const KPI = ({ kpisOfEmployee, employeeKPIS, kpiData, updateEmployeeKPIs, handleChangeKPIName, handleChangeKPIRate }) => {
     useEffect(() => {
-
-    }, [employeeData.kpis])
+        kpisOfEmployee()
+    }, [])
 
     return (
         <div className='w-full h-full -mt-4 p-1'>
@@ -93,78 +97,43 @@ export const KPI = ({ employeeData, kpiData, updateEmployeeKPIs, handleChangeKPI
                 <span className='w-1/2 rounded-lg bg-light h-fit p-2 text-center font-alkatra text-xl'>RATE</span>
             </header>
 
-            {/* Inputs */}
+            {/* Values */}
             <div className='h-full w-5/6  m-auto p-1 '>
                 <div className='w-full h-3/5 rounded-md bg-sidebar relative overflow-auto '>
-                    {/* h-1/2 */}
                     <div className=' w-full'>
-                        {
-                            employeeData.kpis && employeeData.kpis.length > 0 ? (
-                                employeeData.kpis.map((k) => (
-                                    <div className='w-full flex gap-2 p-2' key={k.id}>
-
-                                        <span
-                                            className='w-1/2 py-2 flex items-center justify-center bg-light text-center rounded-md text-orange font-bold uppercase font-alkatra' >
-                                            {k.name}
-                                        </span>
-
-                                        <select
-                                            className='w-1/2 text-center m-auto  rounded-md p-2 bg-light focus:outline-orange outline-orange font-alkatra text-lg text-orange'
-                                            // name="" id=""
-                                            defaultValue={k.rate}
-                                        // onChange={(e) => { updateEmployeeKPIs(e, employeeData.id, k.id) }}
-                                        >
-                                            <option value="">{k.rate}</option>
-                                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((rate) => (
-                                                <option key={rate} value={rate}>
-                                                    {rate}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                ))
-                            ) : (
-                                <p>No KPIs found for this employee</p>
-                            )
-                        }
-
-
+                        {employeeKPIS && employeeKPIS.length > 0 ? (employeeKPIS.map((k) => (
+                            <div className='w-full flex gap-2 p-2' key={Math.random() * 100 - 50}>
+                                <span className='w-1/2 py-2 flex items-center justify-center bg-light text-center rounded-md text-orange font-bold uppercase font-alkatra' >
+                                    {k.name}
+                                </span>
+                                <span className='w-1/2 text-center m-auto  rounded-md p-2 bg-light focus:outline-orange outline-orange font-alkatra text-lg text-orange'>
+                                    {k.rate}
+                                </span>
+                            </div>
+                        ))) : (<p className='w-fit h-fit m-auto p-3 my-8 rounded-md bg-orange text-lg font-alkatra text-light'
+                        >No KPIs found for this employee, Add !
+                        </p>
+                        )}
                     </div>
                 </div>
+
                 {/* ADD */}
                 <form onSubmit={updateEmployeeKPIs} className=' w-full h-fit mt-1 m-auto p-2 flex items-center gap-2 bg-sidebar rounded-md'>
 
-                    <select
-                        className='w-1/3 text-center h-10 m-auto  rounded-md p-2 bg-light focus:outline-orange outline-orange font-alkatra text-lg text-orange'
-                        // name="" id=""
-                        onChange={handleChangeKPIName}
-
-                    >
-                        <option value="">Chooose</option>
-                        {kpiData.map((k) => (
-                            <option key={k.id} value={k.id}>
-                                {k.name}
-                            </option>
-                        ))}
-
+                    <select className='w-1/3 text-center h-10 m-auto  rounded-md p-2 bg-light focus:outline-orange outline-orange font-alkatra text-lg text-orange'
+                        onChange={handleChangeKPIName}><option value="640392f74b670907f1bea1d6">agile</option>
+                        {kpiData.map((k) => (<option key={k._id} value={k.id}>{k.name}</option>))}
                     </select>
-                    <select
-                        className='w-1/3 h-10 text-center m-auto  rounded-md p-2 bg-light focus:outline-orange outline-orange font-alkatra text-lg text-orange'
-                        // name="" id=""
-                        onChange={handleChangeKPIRate}
-                    >
-                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((rate) => (
-                            <option key={rate} value={rate}>
-                                {rate}
-                            </option>
+
+                    <select className='w-1/3 h-10 text-center m-auto  rounded-md p-2 bg-light focus:outline-orange outline-orange font-alkatra text-lg text-orange'
+                        onChange={handleChangeKPIRate}>{[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((rate) => (
+                            <option key={Math.random() * 100 - 50} value={rate}>{rate}</option>
                         ))}
                     </select>
+
                     <Buttons className={'w-1/3'} done text={'done'} />
-
                 </form>
             </div>
-
-        </div >
-
+        </div>
     )
 }

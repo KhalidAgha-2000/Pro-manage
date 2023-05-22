@@ -1,30 +1,28 @@
 import { useContext, useEffect, useState } from 'react'
 import { AiFillCloseCircle } from 'react-icons/ai'
-import { Context } from '../Context/Context';
-import axiosInstance from '../../constants/axios'
+import { Context } from '../../Context/Context';
+import axiosInstance from '../../utils/axios'
 import Cookies from 'js-cookie';
-import Inputs from '../Shared/Inputs';
-import { Buttons } from '../Shared/Buttons';
-import { MdAdminPanelSettings } from 'react-icons/md';
-import { EmployeeContext } from '../Context/EmployeeeContext';
+import { EmployeeContext } from '../../Context/EmployeeeContext';
 import { Image, KPI, Profile, Team } from './FormsToUpdate';
+import GlobalToast from '../Shared/Toast';
+import Circles from "../Shared/Circles";
 
 const Employee = ({ teamsData, setEmployees, getAllEmployees, kpiData }) => {
 
-    const { setNotifications, setLoading } = useContext(Context)
-    const { setOpenFormToEdit, openFormToEdit, id, opened, idToEdit, setIdToEdit, isOpenToEdit, setIsOpenToEdit, } = useContext(EmployeeContext);
+    const { setLoading } = useContext(Context)
+    const { setOpenFormToEdit, openFormToEdit, id, } = useContext(EmployeeContext);
 
-    // const { id } = openFormToEdit
-    // const { id } = isOpenToEdit
     const [employeeData, setEmployeeData] = useState({})
+    const [employeeKPIS, setEmployeeKPIS] = useState([])
     const [selectedTeam, setSelectedTeam] = useState('');
     const [image, setImage] = useState('');
     const [first_name, setFirst_name] = useState('' || employeeData.first_name)
     const [last_name, setLast_name] = useState('' || employeeData.last_name)
     const [email, setEmail] = useState('' || employeeData.email)
     const [phone, setPhone] = useState('' || employeeData.phone)
-    const [updatedKpiName, setUpdatedKpiName] = useState('')
-    const [updatedKpiRate, setUpdatedKpiRate] = useState('')
+    const [updatedKpiName, setUpdatedKpiName] = useState('640392f74b670907f1bea1d6')
+    const [updatedKpiRate, setUpdatedKpiRate] = useState(1)
 
 
     // Data of the admin
@@ -32,35 +30,29 @@ const Employee = ({ teamsData, setEmployees, getAllEmployees, kpiData }) => {
         try {
             setLoading(true)
             const response = await
-                axiosInstance.get(`/employees/specific-employee/${id}`, {
-                    headers: { token: Cookies.get('token') }
-                })
+                axiosInstance.get(`/employees/specific-employee/${id}`, { headers: { token: Cookies.get('token') } })
             setEmployeeData(response.data.data)
-            // console.log(response.data.data.kpis);
-            console.log('kk', response.data.data);
         } catch (error) {
             if (error.response && error.response.data) {
-                setNotifications({
-                    notificationBar: true,
-                    pass: false,
-                    notificationBarMessage: "Oops! Some thing wrong, try to reload"
-                })
+                GlobalToast('warn', 'Oops! Some thing wrong, try to reload')
             }
-            console.log(error.response.data);
         }
-
-        finally {
-            setLoading(false);
-            setInterval(() => {
-                setNotifications({
-                    pass: false,
-                    notificationBarMessage: '',
-                    notificationBar: false,
-                })
-            }, 9000);
-        }
+        setTimeout(() => { setLoading(false) }, 2000);
     }
 
+    // Data of the admin
+    const kpisOfEmployee = async () => {
+        try {
+            setLoading(true)
+            const response = await
+                axiosInstance.get(`/employees/kpis-of-employee-update/${id}`, { headers: { token: Cookies.get('token') } })
+            setEmployeeKPIS(response.data.data.kpis)
+        } catch (error) {
+            if (error.response && error.response.data) {
+                GlobalToast('warn', 'Oops! Some thing wrong, try to reload')
+            }
+        } setTimeout(() => { setLoading(false) }, 2000);
+    }
     // Assign Team To Employee
     const handleChangeTeam = (e) => {
         setSelectedTeam(e.target.value);
@@ -74,11 +66,7 @@ const Employee = ({ teamsData, setEmployees, getAllEmployees, kpiData }) => {
                 axiosInstance.put(`/teams/assign-team-to-employee/${selectedTeam}`, { employeeId: id }, {
                     headers: { token: Cookies.get('token') }
                 })
-            setNotifications({
-                notificationBar: true,
-                pass: true,
-                notificationBarMessage: response.data.message
-            })
+            GlobalToast('success', response.data.message)
             // Get The Updated Employee Data
             setEmployees(prevemployeeData => {
                 const updatedemployeeData = prevemployeeData.map(emp => {
@@ -92,23 +80,9 @@ const Employee = ({ teamsData, setEmployees, getAllEmployees, kpiData }) => {
             setOpenFormToEdit({ opened: false })
         } catch (error) {
             if (error.response && error.response.data) {
-                setNotifications({
-                    notificationBar: true,
-                    pass: false,
-                    notificationBarMessage: "Oops! Some thing wrong, try to reload"
-                })
+                GlobalToast('warn', 'Oops! Some thing wrong, try to reload')
             }
-        }
-        finally {
-            setLoading(false);
-            setInterval(() => {
-                setNotifications({
-                    pass: false,
-                    notificationBarMessage: '',
-                    notificationBar: false,
-                })
-            }, 9000);
-        }
+        } setTimeout(() => { setLoading(false) }, 2000);
     }
 
     // Change Image
@@ -119,17 +93,10 @@ const Employee = ({ teamsData, setEmployees, getAllEmployees, kpiData }) => {
         e.preventDefault()
         try {
             const response = await axiosInstance.put(`/employees/change-image/${id}`, { image: image }, {
-                headers: {
-                    token: Cookies.get('token'),
-                    "content-type": "multipart/form-data",
-                }
+                headers: { token: Cookies.get('token'), "content-type": "multipart/form-data", }
             })
             setLoading(true)
-            setNotifications({
-                notificationBar: true,
-                pass: true,
-                notificationBarMessage: response.data.message
-            })
+            GlobalToast('success', response.data.message)
             // Get The Updated Employee Data
             setEmployees(prevemployeeData => {
                 const updatedEmployeeData = prevemployeeData.map(emp => {
@@ -143,23 +110,9 @@ const Employee = ({ teamsData, setEmployees, getAllEmployees, kpiData }) => {
             setOpenFormToEdit({ opened: false })
         } catch (error) {
             if (error.response && error.response.data) {
-                setNotifications({
-                    notificationBar: true,
-                    pass: false,
-                    notificationBarMessage: error.response.data.message
-                })
+                GlobalToast('warn', rror.response.data.message)
             }
-        } finally {
-            setInterval(() => {
-                setLoading(false)
-                setNotifications({
-                    pass: false,
-                    notificationBarMessage: '',
-                    notificationBar: false,
-                })
-            }, 9000);
-        }
-
+        } setTimeout(() => { setLoading(false) }, 2000);
     }
 
     // Update Employee Information (Name, Email, Phone)
@@ -168,46 +121,20 @@ const Employee = ({ teamsData, setEmployees, getAllEmployees, kpiData }) => {
         // Check if length of phone number = 8
         const phoneRegex = /^\d{8}$/
         if (!phoneRegex.test(phone || employeeData.phone)) {
-            setNotifications({
-                notificationBar: true,
-                pass: false,
-                notificationBarMessage: 'Please enter a valid 8-digit phone number.'
-            })
+            GlobalToast('warn', 'Please enter a valid 8-digit phone number.')
             return
         }
         try {
             const response = await axiosInstance.put(`/employees/update-info/${id}`, {
-                first_name: first_name,
-                last_name: last_name,
-                email: email,
-                phone: phone
-            }, {
-                headers: { token: Cookies.get('token') }
-            })
+                first_name: first_name, last_name: last_name, email: email, phone: phone
+            }, { headers: { token: Cookies.get('token') } })
             setLoading(true)
-            setNotifications({
-                notificationBar: true,
-                pass: true,
-                notificationBarMessage: response.data.message
-            })
+            GlobalToast('success', response.data.message)
             getAllEmployees()
         } catch (error) {
             if (error.response && error.response.data) {
-                setNotifications({
-                    notificationBar: true,
-                    pass: false,
-                    notificationBarMessage: error.response.data.message
-                })
-            }
-        } finally {
-            setInterval(() => {
-                setLoading(false)
-                setNotifications({
-                    pass: false,
-                    notificationBarMessage: '',
-                    notificationBar: false,
-                })
-            }, 9000);
+                GlobalToast('warn', error.response.data.message)
+            } setTimeout(() => { setLoading(false) }, 2000);
         }
     }
 
@@ -224,74 +151,34 @@ const Employee = ({ teamsData, setEmployees, getAllEmployees, kpiData }) => {
 
         try {
             const response = await axiosInstance.put(`/employees/add-kpi-to-employee/${id}`, {
-                kpiId: updatedKpiName,
-                kpiRate: updatedKpiRate,
+                kpiId: updatedKpiName, kpiRate: updatedKpiRate,
             }, { headers: { token: Cookies.get('token') } })
             setLoading(true)
-            setNotifications({
-                notificationBar: true,
-                pass: true,
-                notificationBarMessage: response.data.message
-            })
+            GlobalToast('success', response.data.message)
             // Get The Updated Employee Data
-            setEmployees(prevEmployeeData => {
-                const updatedEmployeeData = prevEmployeeData.map(emp => {
-                    if (emp.id === response.data.id) {
-                        return { ...emp, kpis: response.data.updatedKpis };
-                    }
-                    return emp;
-                });
-                return updatedEmployeeData;
-            });
-
-            console.log('response', response.data);
-            //     getAllEmployees()
+            setEmployeeKPIS(response.data.kpis)
         } catch (error) {
             if (error.response && error.response.data) {
-                setNotifications({
-                    notificationBar: true,
-                    pass: false,
-                    notificationBarMessage: error.response.data.message
-                })
+                GlobalToast('warn', error.response.data.message)
             }
-            console.log(error);
-        }
-        finally {
-            setInterval(() => {
-                setLoading(false)
-                setNotifications({
-                    pass: false,
-                    notificationBarMessage: '',
-                    notificationBar: false,
-                })
-            }, 9000);
-        }
+        } setTimeout(() => { setLoading(false) }, 2000);
     }
-
 
     useEffect(() => {
         specificEmployee()
     }, [])
 
-    const formComponents = {
-        image: Image,
-        team: Team,
-        kpi: KPI,
-        profile: Profile,
-    };
+    const formComponents = { image: Image, team: Team, kpi: KPI, profile: Profile, };
 
     const FormComponent = formComponents[openFormToEdit.formName] || null;
 
     return (
         <div className='w-1/3 h-3/4  max-h-fit z-[9999] m-auto bg-light relative overflow-hidden'>
 
-            {/* ---- */}
-            <span className='absolute -left-2 bottom-0 w-6 h-6 object-cover bg-orange bg-opacity-95 rounded-full' />
-            <span className='absolute left-6 bottom-2 w-4 h-4 object-cover bg-sidebar  rounded-full' />
-            <span className='absolute left-4 bottom-6 w-1 h-1 object-cover bg-orange bg-opacity-95 rounded-full' />
+            {/* Circles */}
+            <Circles className1={'-left-2 bottom-0 w-6 h-6 bg-orange'} className2={'left-6 bottom-2 w-4 h-4 bg-orange'} className3={'left-4 bottom-6 w-1 h-1 bg-orange'} />
 
-            <AiFillCloseCircle
-                onClick={() => { setOpenFormToEdit({ opened: false }) }}
+            <AiFillCloseCircle onClick={() => { setOpenFormToEdit({ opened: false }) }}
                 className='absolute top-2 right-2' cursor='pointer' size={25} color='#e04e17'
             />
 
@@ -310,64 +197,17 @@ const Employee = ({ teamsData, setEmployees, getAllEmployees, kpiData }) => {
                 assignTeamToemployee={assignTeamToemployee}
                 handleChangeTeam={handleChangeTeam}
                 // KPI Form
-                kpiData={kpiData}
+                kpiData={kpiData} kpisOfEmployee={kpisOfEmployee}
                 updateEmployeeKPIs={updateEmployeeKPIs}
                 handleChangeKPIName={handleChangeKPIName}
                 handleChangeKPIRate={handleChangeKPIRate}
+                employeeKPIS={employeeKPIS} setEmployeeKPIS={setEmployeeKPIS}
             />}
 
 
-        </div >
+        </div>
 
     )
 }
 
 export default Employee
-
-// // Employee Image
-// export const Image = ({ employeeData, changeImage, handleImageUpload, image }) => {
-//     return (
-//         <div className='flex flex-col items-center'>
-//             {employeeData.image &&
-//                 <img src={employeeData.image} alt={employeeData.first_name}
-//                     className="w-48 h-48 mb-3 object-cover object-center border-orange shadow-lg shadow-light rounded-full"
-//                 /> ||
-//                 <MdAdminPanelSettings className='text-orange w-24 h-24 ' />
-//             }
-//             <form
-//                 onSubmit={changeImage}
-//                 className=' flex flex-col justify-between items-center gap-y-10 my-10 pb-5'
-//             >
-//                 <Inputs
-//                     onChange={handleImageUpload}
-//                     name="image"
-//                     defaultValue={employeeData.image}
-//                     placeholder='image'
-//                     type='file'
-//                     className={'pt-3 px-1 w-full'} />
-
-//                 <Buttons disabled={image === ''} done text={'upload'} className={'w-10/12'} />
-
-//             </form>
-//         </div>
-//     )
-// }
-
-
-// export const Profile = ({ }) => {
-//     return (
-//         <div>Employee</div>
-//     )
-// }
-
-// export const Team = ({ }) => {
-//     return (
-//         <div>Team</div>
-//     )
-// }
-
-// export const KPI = ({ }) => {
-//     return (
-//         <div>KPI</div>
-//     )
-// }
