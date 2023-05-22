@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Context } from '../Context/Context'
+import { Context } from '../../Context/Context'
 
 const Loading = () => {
     const { loading } = useContext(Context)
@@ -25,7 +25,7 @@ export default Loading
 
 
 // Falid To Fetch
-export const falidtoFetch = () => {
+export const FalidtoFetch = () => {
     return (
         <h1 className='w-fit h-fit m-auto p-3 my-8 rounded-md bg-orange text-lg font-alkatra text-light'>
             Getting Data, Try to reload !

@@ -1,37 +1,31 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import './App.css'
-import Dashboard from './components/Dashboard'
-import Login from './components/Login'
-import Notification from './components/Shared/Notification'
-import NotFound from './components/Shared/NotFound'
-import Analysis from './components/Analysis'
+import Dashboard from './pages/Dashboard'
+import Analysis from './components/Analysis/Analysis'
 import Cookies from 'js-cookie'
 import Admins from './components/Admins/Admins'
-import Admin from './components/Admins/Admin'
-import AddAdmin from './components/Admins/AddAdmin'
 import Employees from './components/Employees/Employees'
-import Addemployee from './components/Employees/Addemployee'
 import Teams from './components/Teams/Teams'
 import Team from './components/Teams/Team'
 import AddTeam from './components/Teams/AddTeam'
 import Projects from './components/Projects/Projects'
 import Project from './components/Projects/Project'
 import Kpis from './components/KPIS/Kpis'
-import { useEffect, useState } from 'react'
+import { ToastContainer } from 'react-toastify'
+import './App.css'
+import Login from './pages/Login'
+import NotFound from './pages/NotFound'
 
 function App() {
-
-  const idInToken = Cookies.get('id')
 
   return (
     <div className='bg-light'>
 
-      <Notification />
+      <ToastContainer />
       <Router>
         <Routes>
           <Route path='/' element={<Login />} />
           <Route path="/login" element={<Login />} />
-          {Cookies.get('token') !== null ?
+          {Cookies.get('token') !== null || '' ?
             <Route path="/dashboard" element={<Dashboard />}>
               {/* ANALYSIS */}
               <Route path="analysis" element={<Analysis />} />
@@ -42,16 +36,16 @@ function App() {
               {/* EMPLOYEES */}
               <Route path="employees" element={<Employees />} />
 
-              {/* Teams */}
+              {/* TEAMS */}
               <Route path="teams" element={<Teams />} />
               <Route path="teams/add-team" element={<AddTeam />} />
               <Route path="teams/team/:id" element={<Team />} />
 
-              {/* Projects */}
+              {/* PROJECTS */}
               <Route path="projects" element={<Projects />} />
               <Route path="projects/project/:id" element={<Project />} />
 
-              {/* Kpis */}
+              {/* KPIS */}
               <Route path="kpis" element={<Kpis />} />
               {/* <Route path="projects/project/:id" element={<Project />} /> */}
 

@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from 'react'
 import { FaSearch } from 'react-icons/fa'
-import { Context } from '../Context/Context'
+import { Context } from '../../Context/Context'
 
-const Search = (props) => {
-    const { search, setSearch } = useContext(Context)
+const Search = () => {
+    const { setSearch } = useContext(Context)
     const [timeoutId, setTimeoutId] = useState(null);
 
     const handleChange = (e) => {
@@ -36,7 +36,6 @@ const Search = (props) => {
                      rounded-lg focus:ring-orange focus:border-orange outline-none"
                 placeholder="Looking for ..."
                 onChange={handleChange}
-            // onChange={(e) => setSearch(e.target.value)}
             />
             <FaSearch color='#e04e17' className="absolute left-2 inset-y-3 " />
         </div>
