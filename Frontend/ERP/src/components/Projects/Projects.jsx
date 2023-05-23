@@ -2,19 +2,23 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Context } from '../../Context/Context';
 import axiosInstance from '../../utils/axios';
 import Cookies from "js-cookie";
-import { IoMdArchive } from "react-icons/io";
+import { IoMdAdd, IoMdArchive } from "react-icons/io";
 import { FaProjectDiagram } from "react-icons/fa";
 import GlobalToast from '../Shared/Toast';
 import NoValueMatchSeaarch, { filteredArrayToSearch } from '../../utils/search';
 import { FalidtoFetch } from '../Shared/Loading';
+import { IconButtons } from "../Shared/Buttons";
 import ProjectCard from './ProjectCard';
+import AddProject from './AddProject';
+import { ProjectContext } from '../../Context/ProjectContext';
 
 const Projects = () => {
     const { setLoading, search } = useContext(Context)
+    const { setIsOpenToAdd } = useContext(ProjectContext)
 
     const [allProjectsData, setAllProjectsData] = useState([]);
     const [isArchived, setIsArchived] = useState(false)
-
+    const [teamsData, setTeamsData] = useState([])
     // Search
     const filteredAdminsToSearch = filteredArrayToSearch(allProjectsData, 'name', search)
 
@@ -35,9 +39,52 @@ const Projects = () => {
         }
         setTimeout(() => { setLoading(false) }, 2000);
     }
+
+    // Get All Teams
+    const getAllTeams = async () => {
+        try {
+            setLoading(true)
+            const response = await
+                axiosInstance.get('/teams/all-teams/', { headers: { token: Cookies.get('token') } })
+            setTeamsData(response.data.data)
+        } catch (error) {
+            if (error.response && error.response.data) {
+                GlobalToast('warn', 'Oops! Some thing wrong, try to reload')
+            }
+        } setTimeout(() => { setLoading(false) }, 2000);
+    }
+
     useEffect(() => {
         getAllProjects()
+        getAllTeams()
     }, [isArchived, search])
+
+    // Change Project Status
+    const changeProjectStatus = async (e, _id) => {
+        e.preventDefault()
+        try {
+            const response = await axiosInstance.put(`/projects/change-project-status/${_id}`, {}, {
+                headers: { token: Cookies.get('token') },
+            });
+            setLoading(true)
+            GlobalToast('success', response.data.message)
+            // Get The Updated Project Status
+            setAllProjectsData(prevProjectStatus => {
+                const updatedProjectStatus = prevProjectStatus.map(prj => {
+                    if (prj._id === _id) {
+                        return { ...prj, in_progress: response.data.data.in_progress };
+                    }
+                    return prj;
+                });
+                return updatedProjectStatus;
+            })
+        } catch (error) {
+            if (error.response && error.response.data) {
+                GlobalToast('warn', error.response.data.message)
+            }
+        } setTimeout(() => { setLoading(false) }, 2000);
+
+    }
 
     return (
 
@@ -51,14 +98,22 @@ const Projects = () => {
 
             {/* Projects */}
             {allProjectsData.length == 0 ? <FalidtoFetch /> : filteredAdminsToSearch.length === 0 ? <NoValueMatchSeaarch /> :
-                filteredAdminsToSearch.map((p) => (
+                filteredAdminsToSearch.reverse().map((p) => (
                     <ProjectCard key={p._id}
                         _id={p._id} name={p.name} teamName={p.teamName} in_progress={p.in_progress} numberOfEmployees={p.numberOfEmployees}
+                        changeProjectStatus={changeProjectStatus}
                     />
                 ))
             }
 
-        </div >
+            {/* Add Button */}
+            <IconButtons Icon={IoMdAdd} onClick={() => setIsOpenToAdd(true)} className={'fixed right-6 bottom-6'} />
+
+            {/* Add Project */}
+            <AddProject allProjectsData={allProjectsData} setAllProjectsData={setAllProjectsData} teamsData={teamsData} />
+
+
+        </div>
     )
 }
 
