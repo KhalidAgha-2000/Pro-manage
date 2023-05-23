@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import axiosInstance from '../../utils/axios'
 import { Context } from '../../Context/Context'
 import Cookies from 'js-cookie'
@@ -9,19 +9,22 @@ import GlobalToast from '../Shared/Toast'
 
 
 const AddKpi = ({ allKpisData, setAllKpisData, addKpi, setAddKpi }) => {
+
+    const [newKpi, setNewKpi] = useState('')
+
     const { setLoading } = useContext(Context)
 
     // Add KPI 
     const addNewKPI = async (e) => {
         e.preventDefault()
-        // Check if the kpi inout is empty
-        if (!addKpi) {
+        // Check if the kpi input is empty
+        if (!newKpi) {
             GlobalToast('warn', 'Please enter a kpi name.')
             return
         }
 
         try {
-            const response = await axiosInstance.post('/kpis/add-kpi', { name: addKpi }, { headers: { token: Cookies.get('token') } })
+            const response = await axiosInstance.post('/kpis/add-kpi', { name: newKpi }, { headers: { token: Cookies.get('token') } })
             setLoading(true)
             GlobalToast('success', response.data.message)
             setAllKpisData([...allKpisData, response.data.data]);
@@ -41,7 +44,7 @@ const AddKpi = ({ allKpisData, setAllKpisData, addKpi, setAddKpi }) => {
                     <form className='w-80 h-fit fixed right-10 bottom-20 flex flex-col gap-y-2 p-4 rounded-2xl bg-white border-4 border-sidebar '>
                         <span className='text-orange font-montserrat font-bold'>Add new KPI</span>
                         <div className='flex items-center justify-between '>
-                            <input onChange={(e) => setAddKpi(e.target.value)}
+                            <input onChange={(e) => setNewKpi(e.target.value.trim())}
                                 type="text" requiredname="name" placeholder='KPI name'
                                 className="w-3/4 bg-gray-50 text-sm rounded-lg focus:ring-orange border outline-none p-2.5 "
                             />

@@ -16,10 +16,9 @@ import { FalidtoFetch } from '../Shared/Loading'
 const Kpis = () => {
 
     const [allKpisData, setAllKpisData] = useState([])
-    const [editKpi, setEditKpi] = useState('')
-    const [editKpiIsopen, setEditKpiIsopen] = useState(false)
     const [addKpi, setAddKpi] = useState(false)
     const [kpiToUpdate, setKpiToUpdate] = useState({ id: '', kpiName: '', isOpen: false })
+
     const { setLoading, search } = useContext(Context)
 
     // Search
@@ -58,7 +57,6 @@ const Kpis = () => {
                         <h3 className="text-xl uppercase font-montserrat font-semibold text-dark">{k.name}</h3>
                         <AiFillEdit size={20} cursor={'pointer'}
                             onClick={() => setKpiToUpdate({ id: k.id, kpiName: k.name, isOpen: true })}
-                            // onClick={() => { setEditKpi(k._id), setEditKpiIsopen(true) }}
                             className='hover:scale-150 transition duration-200 ease-in-out text-xl text-dark opacity-60'
                         />
                     </motion.div>
