@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import axiosInstance from '../../utils/axios'
-import Input from './Input'
+import Inputs from '../Shared/Inputs';
 import { Buttons } from '../Shared/Buttons'
 import { Context } from '../../Context/Context';
 import Cookies from 'js-cookie'
@@ -52,30 +52,30 @@ const AddEmployee = ({ getAllEmployees }) => {
 
                     <div className='w-1/3 h-fit py-4 m-auto bg-light relative overflow-hidden'>
                         {/* Circles */}
-                        <Circles className1={'--left-2 top-0 w-6 h-6 bg-orange'} className2={'left-6 top-2 w-4 h-4 bg-sidebar'} className3={'left-4 top-6 w-1 h-1 bg-orange'} />
+                        <Circles className1={'-left-2 top-0 w-6 h-6 bg-orange'} className2={'left-6 top-2 w-4 h-4 bg-sidebar'} className3={'left-4 top-6 w-1 h-1 bg-orange'} />
 
                         <h1 className='font-alkatra text-xl text-orange font-semibold w-full p-2 my-1 mb-6 text-center'>Add New Employee To The System</h1>
 
                         <form className='w-full m-auto h-full flex flex-col items-center gap-y-8 mt-4'>
 
-                            <Input onChange={handleChangeAddEmployee}
-                                value={employeeToAdd.firstname} name="firstname" placeholder='First Name' type='text' className={'-my-1'}
+                            <Inputs onChange={handleChangeAddEmployee}
+                                value={employeeToAdd.firstname} name="firstname" placeholder='First Name' type='text' className={'w-3/4 -my-1'}
                             />
 
-                            <Input onChange={handleChangeAddEmployee}
-                                value={employeeToAdd.lastname} name="lastname" placeholder='Last Name' type='text' className={'-my-1'}
+                            <Inputs onChange={handleChangeAddEmployee}
+                                value={employeeToAdd.lastname} name="lastname" placeholder='Last Name' type='text' className={'w-3/4 -my-1'}
                             />
 
-                            <Input onChange={handleChangeAddEmployee}
-                                value={employeeToAdd.email} name="email" placeholder='Email' type='email' className={'-my-1'}
+                            <Inputs onChange={handleChangeAddEmployee}
+                                value={employeeToAdd.email} name="email" placeholder='Email' type='email' className={'w-3/4 -my-1'}
                             />
 
-                            <Input onChange={handleChangeAddEmployee}
-                                value={employeeToAdd.phone} name="phone" type='number' placeholder='enter a valid phone number (8) digits' className={'-my-1'}
+                            <Inputs onChange={handleChangeAddEmployee}
+                                value={employeeToAdd.phone} name="phone" type='number' placeholder='enter a valid phone number (8) digits' className={'w-3/4 -my-1'}
                             />
 
-                            <Input onChange={handleFileChangeAddEmployee}
-                                name="image" defaultValue={employeeToAdd.image} placeholder='image' type='file' className={'pt-3 px-1 -my-1'}
+                            <Inputs onChange={handleFileChangeAddEmployee}
+                                name="image" defaultValue={employeeToAdd.image} placeholder='image' type='file' className={'pt-3 px-1 w-3/4 -my-1'}
                             />
 
                             <div className='w-[90%] flex justify-end items-center gap-x-2'>

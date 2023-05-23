@@ -5,7 +5,7 @@ import { Context } from '../../Context/Context'
 import { MdNavigateNext, MdNavigateBefore, MdAdd } from 'react-icons/md'
 import { IconButtons } from "../Shared/Buttons";
 import { AnimatePresence, motion } from "framer-motion";
-import AddEmployee from './Addemployee'
+import AddEmployee from './AddEmployee'
 import Employee from './Employee'
 import Circles from '../Shared/Circles'
 import NoValueMatchSeaarch, { filteredArrayToSearch } from '../../utils/search'
