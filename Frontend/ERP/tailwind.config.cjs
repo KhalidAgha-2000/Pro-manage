@@ -15,13 +15,15 @@ module.exports = {
         'orange': 'hsl(20, 84%, 50%)',
         // 'orange': '#e04e17',
         'light': 'hsl(0, 0%, 94%)',
-        // 'light': '#f0f0f0',
+        // 'light': '#0066CC',
         'dark': 'hsl(0, 0%, 9%)',
-        // 'dark': '#171717',
+        // // 'dark': '#171717',
         'success': 'hsl(120, 60%, 41%)',
         // 'success': '#4bb543',
         'failed': 'hsl(0, 100%, 60%)',
         // 'failed': '#ff3333',
+
+        'card': '#F8F6F4',
       },
       boxShadow: {
         'floating-shadow': '0px 26px 27px 0px #e04e17',
