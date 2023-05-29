@@ -103,10 +103,9 @@ const Employees = () => {
                 {employees.length == 0 ? <FalidtoFetch /> :
                     filteredAdminsToSearch.length === 0 ? <NoValueMatchSeaarch /> :
                         filteredAdminsToSearch.map((employee) => (
-                            <EmployeeCard
-                                key={employee.id}
-                                id={employee.id} Employee_Name={employee.Employee_Name} image={employee.image} team={employee.team}
-                                phone={employee.phone} email={employee.email}
+                            <EmployeeCard data={employee} key={employee.id} id={employee.id}
+                            // Employee_Name={employee.Employee_Name} image={employee.image} team={employee.team}
+                            // phone={employee.phone} email={employee.email}
                             />
                         ))}
             </div>
