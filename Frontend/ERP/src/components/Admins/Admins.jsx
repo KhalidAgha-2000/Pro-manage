@@ -70,8 +70,7 @@ const Admins = () => {
                             if (loggedIn._id === Cookies.get('id')) { return -1; }// Logedin admin should come first
                             else { return 0; }// keep the same order
                         }).map((admin) => (
-                            <AdminCard key={admin._id}
-                                _id={admin._id} image={admin.image} username={admin.username} email={admin.email}
+                            <AdminCard key={admin._id} data={admin} _id={admin._id}
                                 removeAdmin={removeAdmin} setPrepareToRemove={setPrepareToRemove} prepareToRemove={prepareToRemove}
                             />
                         ))
