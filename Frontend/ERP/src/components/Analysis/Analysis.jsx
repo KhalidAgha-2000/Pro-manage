@@ -53,16 +53,16 @@ const Analysis = () => {
             {Object.entries(analysisDataState)
                 .map((analys, index) => (
                     <motion.div initial={{ opacity: 0, y: 100 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.5, ease: "easeInOut" }}
-                        key={index} className={`w-[30%] h-28 p-4 relative flex overflow-hidden gap-1 items-center my-1 rounded-3xl bg-dark
+                        key={index} className={`w-[30%] h-28 p-4 relative flex overflow-hidden gap-1 items-center my-1 rounded-3xl bg-card border-r-4 border-b-4
                             ${index >= Object.entries(analysisDataState).length - 2 ? 'w-[40%]' : ''}`}
                     >
-                        <span className='w-12 h-12 p-2 rounded-lg flex items-center justify-center text-orange bg-[#dfd6d3] '>
+                        <span className='w-12 h-12 p-2 rounded-lg flex items-center justify-center text-orange opacity-70 bg-sidebar '>
                             {iconsArray[index] && iconsArray[index].icon}
                         </span>
 
                         <div className='w-full h-full flex flex-col gap-y-1 mx-2'>
-                            <h1 className='mt-3 text-xl font-black text-[#e87338] font-montserrat'>{analys[0]}</h1>
-                            <span className="w-max h-auto text-2xl text-light font-montserrat px-2.5 py-0.5 rounded-lg">
+                            <h1 className='mt-3 text-2xl font-black text-dark font-alkatra'>{analys[0]}</h1>
+                            <span className="w-max h-auto text-2xl text-orange font-alkatra px-2.5 py-0.5 rounded-lg">
                                 {analys[1]}
                             </span>
                         </div>
