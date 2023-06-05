@@ -41,7 +41,7 @@ const SideBar = () => {
                                           ${n.title === activeNavItem || location.pathname.includes(n.linkTo) ? 'bg-light' : ""}`}>
 
                             {/* {n.icon} */}
-                            <n.icon size={25} color='#e04e17' />
+                            <n.icon size={25} color='#171717' />
                             <h2 className='text-base uppercase font-semibold text-dark font-montserrat'>{n.title}</h2>
                         </div>
                     </Link>

@@ -26,7 +26,7 @@ export const Buttons = ({ text, edit, done, remove, type, disabled, onClick, cla
 }
 
 
-// // Icon Buttons
+// Icon Buttons
 export const IconButtons = ({ Icon, onClick, className, linkTo }) => {
     return (
         <div className=" fixed  right-6 bottom-6">
@@ -48,3 +48,14 @@ export const IconButtons = ({ Icon, onClick, className, linkTo }) => {
         </div>
     );
 };
+
+// Padge to Navigate
+export const PadgeToNavigate = ({ className, onClick, text }) => {
+    return (
+        <span
+            onClick={onClick}
+            className={`${className} rounded-lg bg-light h-fit p-2 text-center font-alkatra text-xl`}>{text}</span>
+    )
+}
+
+

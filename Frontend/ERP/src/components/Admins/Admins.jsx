@@ -2,20 +2,18 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import axiosInstance from '../../utils/axios'
 import { Context } from '../../Context/Context';
 import { MdAdd } from 'react-icons/md';
-import { AnimatePresence, motion } from "framer-motion";
 import Cookies from 'js-cookie';
 import { IconButtons } from '../Shared/Buttons';
 import AddAdmin from './AddAdmin';
 import Admin from './Admin';
 import NoValueMatchSeaarch, { filteredArrayToSearch } from '../../utils/search'
 import AdminCard from './AdminCard';
-import { AdminContext } from '../../Context/AdminContext';
 import GlobalToast from '../Shared/Toast';
 import { FalidtoFetch } from '../Shared/Loading';
+import { FormToEdit, FormToAdd } from '../Shared/FormtoEdit';
 
 const Admins = () => {
-    const { setLoading, search } = useContext(Context)
-    const { setIsOpenToAdd, isOpenToEdit } = useContext(AdminContext);
+    const { setLoading, search, setOpenFormToAddEdit } = useContext(Context)
 
     const [allAdminsData, setAllAdminsData] = useState([])
     const [prepareToRemove, setPrepareToRemove] = useState(null)
@@ -61,7 +59,6 @@ const Admins = () => {
 
     return (
         <div className='w-full h-[75vh] relative flex flex-wrap justify-center p-3 gap-x-4 gap-y-4 overflow-auto'>
-
             {allAdminsData.length == 0 ?
                 <FalidtoFetch /> :
                 filteredAdminsToSearch.length === 0 ?
@@ -76,23 +73,16 @@ const Admins = () => {
                         ))
             }
 
-            {/* Add Button */}
-            <IconButtons Icon={MdAdd} onClick={() => setIsOpenToAdd(true)} className={'fixed right-6 bottom-6'} />
-
             {/* Add Admin */}
-            <AddAdmin setAllAdminsData={setAllAdminsData} allAdminsData={allAdminsData} />
+            <IconButtons Icon={MdAdd} onClick={() => setOpenFormToAddEdit({ openedToAdd: true })} className={'fixed right-6 bottom-6'} />
+            <FormToAdd>
+                <AddAdmin setAllAdminsData={setAllAdminsData} allAdminsData={allAdminsData} />
+            </FormToAdd>
 
             {/* Edit Admin */}
-            <AnimatePresence>
-                {isOpenToEdit &&
-                    <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }} transition={{ duration: 0.5 }}
-                        className="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 flex items-center justify-center"
-                    >
-                        <Admin setAllAdminsData={setAllAdminsData} />
-                    </motion.div>
-                }
-            </AnimatePresence>
-
+            <FormToEdit>
+                <Admin setAllAdminsData={setAllAdminsData} />
+            </FormToEdit>
         </div>
     )
 }

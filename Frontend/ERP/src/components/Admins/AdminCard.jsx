@@ -5,12 +5,12 @@ import { GiCheckMark } from 'react-icons/gi'
 import { MdAdminPanelSettings } from 'react-icons/md'
 import { TbLetterX } from 'react-icons/tb'
 import Circles from '../Shared/Circles'
-import { AdminContext } from "../../Context/AdminContext";
 import { useContext } from "react";
+import { Context } from "../../Context/Context";
 
 const AdminCard = ({ _id, data, setPrepareToRemove, removeAdmin, prepareToRemove }) => {
 
-    const { setIsOpenToEdit, setIdToEdit } = useContext(AdminContext);
+    const { setOpenFormToAddEdit } = useContext(Context)
 
     return (
         <motion.div initial={{ opacity: 0, y: 100 }} whileInView={{ y: [100, 50, 0], opacity: [0, 0, 1] }} transition={{ duration: 0.5 }}
@@ -27,7 +27,9 @@ const AdminCard = ({ _id, data, setPrepareToRemove, removeAdmin, prepareToRemove
             {/* Edit & Delete */}
             <div className='h-full w-4 absolute top-0 pr-4 right-3 flex flex-col items-start justify-evenly'>
                 <AiFillEdit className='hover:scale-150 transition duration-200 ease-in-out'
-                    onClick={() => { setIdToEdit(_id), setIsOpenToEdit(true) }}
+
+                    onClick={() => { setOpenFormToAddEdit({ openedToEdit: true, idToEdit: _id }) }}
+                    // onClick={() => { setIdToEdit(_id), setIsOpenToEdit(true) }}
                     size={20} color='#171717' cursor={'pointer'}
                 />
                 <AiOutlineUserDelete className={`hover:scale-150  transition duration-200 ease-in-out ${_id === Cookies.get('id') && "hidden"}`}
