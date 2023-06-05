@@ -22,7 +22,6 @@ const Projects = () => {
     // Search
     const filteredAdminsToSearch = filteredArrayToSearch(allProjectsData, 'name', search)
 
-
     // Get All Project
     const getAllProjects = async () => {
         try {

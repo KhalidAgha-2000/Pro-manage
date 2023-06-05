@@ -16,9 +16,10 @@ import { FalidtoFetch } from '../Shared/Loading'
 const Kpis = () => {
 
     const [allKpisData, setAllKpisData] = useState([])
+    const [editKpi, setEditKpi] = useState('')
+    const [editKpiIsopen, setEditKpiIsopen] = useState(false)
     const [addKpi, setAddKpi] = useState(false)
     const [kpiToUpdate, setKpiToUpdate] = useState({ id: '', kpiName: '', isOpen: false })
-
     const { setLoading, search } = useContext(Context)
 
     // Search

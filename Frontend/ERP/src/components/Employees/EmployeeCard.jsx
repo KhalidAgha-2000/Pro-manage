@@ -21,7 +21,8 @@ const EmployeeCard = ({ data, id }) => {
             className='w-full h-14 flex items-center rounded-2xl justify-around font-montserrat relative overflow-hidden
                group cursor-pointer my-2 border-2 border-sidebar  transition duration-200 ease-in-out'>
             {data.image && <img src={data.image} alt={data.Employee_Name} className='object-cover object-center aspect-square  rounded-full mx-2 border-2 w-12 h-12' />
-                || <HiUserCircle size={20} />
+                // {image && <img src={image} alt={Employee_Name} className='object-cover object-center aspect-square  rounded-full mx-2 border-2 w-12 h-12' />
+                //     || <HiUserCircle size={20} />
             }
             <p className='w-full font-semibold text-lg text-center truncate mr-4'>{data.Employee_Name}</p>
             <p className='w-full font-semibold text-lg text-center'>{data.email}</p>
@@ -40,6 +41,7 @@ const EmployeeCard = ({ data, id }) => {
                     >{item.label}
                     </span>
                 ))}
+
             </div>
 
         </motion.div>

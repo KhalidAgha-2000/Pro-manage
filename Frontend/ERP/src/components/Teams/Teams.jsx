@@ -36,7 +36,7 @@ const Teams = () => {
         setTimeout(() => { setLoading(false) }, 2000);
     }
     // Search
-    const filteredTeamsToSearch = filteredArrayToSearch(allTeamsData, 'name', search)
+    const filteredAdminsToSearch = filteredArrayToSearch(allTeamsData, 'name', search)
 
     useEffect(() => {
         getAllTeams()

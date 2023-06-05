@@ -9,9 +9,6 @@ import GlobalToast from '../Shared/Toast'
 
 
 const AddKpi = ({ allKpisData, setAllKpisData, addKpi, setAddKpi }) => {
-
-    const [newKpi, setNewKpi] = useState('')
-
     const { setLoading } = useContext(Context)
 
     // Add KPI 
