@@ -25,7 +25,7 @@ const Employee = ({ teamsData, setEmployees, getAllEmployees, kpiData }) => {
     const [updatedKpiRate, setUpdatedKpiRate] = useState(1)
 
 
-    // Data of the admin
+    // Data of the Employee
     const specificEmployee = async () => {
         try {
             setLoading(true)

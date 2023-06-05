@@ -93,14 +93,15 @@ const Projects = () => {
             <header onClick={() => setIsArchived(!isArchived)}
                 className='absolute top-2 right-0 flex items-center w-fit m-auto bg-orange text-sidebar rounded-md p-1 mx-1 font-montserrat h-fit cursor-pointer hover:opacity-50 transition duration-200 ease-in-out'>
                 {!isArchived ? <IoMdArchive /> : <FaProjectDiagram />}
-                <span className='mx-1'>{!isArchived ? "Go To Archived Project" : "Back To Projects "}</span>
+                <span className='mx-1'>{!isArchived ? "See Archived Projects" : "Back To Projects "}</span>
             </header>
+
 
             {/* Projects */}
             {allProjectsData.length == 0 ? <FalidtoFetch /> : filteredAdminsToSearch.length === 0 ? <NoValueMatchSeaarch /> :
-                filteredAdminsToSearch.reverse().map((p) => (
-                    <ProjectCard key={p._id}
-                        _id={p._id} name={p.name} teamName={p.teamName} in_progress={p.in_progress} numberOfEmployees={p.numberOfEmployees}
+                filteredAdminsToSearch.reverse().map((projj) => (
+                    <ProjectCard key={projj._id} data={projj}
+                        _id={projj._id}
                         changeProjectStatus={changeProjectStatus}
                     />
                 ))
