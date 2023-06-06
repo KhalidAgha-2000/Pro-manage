@@ -27,9 +27,7 @@ const AdminCard = ({ _id, data, setPrepareToRemove, removeAdmin, prepareToRemove
             {/* Edit & Delete */}
             <div className='h-full w-4 absolute top-0 pr-4 right-3 flex flex-col items-start justify-evenly'>
                 <AiFillEdit className='hover:scale-150 transition duration-200 ease-in-out'
-
                     onClick={() => { setOpenFormToAddEdit({ openedToEdit: true, idToEdit: _id }) }}
-                    // onClick={() => { setIdToEdit(_id), setIsOpenToEdit(true) }}
                     size={20} color='#171717' cursor={'pointer'}
                 />
                 <AiOutlineUserDelete className={`hover:scale-150  transition duration-200 ease-in-out ${_id === Cookies.get('id') && "hidden"}`}

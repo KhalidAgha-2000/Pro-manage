@@ -50,34 +50,28 @@ const Analysis = () => {
     return (
         <div className='flex flex-wrap items-center justify-center mt-3 gap-7 p-4 '>
 
-            {/* {Object.entries(analysisDataState)
+            {Object.entries(analysisDataState)
                 .map((analys, index) => (
                     <motion.div initial={{ opacity: 0, y: 100 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.5, ease: "easeInOut" }}
                         key={index} className={`w-[30%] h-28 p-4 relative flex overflow-hidden gap-1 items-center my-1 rounded-3xl bg-card border-r-4 border-b-4
                             ${index >= Object.entries(analysisDataState).length - 2 ? 'w-[40%]' : ''}`}
                     >
                         <span className='w-12 h-12 p-2 rounded-lg flex items-center justify-center text-orange opacity-70 bg-sidebar '>
-                            key={index} className={`w-[30%] h-28 p-4 relative flex overflow-hidden gap-1 items-center my-1 rounded-3xl bg-dark
-                            ${index >= Object.entries(analysisDataState).length - 2 ? 'w-[40%]' : ''}`}
-                    >
-                            <span className='w-12 h-12 p-2 rounded-lg flex items-center justify-center text-orange bg-[#dfd6d3] '>
-                                {iconsArray[index] && iconsArray[index].icon}
-                            </span> */}
+                            {iconsArray[index] && iconsArray[index].icon}
+                        </span>
 
-            {/* <div className='w-full h-full flex flex-col gap-y-1 mx-2'>
-                                <h1 className='mt-3 text-2xl font-black text-dark font-alkatra'>{analys[0]}</h1>
-                                <span className="w-max h-auto text-2xl text-orange font-alkatra px-2.5 py-0.5 rounded-lg">
-                                    <h1 className='mt-3 text-xl font-black text-[#e87338] font-montserrat'>{analys[0]}</h1>
-                                    <span className="w-max h-auto text-2xl text-light font-montserrat px-2.5 py-0.5 rounded-lg">
-                                        {analys[1]}
-                                    </span>
-                            </div> */}
+                        <div className='w-full h-full flex flex-col gap-y-1 mx-2'>
+                            <h1 className='mt-3 text-2xl font-black text-dark font-alkatra'>{analys[0]}</h1>
+                            <span className="w-max h-auto text-2xl text-orange font-alkatra px-2.5 py-0.5 rounded-lg">
+                                {analys[1]}
+                            </span>
+                        </div>
 
-            {/* Circles */}
-            {/* <Circles className1={"-right-8 -bottom-2 w-14 bg-sidebar h-14"} className2={'right-4 w-4 h-4 bg-sidebar'} className3={'right-2 w-1 h-1 bg-sidebar '} />
+                        {/* Circles */}
+                        <Circles className1={"-right-8 -bottom-2 w-14 bg-sidebar h-14"} className2={'right-4 w-4 h-4 bg-sidebar'} className3={'right-2 w-1 h-1 bg-sidebar '} />
 
                     </motion.div>
-                ))} */}
+                ))}
         </div>
 
     )

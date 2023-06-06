@@ -6,7 +6,6 @@ import Cookies from 'js-cookie'
 import Circles from '../Shared/Circles';
 import Inputs from '../Shared/Inputs';
 import GlobalToast from '../Shared/Toast';
-import { AiFillCloseCircle } from 'react-icons/ai';
 
 const AddAdmin = ({ setAllAdminsData, allAdminsData }) => {
 
@@ -49,8 +48,6 @@ const AddAdmin = ({ setAllAdminsData, allAdminsData }) => {
         <>
             {/* Title */}
             <h1 className='font-alkatra text-orange font-semibold w-full p-2 my-1 text-center text-xl'>Add New Admin To The System</h1>
-            {/* Close */}
-            <AiFillCloseCircle onClick={() => setOpenFormToAddEdit({ openedToAdd: false })} className='absolute z-[9999]  top-2 right-2' cursor='pointer' size={25} color='#e04e17' />
 
             <form className='w-full m-auto h-full flex flex-col items-center gap-y-8 mt-4 '>
                 <Inputs className={'w-5/6'} onChange={handleChangeAddAdmin}

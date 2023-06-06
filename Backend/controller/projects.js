@@ -69,14 +69,13 @@ class Controller {
     // -------------------- Add Kpi
     async addProject(req, res, next) {
 
-        // Check if the Project name is already in the database 
+        // Check if the Project name is already in the database
         const projectExists = await projectModel.findOne({ name: req.body.name })
-        if (projectExists) {
-            // 409 Conflict
-            return res.status(409).json({ success: false, message: "Project already exists" })
+        if (projectExists) {// 409 Conflict
+            return res.status(409).json({ success: false, message: "Project already exists" });
         }
 
-        const team = await teamModel.findById({ _id: req.body.teamID })
+        const team = await teamModel.findById(req.body.teamID)
 
         if (!team) {
             return res.status(404).json({ success: false, message: "Team not found" });
@@ -85,15 +84,29 @@ class Controller {
         const newProject = new projectModel({
             team: req.body.teamID,
             name: req.body.name.toLowerCase(),
-        });
+        })
 
-        // Save new KPI to database
         try {
-            const savedProject = await newProject.save();
-            return res.status(201).json({ success: true, message: "New Project added successfully", data: savedProject });
+            // Save the new project
+            const savedProject = await newProject.save()
+            await savedProject.populate('team')
+
+            const responseData = {
+                _id: savedProject._id,
+                name: savedProject.name,
+                in_progress: savedProject.in_progress,
+                archive: savedProject.archive,
+                team: team._id,
+                teamName: team.name,
+                numberOfEmployees: savedProject.team.employees.length,
+            };
+            return res.status(200).json({ success: true, message: "Project created", data: responseData });
         } catch (error) {
-            next(error)
+            // Handle any errors
+            console.log(error);
+            return res.status(500).json({ success: false, message: "Internal Server Error", error });
         }
+
 
     }
 
@@ -166,13 +179,14 @@ class Controller {
             if (project.archive.archived) {
                 return res.status(400).json({ success: false, message: "Project is already archived" });
             }
-            // Archive the Project by ID
+
             const newProjectData = await projectModel.findByIdAndUpdate(
                 req.params.id,
                 {
                     $set: {
                         'archive.archived': true,
-                        'archive.arcivedDate': new Date().toDateString()
+                        'archive.arcivedDate': new Date().toDateString(),
+                        'in_progress': false
                     }
                 },
                 { new: true }

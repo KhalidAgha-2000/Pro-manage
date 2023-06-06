@@ -61,7 +61,7 @@ class Controller {
 
     }
 
-    // -------------------- Delete / Check if team does not has employee(s)
+    // -------------------- Delete / Check if team does not has employee(s)/projects
     async deleteTeam(req, res, next) {
         try {
             const team = await teamModel.findById(req.params.id).populate('employees')
@@ -70,7 +70,7 @@ class Controller {
                 return res.status(404).json({ success: false, message: "Team not found" });
             }
 
-            // Check if Team has employees
+            // Check if Team has employees/projects
             if (team.employees && team.employees.length > 0) {
                 res.status(403).json({ success: false, message: "This Team has a list of employees, cannot be deleted" });
             }
@@ -123,6 +123,48 @@ class Controller {
         }
     }
 
+    // -------------------- Fetch Employees To Add-Remove from team
+    async getEmployeesByTeamToAssignUn(req, res, next) {
+        try {
+            let { id } = req.params;
+            const teamm = await teamModel.findById(id);
+            if (!teamm) {
+                return res.status(404).json({ success: false, message: "Team not found" });
+            }
+            //$ne specific field is not equal to a specified value. 
+            const assignedEmployees = await employeeModel.find({ team: id }, '-kpis -roles').populate('team');
+            const unassignedEmployees = await employeeModel.find({ team: { $ne: id } }, '-kpis -roles').populate('team');
+
+            const assignedEmployeesData = assignedEmployees.map(e => ({
+                id: e.id,
+                first_name: e.first_name,
+                last_name: e.last_name,
+                Employee_Name: e.Employee_Name,
+            }));
+
+            const unassignedEmployeesData = unassignedEmployees.map(e => ({
+                id: e.id,
+                first_name: e.first_name,
+                last_name: e.last_name,
+                Employee_Name: e.Employee_Name,
+            }));
+
+
+            return res.status(200).json({
+                success: true, message: "Employees Data", team: teamm.name,
+                data: {
+                    assignedEmployees: assignedEmployeesData,
+                    unassignedEmployees: unassignedEmployeesData,
+
+                }
+            });
+
+        } catch (err) {
+            next(err)
+            return res.status(500).json({ success: false, message: "Server Error", error: err });
+
+        }
+    };
 
     // ---------------------  Update Team name
     async updateTeamName(req, res, next) {
@@ -137,7 +179,7 @@ class Controller {
             // Check if the name already exists
             const teamExists = await teamModel.findOne({ name: req.body.name });
             if (teamExists) {
-                return res.status(400).json({ message: 'Email already exists' });
+                return res.status(400).json({ message: 'Team already exists' });
             }
 
             // Update the Team by ID
