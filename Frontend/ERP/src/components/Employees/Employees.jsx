@@ -4,15 +4,14 @@ import axiosInstance from '../../utils/axios'
 import { Context } from '../../Context/Context'
 import { MdNavigateNext, MdNavigateBefore, MdAdd } from 'react-icons/md'
 import { IconButtons } from "../Shared/Buttons";
-import { AnimatePresence, motion } from "framer-motion";
-import AddEmployee from './AddEmployee'
 import Employee from './Employee'
 import Circles from '../Shared/Circles'
 import NoValueMatchSeaarch, { filteredArrayToSearch } from '../../utils/search'
 import EmployeeCard from './EmployeeCard'
-import { EmployeeContext } from '../../Context/EmployeeeContext'
 import { FalidtoFetch } from "../Shared/Loading";
 import GlobalToast from '../Shared/Toast'
+import { FormToAdd, FormToEdit } from '../Shared/FormtoEdit'
+import Addemployee from './Addemployee'
 
 const Employees = () => {
 
@@ -22,8 +21,7 @@ const Employees = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
 
-    const { setLoading, search } = useContext(Context)
-    const { opened, setIsOpenToAdd } = useContext(EmployeeContext);
+    const { setLoading, search, setOpenFormToAddEdit } = useContext(Context)
 
     // Get All Employees
     const getAllEmployees = async () => {
@@ -103,10 +101,7 @@ const Employees = () => {
                 {employees.length == 0 ? <FalidtoFetch /> :
                     filteredAdminsToSearch.length === 0 ? <NoValueMatchSeaarch /> :
                         filteredAdminsToSearch.map((employee) => (
-                            <EmployeeCard data={employee} key={employee.id} id={employee.id}
-                            // Employee_Name={employee.Employee_Name} image={employee.image} team={employee.team}
-                            // phone={employee.phone} email={employee.email}
-                            />
+                            <EmployeeCard data={employee} key={employee.id} id={employee.id} />
                         ))}
             </div>
 
@@ -129,22 +124,16 @@ const Employees = () => {
             </div> : null
             }
 
-            {/* Add Button */}
-            <IconButtons Icon={MdAdd} onClick={() => setIsOpenToAdd(true)} />
-
-
             {/* Add Employee */}
-            <AddEmployee getAllEmployees={getAllEmployees} />
+            <IconButtons Icon={MdAdd} onClick={() => setOpenFormToAddEdit({ openedToAdd: true })} />
+            <FormToAdd>
+                <Addemployee getAllEmployees={getAllEmployees} />
+            </FormToAdd>
 
             {/* Edit Employee */}
-            <AnimatePresence>
-                {opened &&
-                    <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }} transition={{ duration: 0.5 }}
-                        className="fixed top-0 left-0 w-full h-full z-10 bg-gray-900 bg-opacity-50 flex items-center justify-center">
-                        <Employee teamsData={teamsData} kpiData={kpiData} setEmployees={setEmployees} getAllEmployees={getAllEmployees} />
-                    </motion.div>
-                }
-            </AnimatePresence>
+            <FormToEdit>
+                <Employee teamsData={teamsData} kpiData={kpiData} setEmployees={setEmployees} getAllEmployees={getAllEmployees} />
+            </FormToEdit>
         </div>
     )
 }
