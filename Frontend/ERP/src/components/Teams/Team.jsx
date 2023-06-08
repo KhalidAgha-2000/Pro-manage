@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
 import { TeamDelete, TeamEmployee, TeamName } from './FormsToUpdate';
-import { TeamContext } from '../../Context/TeamContext';
 import Circles from '../Shared/Circles';
 import { AiFillCloseCircle } from "react-icons/ai";
 import { Context } from '../../Context/Context';
@@ -10,21 +9,29 @@ import GlobalToast from '../Shared/Toast';
 
 const Team = ({ allTeamsData, setallTeamsData }) => {
 
-    const { setLoading } = useContext(Context)
-    const { setOpenFormToEdit, openFormToEdit, id, teamName } = useContext(TeamContext);
-    const [teamData, setTeamData] = useState({})
+    const { setOpenFormToAddEdit, setLoading, idToEdit } = useContext(Context)
+    const [teamName, setTeamName] = useState('')
     const [updateTheTeam, setUpdateTheTeam] = useState('')
+    const [tabsToEdit, setTabsToEdit] = useState('rename')
     const [assignedEmployees, setAssignedEmployees] = useState([])
     const [unassignedEmployees, setUnassignedEmployees] = useState([])
+    const [numberOfEmployees, setNumberOfEmployees] = useState(0)
+    const [numberOfProjects, setNumberOfProjects] = useState(0)
+
+    const formComponents = { rename: TeamName, employees: TeamEmployee, delete: TeamDelete };
+    const FormComponent = formComponents[tabsToEdit] || null;
 
     // Data of the Team
     const specificTeam = async () => {
         try {
             setLoading(true)
             const response = await
-                axiosInstance.get(`/teams/specific-team/${id}`, { headers: { token: Cookies.get('token') } })
-            console.log(response.data.data.name);
-            setTeamData(response.data)
+                axiosInstance.get(`/teams/specific-team/${idToEdit}`, { headers: { token: Cookies.get('token') } })
+            setTeamName(response.data.data.name)
+            setAssignedEmployees(response.data.data.employees)
+            setUnassignedEmployees(response.data.unassignedEmployees)
+            setNumberOfEmployees(response.data.numberOfEmployees)
+            setNumberOfProjects(response.data.numberOfProjects)
         } catch (error) {
             if (error.response && error.response.data) {
                 GlobalToast('warn', 'Oops! Some thing wrong, try to reload')
@@ -32,6 +39,7 @@ const Team = ({ allTeamsData, setallTeamsData }) => {
         }
         setTimeout(() => { setLoading(false) }, 2000);
     }
+
 
     // Update Team`s name
     const handleChangeTeamName = (e) => {
@@ -46,17 +54,15 @@ const Team = ({ allTeamsData, setallTeamsData }) => {
         }
 
         try {
-            const response = await axiosInstance.put(`/teams/update-team-name/${id}`, { name: updateTheTeam }, {
+            const response = await axiosInstance.put(`/teams/update-team-name/${idToEdit}`, { name: updateTheTeam }, {
                 headers: { token: Cookies.get('token') }
             })
             setLoading(true)
             GlobalToast('success', response.data.message)
             // Get The Updated Team Data
-            console.log(response.data.data);
             setallTeamsData((prevTeamsData) =>
-                prevTeamsData.map((team) => team._id === id ? { ...team, name: response.data.data.name } : team)
+                prevTeamsData.map((team) => team._id === idToEdit ? { ...team, name: response.data.data.name } : team)
             );
-            setTimeout(() => { setOpenFormToEdit({ opened: false }) }, 2000);
         } catch (error) {
             if (error.response && error.response.data) {
                 GlobalToast('warn', error.response.data.message)
@@ -65,77 +71,135 @@ const Team = ({ allTeamsData, setallTeamsData }) => {
 
     }
 
+
+
+    // Assign Employee
+    const handleAssignEmployee = async (e, employeeId) => {
+        e.preventDefault();
+        try {
+            const response = await axiosInstance.put(`/teams/assign-team-to-employee/${idToEdit}`, { employeeId: employeeId }, {
+                headers: { token: Cookies.get('token') }
+            });
+            GlobalToast('success', "DoneASS");
+            // Update unassignedEmployees array by removing the assigned employee
+            setUnassignedEmployees(prevEmployees => prevEmployees.filter(emp => emp.id !== employeeId));
+            // Update assignedEmployees array by adding the unassigned employee
+            const employee = unassignedEmployees.find(emp => emp.id === employeeId);
+            setAssignedEmployees(prevEmployees => [...prevEmployees, employee]);
+            // Get The Updated Team Data
+            setallTeamsData(prevTeamsData => {
+                const updatedTeamsData = prevTeamsData.map(team => {
+                    if (team._id === idToEdit) {
+                        return { ...team, numberOfEmployees: assignedEmployees.length + 1 };
+                    }
+                    return team;
+                });
+                return updatedTeamsData;
+            })
+        } catch (error) {
+            if (error.response && error.response.data) {
+                GlobalToast('warn', error.response.data.message);
+            }
+        }
+    };
+
+    // UnAssign Employee
+    const handleUnAssignEmployee = async (e, employeeId) => {
+        e.preventDefault();
+        try {
+            const response = await axiosInstance.put(`/teams/un-assign-employee-from-team/${idToEdit}`, { employeeId: employeeId }, {
+                headers: { token: Cookies.get('token') }
+            });
+            GlobalToast('success', "Done");
+            // Update AssignedEmployees array by removing the unassigned employee
+            setAssignedEmployees(prevEmployees => prevEmployees.filter(emp => emp.id !== employeeId));
+            // Update unassignedEmployees array by adding the assigned employee
+            const employee = assignedEmployees.find(emp => emp.id === employeeId);
+            setUnassignedEmployees(prevEmployees => [...prevEmployees, employee]);
+            // Get The Updated Team Data
+            setallTeamsData(prevTeamsData => {
+                const updatedTeamsData = prevTeamsData.map(team => {
+                    if (team._id === idToEdit) {
+                        return { ...team, numberOfEmployees: assignedEmployees.length - 1 };
+                    }
+                    return team;
+                });
+                return updatedTeamsData;
+            })
+        } catch (error) {
+            if (error.response && error.response.data) {
+                GlobalToast('warn', error.response.data.message);
+            }
+        }
+    };
+
     // Delete Team
     const removeTeam = async (e) => {
         e.preventDefault()
         try {
             setLoading(true)
             const response = await
-                axiosInstance.delete(`/teams/remove-team/${id}`, { headers: { token: Cookies.get('token') } })
-            console.log(response);
+                axiosInstance.delete(`/teams/remove-team/${idToEdit}`, { headers: { token: Cookies.get('token') } })
             GlobalToast('success', response.data.message)
-            setallTeamsData(allTeamsData.filter((team) => team._id !== id))
-            setTimeout(() => { setOpenFormToEdit({ opened: false }) }, 2000);
+            setallTeamsData(allTeamsData.filter((team) => team._id !== idToEdit))
+            setTimeout(() => { setOpenFormToAddEdit({ openedToEdit: false }) }, 2000);
         } catch (error) {
             if (error.response && error.response.data) {
-                console.log(error);
                 GlobalToast('warn', error.response.data.message)
             }
         }
         finally { setLoading(false) }
     }
-    const formComponents = { rename: TeamName, delete: TeamDelete, employees: TeamEmployee };
-    const FormComponent = formComponents[openFormToEdit.formName] || null;
 
-
-    const getEmployeesByTeamToAssignUn = async () => {
-        try {
-            setLoading(true)
-            const response = await
-                axiosInstance.get(`/teams/get-employees-by-Team-to-assign-un/${id}`, { headers: { token: Cookies.get('token') } })
-            console.log(response.data.data);
-            setAssignedEmployees(response.data.data.assignedEmployees)
-            setUnassignedEmployees(response.data.data.unassignedEmployees)
-            // console.log('tt', employeesOfTeam);
-        } catch (error) {
-            if (error.response && error.response.data) {
-                console.log(error);
-                GlobalToast('warn', error.response.data.message)
-            }
-        }
-        finally { setLoading(false) }
-    }
     useEffect(() => {
-
-        // specificTeam()
+        specificTeam()
     }, [])
 
     return (
-        <div className='w-1/3 h-4/6 max-h-fit z-[9999] m-auto bg-light relative overflow-hidden'>
-
+        <>
             {/* Circles */}
             <Circles className1={'-left-2 bottom-0 w-6 h-6 bg-orange'} className2={'left-6 bottom-2 w-4 h-4 bg-orange'} className3={'left-4 bottom-6 w-1 h-1 bg-orange'} />
 
-            <AiFillCloseCircle onClick={() => { setOpenFormToEdit({ opened: false }) }}
+            <AiFillCloseCircle onClick={() => { setOpenFormToAddEdit({ openedToEdit: false }) }}
                 className='absolute top-2 right-2' cursor='pointer' size={25} color='#e04e17'
             />
+            {/* Title */}
+            <h1 className='font-alkatra text-orange font-semibold w-full p-2 my-1 text-center text-xl'>
+                Update Team's Data
+            </h1>
+            {/* Nav Tabs */}
+            <div className='w-10/12 m-auto h-fit p-2  flex justify-between items-center gap-x-2'>
+                {['rename', 'employees', 'delete'].map((key, index) => (
+                    <span key={index} onClick={() => setTabsToEdit(key)}
+                        className={`${tabsToEdit === key ? 'opacity-40' : ''} w-1/2 rounded-lg transition duration-700 ease-in-out hover:opacity-40 bg-sidebar h-fit p-2 text-center cursor-pointer font-alkatra text-xl`}
+                    >{key}
+                    </span>
+                ))}
+            </div>
+
+            {/* Forms */}
             {FormComponent && <FormComponent
                 // 
-                teamData={teamData}
+                teamName={teamName}
                 // Update Name
                 updateTheTeam={updateTheTeam}
                 updateTeamName={updateTeamName}
                 handleChangeTeamName={handleChangeTeamName}
                 // Delete
                 removeTeam={removeTeam}
-                // Employees
-                getEmployeesByTeamToAssignUn={getEmployeesByTeamToAssignUn}
+                // Un / Assign
+                handleAssignEmployee={handleAssignEmployee}
+                handleUnAssignEmployee={handleUnAssignEmployee}
+                setAssignedEmployees={setAssignedEmployees}
+                setUnassignedEmployees={setUnassignedEmployees}
                 assignedEmployees={assignedEmployees}
                 unassignedEmployees={unassignedEmployees}
+                numberOfEmployees={numberOfEmployees}
+                numberOfProjects={numberOfProjects}
             />}
 
 
-        </div>
+        </>
 
     )
 }

@@ -7,8 +7,8 @@ export const ContextBody = ({ children }) => {
     const [loading, setLoading] = useState(false)
     const [search, setSearch] = useState('')
 
-    const [openFormToAddEdit, setOpenFormToAddEdit] = useState({ idToEdit: '', openedToEdit: false, openedToAdd: false })
-    const { idToEdit, openedToEdit, openedToAdd } = openFormToAddEdit;
+    const [openFormToAddEdit, setOpenFormToAddEdit] = useState({ idToEdit: '', data: '', openedToEdit: false, openedToAdd: false })
+    const { idToEdit, data, openedToEdit, openedToAdd } = openFormToAddEdit;
 
     return (
         <Context.Provider
@@ -16,7 +16,7 @@ export const ContextBody = ({ children }) => {
                 adminData, setAdminData,
                 loading, setLoading,
                 search, setSearch,
-                idToEdit, openedToAdd, openedToEdit, setOpenFormToAddEdit, openFormToAddEdit
+                idToEdit, openedToAdd, data, openedToEdit, setOpenFormToAddEdit, openFormToAddEdit
             }}
         >
             {children}
