@@ -28,6 +28,7 @@ class Controller {
                 email: e.email,
                 phone: e.phone,
                 image: e.image,
+                teamID: e.team ? e.team._id : null, // replace team ID with team name
                 team: e.team ? e.team.name : null, // replace team ID with team name
             }))
 

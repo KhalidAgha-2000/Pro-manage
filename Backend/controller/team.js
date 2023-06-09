@@ -14,6 +14,7 @@ class Controller {
                 projects: team.projects,
                 employees: team.employees
             }));
+
             res.status(200).json({ success: true, message: 'All Teams', data: teamData });
         } catch (err) {
             next(err);
@@ -27,12 +28,26 @@ class Controller {
             if (!team) {
                 return res.status(404).json({ success: false, message: "Team not found" });
             }
-            res.status(200).json({ success: true, message: 'Team Information', numberOfProjects: team.projects.length, numberOfEmployees: team.employees.length, data: team });
+
+            //$ne specific field is not equal to a specified value.
+            const getUnassignedEmployees = await employeeModel.find({ team: { $ne: team } }, '-kpis -roles').populate('team');
+            const unassignedEmployeesData = getUnassignedEmployees.map(e => ({
+                id: e.id,
+                first_name: e.first_name,
+                last_name: e.last_name,
+                Employee_Name: e.Employee_Name,
+                image: e.image,
+            }));
+            res.status(200).json({
+                success: true, message: 'Team Information', data: team,
+                unassignedEmployees: unassignedEmployeesData, numberOfUnassignedEmployees: getUnassignedEmployees.length,
+                numberOfEmployees: team.employees.length, numberOfProjects: team.projects.length,
+            });
         } catch (err) {
             next(err);
         }
     }
-    // -------------------- Add Kpi
+    // -------------------- Add Team
     async addTeam(req, res) {
 
         // Check if the request body is empty
@@ -94,7 +109,7 @@ class Controller {
     };
 
     // -------------------- Assign Team To Employees
-    async assignTeamToemployee(req, res, next) {
+    async assignTeamToEmployee(req, res, next) {
         try {
             let { id } = req.params;
             const teamm = await teamModel.findById(id);
@@ -120,6 +135,31 @@ class Controller {
         } catch (err) {
             next(err)
             return res.status(500).json({ success: false, message: "Failed to add Team", error: err });
+        }
+    }
+
+    // -------------------- UnAssign  Employees From Team
+    async unAssignTeamFromEmployee(req, res, next) {
+        try {
+            const { id } = req.params;
+            const team = await teamModel.findById(id);
+            const employee = await employeeModel.findById(req.body.employeeId);
+
+            if (!employee) {
+                return res.status(404).json({ success: false, message: "Employee not found" });
+            }
+
+            if (!team) {
+                return res.status(404).json({ success: false, message: "Team not found" });
+            }
+
+            employee.team = null;
+            await employee.save();
+
+            return res.status(200).json({ success: true, id: req.body.employeeId, message: `Employee ${employee.Employee_Name} has been successfully unassigned from team: ${team.name}` });
+        } catch (err) {
+            next(err);
+            return res.status(500).json({ success: false, message: "Failed to unassign team from employee", error: err });
         }
     }
 

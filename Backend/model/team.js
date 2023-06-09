@@ -21,7 +21,7 @@ teamSchema.virtual(
     localField: '_id',
     foreignField: 'team',
     options: {
-        select: 'first_name last_name email -team'// Specify the fields to be loaded from the employee document    
+        select: 'first_name last_name email image -team'// Specify the fields to be loaded from the employee document    
     }
 }
 )
