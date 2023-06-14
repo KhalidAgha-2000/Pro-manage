@@ -164,7 +164,7 @@ class Controller {
     }
 
     // -------------------- Fetch Employees To Add-Remove from team
-    async getEmployeesByTeamToAssignUn(req, res, next) {
+    async getEmployeesByTeamToAssignRole(req, res, next) {
         try {
             let { id } = req.params;
             const teamm = await teamModel.findById(id);
@@ -172,32 +172,18 @@ class Controller {
                 return res.status(404).json({ success: false, message: "Team not found" });
             }
             //$ne specific field is not equal to a specified value. 
+            // const unassignedEmployees = await employeeModel.find({ team: { $ne: id } }, '-kpis -roles').populate('team');
             const assignedEmployees = await employeeModel.find({ team: id }, '-kpis -roles').populate('team');
-            const unassignedEmployees = await employeeModel.find({ team: { $ne: id } }, '-kpis -roles').populate('team');
 
             const assignedEmployeesData = assignedEmployees.map(e => ({
                 id: e.id,
                 first_name: e.first_name,
                 last_name: e.last_name,
                 Employee_Name: e.Employee_Name,
+                image: e.image,
             }));
 
-            const unassignedEmployeesData = unassignedEmployees.map(e => ({
-                id: e.id,
-                first_name: e.first_name,
-                last_name: e.last_name,
-                Employee_Name: e.Employee_Name,
-            }));
-
-
-            return res.status(200).json({
-                success: true, message: "Employees Data", team: teamm.name,
-                data: {
-                    assignedEmployees: assignedEmployeesData,
-                    unassignedEmployees: unassignedEmployeesData,
-
-                }
-            });
+            return res.status(200).json({ success: true, message: "Employees Data", team: teamm.name, data: assignedEmployeesData });
 
         } catch (err) {
             next(err)

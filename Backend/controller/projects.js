@@ -1,5 +1,6 @@
 const projectModel = require('../model/projects')
 const teamModel = require('../model/team')
+const employeeModel = require('../model/employee')
 
 class Controller {
     // -------------------- Fetch All Projects
@@ -37,29 +38,33 @@ class Controller {
         try {
 
             const project = await projectModel.findById(req.params.id).populate('team')
-            // .populate({ path: 'team', select: 'name employees' })
-            // .select('-team.projects');
+
+            const employees = await employeeModel.find({ 'roles.project': req.params.id }).populate('roles.role');
+
             let data = {
-                // const projects = await projectModel.find({}).populate('team');
                 _id: project._id,
                 name: project.name,
                 archive: project.archive.archived,
                 archiveDate: project.archive.arcivedDate,
-                status: project.in_progress,
+                in_progress: project.in_progress,
                 team: project.team._id,
                 teamName: project.team.name,
-                teamemployees: project.team.employees.map(emp => ({
-                    _id: emp._id,
-                    first_name: emp.first_name,
-                    last_name: emp.last_name,
-                    email: emp.email,
-                    Employee_Name: emp.Employee_Name,
-                })),
                 numberOfEmployees: project.team.employees.length,
                 numberOfProjectOfTheTeam: project.team.projects.length,
 
+                teamemployees: project.team.employees.map(emp => {
+                    const employee = employees.find(e => e._id.toString() === emp._id.toString());
+                    const role = employee && employee.roles.find(r => r.project.toString() === req.params.id);
+                    return {
+                        _id: emp._id,
+                        first_name: emp.first_name,
+                        last_name: emp.last_name,
+                        image: emp.image,
+                        Employee_Name: emp.Employee_Name,
+                        role: role ? { roleId: role.role._id, roleName: role.role.name } : "No role assigned"
+                    };
+                }),
             }
-
             res.status(200).json({ success: true, message: 'Project Information!', data: data });
         } catch (err) {
             next(err);
@@ -138,7 +143,10 @@ class Controller {
                 { new: true }
             );
 
-            res.status(200).json({ success: true, message: 'Data updated successfully', data: newProjectData });
+            res.status(200).json({
+                success: true, message: 'Data updated successfully',
+                data: { id: req.params.id, newName: newProjectData.name }
+            });
         } catch (err) {
             next(err)
         }
@@ -154,6 +162,9 @@ class Controller {
                 return res.status(404).json({ success: false, message: "Project not found" });
             }
 
+            if (project.archive.archived == true) {//405 - Method Not Allowed
+                return res.status(405).json({ success: false, message: "Project is archived" });
+            }
             // Update the Project by ID
             const in_progress = project.in_progress;
             const newProjectData = await projectModel.findByIdAndUpdate(
@@ -162,7 +173,7 @@ class Controller {
                 { new: true }
             );
 
-            res.status(200).json({ success: true, message: 'Data updated successfully', data: newProjectData });
+            res.status(200).json({ success: true, message: 'Data updated successfully', in_progress: newProjectData.in_progress });
         } catch (err) {
             next(err)
         }
@@ -192,7 +203,7 @@ class Controller {
                 { new: true }
             );
 
-            res.status(200).json({ success: true, message: 'Project Removed to Archive successfully', data: newProjectData });
+            res.status(200).json({ success: true, message: 'Project Archived successfully', data: newProjectData });
         } catch (err) {
             next(err)
         }
@@ -201,7 +212,7 @@ class Controller {
     // Change Team of project
     async changeTeamOfProject(req, res, next) {
         try {
-            const project = await projectModel.findById({ _id: req.params.id })
+            const project = await projectModel.findById({ _id: req.params.id }).populate('team')
 
             if (!project) {
                 return res.status(404).json({ success: false, message: "Project not found" });
@@ -217,13 +228,46 @@ class Controller {
                 req.params.id,
                 { $set: { team: teamID } },
                 { new: true }
-            );
+            ).populate('team')
 
-            res.status(200).json({ success: true, message: 'New Team assigned successfully', data: newProjectData });
+
+            res.status(200).json({
+                success: true, message: 'Team successfully changed',
+                data: { id: req.params.id, numberOfEmployees: newProjectData.team.employees.length, newTeam: newProjectData.team.name }
+            });
         } catch (err) {
             next(err)
         }
     }
+
+
+    async getEmployeesWithRolesOfProject(req, res, next) {
+        try {
+            const employees = await employeeModel.find({ 'roles.project': req.params.id }).populate('roles.role');
+
+            const employeesWithRoles = employees.map(emp => ({
+                _id: emp._id,
+                first_name: emp.first_name,
+                last_name: emp.last_name,
+                image: emp.image,
+                Employee_Name: emp.Employee_Name,
+                roles: emp.roles.filter(role => role.project.toString() === req.params.id).map(role => ({
+                    roleId: role.role._id,
+                    roleName: role.role.name
+                }))
+            }));
+
+            res.status(200).json({
+                success: true, message: 'HERERE',
+                data: employeesWithRoles
+            });
+
+
+        } catch (err) {
+            next(err)
+        }
+    };
+
 }
 
 

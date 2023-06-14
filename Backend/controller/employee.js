@@ -1,6 +1,6 @@
 const employeeModel = require('../model/employee')
 const projectModel = require('../model/projects')
-const roletModel = require('../model/role')
+const roleModel = require('../model/role')
 const kpiModel = require('../model/kpi')
 const cloudinary = require('cloudinary').v2
 const ObjectID = require('mongodb').ObjectId
@@ -354,7 +354,7 @@ class Controller {
         try {
             const project = await projectModel.findById({ _id: req.params.id });
             const employee = await employeeModel.findById({ _id: req.body.employeeID }).populate('roles.role');
-            const role = await roletModel.findById({ _id: req.body.roleID });
+            const role = await roleModel.findById({ _id: req.body.roleID });
 
             if (!project) {
                 return res.status(404).json({ success: false, message: "Project not found" });
@@ -368,12 +368,11 @@ class Controller {
             employee.roles.push({ project: project._id, role: role._id });
             await employee.save();
 
-            const respond = {
+            const response = {
                 status: 200,
-                message: 'Role added successfully',
-                data: project,
+                message: 'Role assigned',
             }
-            res.status(200).json(respond);
+            res.status(200).json(response);
         } catch (err) {
             next(err)
         }

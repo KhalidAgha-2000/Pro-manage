@@ -36,6 +36,14 @@ const projectSchema = new Schema({
     });
 
 
+projectSchema.virtual('employees', {
+    ref: 'Employee',
+    localField: '_id',
+    foreignField: 'roles.project',
+    options: {
+        select: 'first_name last_name email image roles',
+    }
+});
 
 const Model = model('Project', projectSchema);
 module.exports = Model;

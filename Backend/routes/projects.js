@@ -14,6 +14,7 @@ router.group('/projects', (projectRouter) => {
     // ---------- Project Routes
     projectRouter.get('/all-projects', controller.allProjects)
     projectRouter.get('/specific-project/:id', controller.specificProject)
+    projectRouter.get('/get-employees-with-roles-of-project/:id', controller.getEmployeesWithRolesOfProject)
     projectRouter.post('/add-project', controller.addProject)
     projectRouter.put('/update-project-name/:id', controller.updateProjectName)
     projectRouter.put('/change-project-status/:id', controller.changeProjectStatus)
