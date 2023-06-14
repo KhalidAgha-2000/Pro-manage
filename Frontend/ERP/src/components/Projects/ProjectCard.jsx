@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { AnimatePresence, motion } from "framer-motion";
 import Circles from '../Shared/Circles';
 import { IoMdArchive, IoMdInformationCircle } from "react-icons/io";
@@ -7,14 +7,18 @@ import { AiOutlineEdit, AiOutlineStop } from "react-icons/ai";
 import { MdOutlineNumbers } from "react-icons/md";
 import { IoFastFood, IoPeopleCircleOutline } from "react-icons/io5";
 import { TbLetterX } from "react-icons/tb";
+import { Context } from '../../Context/Context';
 
 const ProjectCard = ({ _id, data, changeProjectStatus }) => {
 
     const [moreSettings, setMoreSettings] = useState(false)
+    const { setLoading, search, setOpenFormToAddEdit } = useContext(Context)
 
     return (
-        <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ y: [50, 0], opacity: [0, 0, 1] }} whileHover={{ scale: 1.05 }} transition={{ duration: 0.3 }}
-            key={_id} className='mt-10 w-[30%] h-fit max-w-sm relative overflow-hidden bg-card flex flex-col justify-center items-start gap-y-6  text-dark p-4 rounded-xl border-r-4 border-b-4'>
+        <motion.div initial={{ opacity: 0, y: 10 }} whileHover={{ scale: 1.05 }} whileInView={{ y: [50, 0], opacity: [0, 0, 1] }} transition={{ duration: 0.3 }}
+            key={_id} onClick={() => setOpenFormToAddEdit({ openedToEdit: true, idToEdit: _id })}
+
+            className='mt-10 w-[30%] h-fit max-w-sm relative overflow-hidden bg-card flex flex-col justify-center items-start gap-y-6  text-dark p-4 rounded-xl border-r-4 border-b-4 cursor-pointer'>
 
             {/* Circles */}
             <Circles className1={'-right-8 -bottom-2 w-14 h-14 bg-sidebar'} className2={'right-4 bottom-10 w-4 h-4 bg-sidebar'} className3={'right-7 bottom-3 w-1 h-1 bg-sidebar '} />
@@ -47,12 +51,12 @@ const ProjectCard = ({ _id, data, changeProjectStatus }) => {
                 }
 
                 {/* More..... */}
-                <div className='inline-flex gap-x-2 w-full '>
+                {/* <div className='inline-flex gap-x-2 w-full '>
                     <AiOutlineEdit
                         onClick={() => { setMoreSettings(!moreSettings) }}
                         size={25} color='#e04e17' cursor='pointer' className='hover:scale-150  transition duration-200 ease-in-out' />
                     More...
-                </div>
+                </div> */}
 
                 {/* More Settings dialog */}
                 <AnimatePresence>

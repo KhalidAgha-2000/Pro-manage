@@ -70,7 +70,7 @@ export const TeamEmployee = ({ handleAssignEmployee, handleUnAssignEmployee, ass
                     <span onClick={() => setAddRemove(false)} className={`${!addRemove ? 'opacity-40' : ''} w-1/2 rounded-lg cursor-pointer bg-light h-fit p-2 text-center font-alkatra text-xl transition duration-200 ease-in-out`}>OUT</span>
                 </header>
 
-                <div className='w-full h-full pb- border-[0.5px] m-auto overflow-auto'>
+                <div className='w-full h-full border-[0.5px] m-auto overflow-auto'>
                     {addRemove ? (// Assigned Employees
                         assignedEmployees.length === 0 ? (
                             <span className='absolute top-52 left-14 w-3/4 rounded-lg bg-light h-fit p-2 pt-2 m-auto text-center font-alkatra'>

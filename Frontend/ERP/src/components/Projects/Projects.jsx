@@ -10,15 +10,19 @@ import { FalidtoFetch } from '../Shared/Loading';
 import { IconButtons } from "../Shared/Buttons";
 import ProjectCard from './ProjectCard';
 import AddProject from './AddProject';
-import { ProjectContext } from '../../Context/ProjectContext';
+import Project from './Project';
+import { FormToEdit, FormToAdd } from '../Shared/FormtoEdit';
+import { getAllRoles } from '../Roles/Roles';
 
 const Projects = () => {
-    const { setLoading, search } = useContext(Context)
-    const { setIsOpenToAdd } = useContext(ProjectContext)
+    //    E-commerce Website Blogging Platform Social Media Dashboard Task Management App Recipe Sharing Website Fitness Tracking App Online Portfolio Weather Forecast App Event Booking Platform Travel Planner Website
+    const { setLoading, search, setOpenFormToAddEdit } = useContext(Context)
 
     const [allProjectsData, setAllProjectsData] = useState([]);
     const [isArchived, setIsArchived] = useState(false)
     const [teamsData, setTeamsData] = useState([])
+    const [allRolesData, setAllRolesData] = useState({})
+
     // Search
     const filteredAdminsToSearch = filteredArrayToSearch(allProjectsData, 'name', search)
 
@@ -58,37 +62,27 @@ const Projects = () => {
         getAllTeams()
     }, [isArchived, search])
 
-    // Change Project Status
-    const changeProjectStatus = async (e, _id) => {
-        e.preventDefault()
-        try {
-            const response = await axiosInstance.put(`/projects/change-project-status/${_id}`, {}, {
-                headers: { token: Cookies.get('token') },
-            });
-            setLoading(true)
-            GlobalToast('success', response.data.message)
-            // Get The Updated Project Status
-            setAllProjectsData(prevProjectStatus => {
-                const updatedProjectStatus = prevProjectStatus.map(prj => {
-                    if (prj._id === _id) {
-                        return { ...prj, in_progress: response.data.data.in_progress };
-                    }
-                    return prj;
-                });
-                return updatedProjectStatus;
-            })
-        } catch (error) {
-            if (error.response && error.response.data) {
-                GlobalToast('warn', error.response.data.message)
-            }
-        } setTimeout(() => { setLoading(false) }, 2000);
 
-    }
+    useEffect(() => {
+        const getRolesData = async () => {
+            try {
+                const data = await getAllRoles();
+                if (data) {
+                    setAllRolesData(data);
+                    console.log(data);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        getRolesData();
+    }, [])
+
+
 
     return (
 
-        <div className='w-full h-[75vh] relative flex flex-wrap justify-center p-3 gap-x-4 gap-y-4 overflow-auto '>
-
+        <div className='w-full h-[75vh] relative flex flex-wrap justify-center p-3 gap-x-4 gap- overflow-auto '>
             <header onClick={() => setIsArchived(!isArchived)}
                 className='absolute top-2 right-0 flex items-center w-fit m-auto bg-orange text-sidebar rounded-md p-1 mx-1 font-montserrat h-fit cursor-pointer hover:opacity-50 transition duration-200 ease-in-out'>
                 {!isArchived ? <IoMdArchive /> : <FaProjectDiagram />}
@@ -101,16 +95,23 @@ const Projects = () => {
                 filteredAdminsToSearch.reverse().map((projj) => (
                     <ProjectCard key={projj._id} data={projj}
                         _id={projj._id}
-                        changeProjectStatus={changeProjectStatus}
                     />
                 ))
             }
-
-            {/* Add Button */}
-            <IconButtons Icon={IoMdAdd} onClick={() => setIsOpenToAdd(true)} className={'fixed right-6 bottom-6'} />
-
             {/* Add Project */}
-            <AddProject allProjectsData={allProjectsData} setAllProjectsData={setAllProjectsData} teamsData={teamsData} />
+            <IconButtons Icon={IoMdAdd} onClick={() => setOpenFormToAddEdit({ openedToAdd: true })} className={'fixed right-6 bottom-6'} />
+            <FormToAdd>
+                <AddProject allProjectsData={allProjectsData} setAllProjectsData={setAllProjectsData} teamsData={teamsData} />
+            </FormToAdd>
+
+            <FormToEdit>
+                <Project
+                    teamsData={teamsData}
+                    allRolesData={allRolesData}
+                    setAllRolesData={setAllRolesData}
+                    allProjectsData={allProjectsData} setAllProjectsData={setAllProjectsData}
+                />
+            </FormToEdit>
 
 
         </div>
@@ -118,3 +119,6 @@ const Projects = () => {
 }
 
 export default Projects
+
+
+

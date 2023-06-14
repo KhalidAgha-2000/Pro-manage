@@ -80,7 +80,7 @@ const Team = ({ allTeamsData, setallTeamsData }) => {
             const response = await axiosInstance.put(`/teams/assign-team-to-employee/${idToEdit}`, { employeeId: employeeId }, {
                 headers: { token: Cookies.get('token') }
             });
-            GlobalToast('success', "DoneASS");
+            GlobalToast('success', "Done");
             // Update unassignedEmployees array by removing the assigned employee
             setUnassignedEmployees(prevEmployees => prevEmployees.filter(emp => emp.id !== employeeId));
             // Update assignedEmployees array by adding the unassigned employee
