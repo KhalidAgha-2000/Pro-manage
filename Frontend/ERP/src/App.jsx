@@ -14,6 +14,7 @@ import { ToastContainer } from 'react-toastify'
 import './App.css'
 import Login from './pages/Login'
 import NotFound from './pages/NotFound'
+import Roles from './components/Roles/Roles'
 
 function App() {
 
@@ -47,7 +48,9 @@ function App() {
 
               {/* KPIS */}
               <Route path="kpis" element={<Kpis />} />
-              {/* <Route path="projects/project/:id" element={<Project />} /> */}
+
+              {/* ROLES  */}
+              <Route path="roles" element={<Roles />} />
 
               {/* <Route path="*" element={<NotFound />} /> */}
             </Route>

@@ -6,6 +6,7 @@ import { MdAdminPanelSettings, MdGroupAdd } from "react-icons/md";
 import { RiTeamFill } from "react-icons/ri";
 import { HiOutlineLogout } from 'react-icons/hi'
 import { SiGoogleanalytics } from 'react-icons/si'
+import { AiFillProject } from 'react-icons/ai'
 import { motion } from "framer-motion";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logout from '../utils/logout';
@@ -13,9 +14,10 @@ import Circles from '../components/Shared/Circles';
 
 
 const SideBar = () => {
+
     const [activeNavItem, setActiveNavItem] = useState('Analysis');
-    const navigate = useNavigate()
     const location = useLocation()
+
     const navItems = [
         { title: "analysis", linkTo: "dashboard/analysis", icon: SiGoogleanalytics },
         { title: "admins", linkTo: "dashboard/admins", icon: MdAdminPanelSettings },
@@ -24,6 +26,7 @@ const SideBar = () => {
         { title: "projects", linkTo: "dashboard/projects", icon: FaProjectDiagram },
         { title: "reports", linkTo: "ZZZ", icon: TbReportAnalytics },
         { title: "KPIs", linkTo: "dashboard/kpis", icon: IoMdAnalytics },
+        { title: "roles", linkTo: "dashboard/roles", icon: AiFillProject },
     ]
 
     return (
