@@ -131,7 +131,7 @@ export const Projectroles = ({ ProjectData, allRolesData, handleChangeRole, assi
                                 </option>
                             ))}
                         </select>
-                        <AiFillCheckCircle onClick={assignRoleToEmployee} color='#e04e17' cursor='pointer' size={22} className='absolute top-4 right-2 hover:scale-150 transition duration-200 ease-in-out' />
+                        <AiFillCheckCircle onClick={assignRoleToEmployee} color='#4bb543' cursor='pointer' size={22} className='absolute top-4 right-2 hover:scale-150 transition duration-200 ease-in-out' />
                     </form>
                 ))}
 

@@ -24,7 +24,7 @@ const SideBar = () => {
         { title: "employees", linkTo: "dashboard/employees", icon: MdGroupAdd },
         { title: "teams", linkTo: "dashboard/teams", icon: RiTeamFill },
         { title: "projects", linkTo: "dashboard/projects", icon: FaProjectDiagram },
-        { title: "reports", linkTo: "ZZZ", icon: TbReportAnalytics },
+        { title: "reports", linkTo: "dashboard/reports", icon: TbReportAnalytics },
         { title: "KPIs", linkTo: "dashboard/kpis", icon: IoMdAnalytics },
         { title: "roles", linkTo: "dashboard/roles", icon: AiFillProject },
     ]
