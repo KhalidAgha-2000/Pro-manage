@@ -40,6 +40,7 @@ router.group('/employees', (employeeRouter) => {
     employeeRouter.get('/all-employees', controller.allEmployees)
     employeeRouter.get('/all-employees-pagination', controller.employeesWithPagination)
     employeeRouter.get('/kpis-of-employee-report/:id', controller.KPIsOfEmployeeReport)
+    employeeRouter.get('/roles-kpis-report/:id', controller.rolesAndKpisForReport)
     employeeRouter.get('/kpis-of-employee-update/:id', controller.KPIsOfEmployeeUpdate)
     employeeRouter.get('/specific-employee/:id', controller.specificEmployee)
     employeeRouter.put('/add-kpi-to-employee/:id', controller.addKpiToEmployee)

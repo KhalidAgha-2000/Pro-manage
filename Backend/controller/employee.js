@@ -268,7 +268,7 @@ class Controller {
             return res.status(500).json({ success: false, message: 'Server error', error });
         }
     };
-    // -------------------- Get All KPIs Of  Employee with date sorting to update
+    // -------------------- Get All KPIs Of Employee with date sorting to update
     async KPIsOfEmployeeUpdate(req, res, next) {
         try {
             const employee = await employeeModel.findById(req.params.id)
@@ -300,7 +300,7 @@ class Controller {
             res.status(500).json({ success: false, message: 'Server Error!', err });
         }
     }
-    // -------------------- Get All KPIs Of  Employee with date sorting to make reports
+    // -------------------- Get All KPIs Of Employee with date sorting to make reports
     async KPIsOfEmployeeReport(req, res, next) {
         try {
             let objectId = new ObjectID(req.params.id);
@@ -378,10 +378,68 @@ class Controller {
         }
     }
 
+    // -------------------- Get All Roles Of Employee to make reports
+    async rolesAndKpisForReport(req, res, next) {
+        try {
+            const employee = await employeeModel.findById(req.params.id)
+                .populate(['roles.role', 'roles.project', 'kpis.kpi', 'team'])
+                .exec()
+
+            let data = {
+                _id: employee._id,
+                first_name: employee.first_name,
+                last_name: employee.last_name,
+                Employee_Name: employee.Employee_Name,
+                image: employee.image,
+
+                roles: employee.roles ? employee.roles.map(rr => ({
+                    rolesInProject: {
+                        roleId: rr.role._id,
+                        projectId: rr.project._id,
+                        roleName: rr.role.name,
+                        projectName: rr.project.name
+                    },
+                })) : null,
+
+                // Get the rates of one kpi
+                kpis: employee.kpis
+                    ? employee.kpis.reduce((result, kp) => {
+                        const existingKPI = result.find((item) => item.kpi._id.equals(kp.kpi._id));
+                        if (existingKPI) {
+                            existingKPI.rates.push({
+                                rate: kp.rate,
+                            });
+                        } else {
+                            result.reverse().push({
+                                kpi: {
+                                    _id: kp.kpi._id,
+                                    name: kp.kpi.name,
+                                },
+                                rates: [
+                                    {
+                                        rate: kp.rate,
+                                    },
+                                ],
+                            });
+                        }
+                        return result;
+                    }, []).map(item => {
+                        item.rates.reverse(); // Reverse the rates array to get last rate
+                        return item;
+                    })
+                    : null,
+
+            }
+
+            res.status(200).json({ success: true, message: 'Employee Information!', data: data });
+        } catch (err) {
+            next(err);
+        }
+    }
+
 }
 
 
 const controller = new Controller(); //Creating an instance from this class 
 module.exports = controller;
-
 
