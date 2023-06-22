@@ -22,7 +22,6 @@ class Controller {
                 team: projj.team._id,
                 teamName: projj.team.name,
                 numberOfEmployees: projj.team.employees.length,
-                // numberOfProjectOfTheTeam: projj.team.projects.length,
             }))
             res.status(200).json({
                 success: true, message: 'Projects', data: projectData,
@@ -107,8 +106,6 @@ class Controller {
             };
             return res.status(200).json({ success: true, message: "Project created", data: responseData });
         } catch (error) {
-            // Handle any errors
-            console.log(error);
             return res.status(500).json({ success: false, message: "Internal Server Error", error });
         }
 
@@ -136,7 +133,7 @@ class Controller {
                 return res.status(400).json({ message: 'Project already exists' });
             }
 
-            // Update the admin by ID
+            // Update the project by ID
             const newProjectData = await projectModel.findByIdAndUpdate(
                 req.params.id,
                 { $set: req.body },

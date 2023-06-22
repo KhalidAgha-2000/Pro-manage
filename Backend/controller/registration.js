@@ -22,15 +22,11 @@ class Controller {
 
             else {
                 const token = jwt.sign
-                    (
-                        { id: admin._id },
+                    ({ id: admin._id },
                         process.env.TOKEN_SCERET,
-                        { expiresIn: 60 * 60 }
-                    )
+                        { expiresIn: 60 * 60 })
 
-                res
-                    // .setHeader('Authorization', 'Bearer ' + token)
-                    .cookie('token', token).json({ success: true, message: "Successfully LogedIn !", data: admin, token: token })
+                res.cookie('token', token).json({ success: true, message: "Successfully LogedIn !", data: admin, token: token })
             }
         })
     }

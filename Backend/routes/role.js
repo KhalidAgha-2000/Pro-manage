@@ -15,7 +15,6 @@ router.group('/roles', (roleRouter) => {
     roleRouter.get('/all-roles', controller.allRoles)
     roleRouter.post('/add-role', controller.addRole)
     roleRouter.put('/update-role-name/:id', controller.updateRoleName)
-    // roleRouter.delete('/remove-kpi/:id', controller.deleteKPI)
 })
 
 module.exports = router

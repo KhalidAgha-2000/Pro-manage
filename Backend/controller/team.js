@@ -123,11 +123,6 @@ class Controller {
                 return res.status(404).json({ success: false, message: "Team not found" });
             }
 
-            // if (employee.team && employee.team !== id) {
-            //     const assignedTeam = await teamModel.findById(employee.team);
-            //     return res.status(409).json({ success: false, message: `Employee ${employee.Employee_Name} is already assigned to team: ${assignedTeam.name}`, employeeData: employee });
-            // }
-
             employee.team = id;
             await employee.save();
 
@@ -218,7 +213,6 @@ class Controller {
             res.status(200).json({ success: true, message: 'Data updated successfully', data: teamData });
         } catch (err) {
             next(err)
-            // res.status(500).json({ success: false, message: "Failed to Update!" });
         }
 
     }

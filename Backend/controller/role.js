@@ -21,8 +21,7 @@ class Controller {
 
         // Check if the Role is already in the database 
         const roleExists = await roleModel.findOne({ name: req.body.name })
-        if (roleExists) {
-            // 409 Conflict
+        if (roleExists) {            // 409 Conflict
             return res.status(409).json({ success: false, message: "Role already exists" })
         }
 

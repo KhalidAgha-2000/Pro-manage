@@ -1,7 +1,6 @@
 const employeeModel = require('../model/employee')
 const projectModel = require('../model/projects')
 const roleModel = require('../model/role')
-const kpiModel = require('../model/kpi')
 const cloudinary = require('cloudinary').v2
 const ObjectID = require('mongodb').ObjectId
 require('dotenv').config();
@@ -28,7 +27,7 @@ class Controller {
                 email: e.email,
                 phone: e.phone,
                 image: e.image,
-                teamID: e.team ? e.team._id : null, // replace team ID with team name
+                teamID: e.team ? e.team._id : null,
                 team: e.team ? e.team.name : null, // replace team ID with team name
             }))
 
@@ -115,27 +114,6 @@ class Controller {
         }
     }
 
-    // -------------------- Delete
-    async deleteEmployee(req, res, next) {
-        try {
-            // *-*-*-*-*-*--*-*-*-*if
-            // *-*-*-*-*-*--*-*-*-*there
-            // *-*-*-*-*-*--*-*-*-*is 
-            // *-*-*-*-*-*--*-*-*-*no team
-
-            // Delete employee from database
-            const deletedEmployee = await employeeModel.findByIdAndDelete(req.params.id);
-
-            if (!deletedEmployee) {
-                return res.status(404).json({ message: "Employee not found" });
-            }
-
-            res.status(200).json({ success: true, message: "Employee removed from database!" });
-        } catch (err) {
-            next(err);
-        }
-    };
-
     // ---------------------  Change Image
     async changeImage(req, res, next) {
         // Upload image to Cloudinary
@@ -167,12 +145,6 @@ class Controller {
             if (employeeExists) {
                 return res.status(400).json({ message: 'Email already exists' });
             }
-
-            // Check if phone number is exactly 8 digits
-            // const phone = req.body.phone;
-            // if (!/^\d{8}$/.test(phone)) {
-            //     return res.status(400).json({ message: 'Phone, Enter (8) digits' });
-            // }
 
             // Update the employee by ID
             const newEmployeeData = await employeeModel.findByIdAndUpdate(
@@ -332,9 +304,6 @@ class Controller {
                 { $group: { _id: "$_id", fullName: { $first: "$fullName" }, kpis: { $push: "$kpis" } } }
 
             ])
-            // if (employee.length === 0) {
-            //     return res.status(200).json({ success: true, message: 'No KPI for this employee yet' });
-            // }
 
             return res.status(200).json({
                 success: true,
