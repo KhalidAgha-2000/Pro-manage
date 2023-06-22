@@ -29,10 +29,11 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(cors({
-    origin: '*',
-    allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
-}));
+// app.use(cors({
+//     origin: '*',
+//     allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
+// }));
+app.options('*', cors());
 app.use(express.static(path.join(__dirname, 'public')));
 app.listen(5000 || process.env.PORT)
 
