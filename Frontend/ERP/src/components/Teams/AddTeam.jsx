@@ -20,7 +20,9 @@ const AddTeam = ({ addTeam, setAddTeam, allTeamsData, setallTeamsData }) => {
         }
 
         try {
-            const response = await axiosInstance.post('/teams/add-team', { name: newTeam }, { headers: { token: Cookies.get('token') } })
+            const response = await axiosInstance.post('/teams/add-team',
+                { name: newTeam },
+                { headers: { token: Cookies.get('token') } })
             setLoading(true)
             GlobalToast('success', response.data.message)
             setallTeamsData([...allTeamsData, response.data.data]);

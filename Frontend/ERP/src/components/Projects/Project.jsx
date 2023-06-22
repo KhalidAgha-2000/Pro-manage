@@ -26,7 +26,8 @@ const Project = ({ allProjectsData, setAllProjectsData, teamsData, allRolesData,
         try {
             setLoading(true)
             const response = await
-                axiosInstance.get(`/projects/specific-project/${idToEdit}`, { headers: { token: Cookies.get('token') } })
+                axiosInstance.get(`/projects/specific-project/${idToEdit}`,
+                    { headers: { token: Cookies.get('token') } })
             setProjectData(response.data.data)
             setIsArchivedProject(response.data.data.archive ? true : false)
         } catch (error) {
@@ -41,9 +42,9 @@ const Project = ({ allProjectsData, setAllProjectsData, teamsData, allRolesData,
     const changeProjectStatus = async (e) => {
         e.preventDefault()
         try {
-            const response = await axiosInstance.put(`/projects/change-project-status/${idToEdit}`, {}, {
-                headers: { token: Cookies.get('token') },
-            });
+            const response = await axiosInstance.put(`/projects/change-project-status/${idToEdit}`,
+                {},
+                { headers: { token: Cookies.get('token') }, });
             setLoading(true)
             GlobalToast('success', response.data.message)
             // Get The Updated Project Status in the form
@@ -71,9 +72,9 @@ const Project = ({ allProjectsData, setAllProjectsData, teamsData, allRolesData,
     const archiveProject = async (e) => {
         e.preventDefault()
         try {
-            const response = await axiosInstance.put(`/projects/archive-project/${idToEdit}`, {}, {
-                headers: { token: Cookies.get('token') },
-            });
+            const response = await axiosInstance.put(`/projects/archive-project/${idToEdit}`,
+                {},
+                { headers: { token: Cookies.get('token') }, });
             setLoading(true)
             GlobalToast('success', response.data.message)
             // Get The Updated Project Data in the form archiveDate
@@ -118,9 +119,9 @@ const Project = ({ allProjectsData, setAllProjectsData, teamsData, allRolesData,
         }
 
         try {
-            const response = await axiosInstance.put(`/projects/update-project-name/${idToEdit}`, { name: updateTheProjectName }, {
-                headers: { token: Cookies.get('token') }
-            })
+            const response = await axiosInstance.put(`/projects/update-project-name/${idToEdit}`,
+                { name: updateTheProjectName },
+                { headers: { token: Cookies.get('token') } })
             setLoading(true)
             GlobalToast('success', response.data.message)
             // Get The Updated Project Data
@@ -145,7 +146,9 @@ const Project = ({ allProjectsData, setAllProjectsData, teamsData, allRolesData,
         }
 
         try {
-            const response = await axiosInstance.put(`/projects/change-team/${idToEdit}`, { teamID: teamToAssign }, { headers: { token: Cookies.get('token') } })
+            const response = await axiosInstance.put(`/projects/change-team/${idToEdit}`,
+                { teamID: teamToAssign },
+                { headers: { token: Cookies.get('token') } })
             setLoading(true)
             GlobalToast('success', response.data.message)
             // Get The Updated Project Status in the form
@@ -173,9 +176,9 @@ const Project = ({ allProjectsData, setAllProjectsData, teamsData, allRolesData,
     const assignRoleToEmployee = async () => {
         try {
             setLoading(true);
-            const response = await axiosInstance.put(`/employees/assign-role-to-employee/${idToEdit}`, {
-                employeeID: roleToAssign.employeeID, roleID: roleToAssign.roleID,
-            }, { headers: { token: Cookies.get('token') }, }
+            const response = await axiosInstance.put(`/employees/assign-role-to-employee/${idToEdit}`,
+                { employeeID: roleToAssign.employeeID, roleID: roleToAssign.roleID, },
+                { headers: { token: Cookies.get('token') }, }
             );
             GlobalToast('success', response.data.message)
         } catch (error) {

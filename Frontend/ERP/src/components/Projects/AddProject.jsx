@@ -24,7 +24,9 @@ const AddProject = ({ teamsData, allProjectsData, setAllProjectsData }) => {
         }
 
         try {
-            const response = await axiosInstance.post('/projects/add-project', { name: newProject, teamID: teamToAssign }, { headers: { token: Cookies.get('token') } })
+            const response = await axiosInstance.post('/projects/add-project',
+                { name: newProject, teamID: teamToAssign },
+                { headers: { token: Cookies.get('token') } })
             setLoading(true)
             GlobalToast('success', response.data.message)
             setAllProjectsData([...allProjectsData, response.data.data]);

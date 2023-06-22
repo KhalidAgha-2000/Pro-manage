@@ -29,7 +29,8 @@ const Employee = ({ teamsData, setEmployees, getAllEmployees, kpiData }) => {
         try {
             setLoading(true)
             const response = await
-                axiosInstance.get(`/employees/specific-employee/${idToEdit}`, { headers: { token: Cookies.get('token') } })
+                axiosInstance.get(`/employees/specific-employee/${idToEdit}`,
+                    { headers: { token: Cookies.get('token') } })
             setEmployeeData(response.data.data)
         } catch (error) {
             if (error.response && error.response.data) {
@@ -44,7 +45,8 @@ const Employee = ({ teamsData, setEmployees, getAllEmployees, kpiData }) => {
         try {
             // setLoading(true)
             const response = await
-                axiosInstance.get(`/employees/kpis-of-employee-update/${idToEdit}`, { headers: { token: Cookies.get('token') } })
+                axiosInstance.get(`/employees/kpis-of-employee-update/${idToEdit}`,
+                    { headers: { token: Cookies.get('token') } })
             setEmployeeKPIS(response.data.data.kpis)
         } catch (error) {
             if (error.response && error.response.data) {
@@ -62,9 +64,11 @@ const Employee = ({ teamsData, setEmployees, getAllEmployees, kpiData }) => {
         try {
             setLoading(true)
             const response = await
-                axiosInstance.put(`/teams/assign-team-to-employee/${selectedTeam}`, { employeeId: idToEdit }, {
-                    headers: { token: Cookies.get('token') }
-                })
+                axiosInstance.put(`/teams/assign-team-to-employee/${selectedTeam}`,
+                    { employeeId: idToEdit },
+                    {
+                        headers: { token: Cookies.get('token') }
+                    })
             GlobalToast('success', response.data.message)
             // Get The Updated Employee Data
             setEmployees(prevemployeeData => {
@@ -91,9 +95,11 @@ const Employee = ({ teamsData, setEmployees, getAllEmployees, kpiData }) => {
     const changeImage = async (e) => {
         e.preventDefault()
         try {
-            const response = await axiosInstance.put(`/employees/change-image/${idToEdit}`, { image: image }, {
-                headers: { token: Cookies.get('token'), "content-type": "multipart/form-data", }
-            })
+            const response = await axiosInstance.put(`/employees/change-image/${idToEdit}`,
+                { image: image },
+                {
+                    headers: { token: Cookies.get('token'), "content-type": "multipart/form-data", }
+                })
             setLoading(true)
             GlobalToast('success', response.data.message)
             // Get The Updated Employee Data
@@ -126,7 +132,8 @@ const Employee = ({ teamsData, setEmployees, getAllEmployees, kpiData }) => {
         try {
             const response = await axiosInstance.put(`/employees/update-info/${idToEdit}`, {
                 first_name: first_name, last_name: last_name, email: email, phone: phone
-            }, { headers: { token: Cookies.get('token') } })
+            },
+                { headers: { token: Cookies.get('token') } })
             setLoading(true)
             GlobalToast('success', response.data.message)
             getAllEmployees()
@@ -149,9 +156,9 @@ const Employee = ({ teamsData, setEmployees, getAllEmployees, kpiData }) => {
         e.preventDefault()
 
         try {
-            const response = await axiosInstance.put(`/employees/add-kpi-to-employee/${idToEdit}`, {
-                kpiId: updatedKpiName, kpiRate: updatedKpiRate,
-            }, { headers: { token: Cookies.get('token') } })
+            const response = await axiosInstance.put(`/employees/add-kpi-to-employee/${idToEdit}`,
+                { kpiId: updatedKpiName, kpiRate: updatedKpiRate, },
+                { headers: { token: Cookies.get('token') } })
             setLoading(true)
             GlobalToast('success', response.data.message)
             // Get The Updated Employee Data

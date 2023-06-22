@@ -22,7 +22,9 @@ const AddRole = ({ allRolesData, setAllRolesData, addRole, setAddRole }) => {
         }
 
         try {
-            const response = await axiosInstance.post('/roles/add-role', { name: newRole }, { headers: { token: Cookies.get('token') } })
+            const response = await axiosInstance.post('/roles/add-role',
+                { name: newRole },
+                { headers: { token: Cookies.get('token') } })
             setLoading(true)
             GlobalToast('success', response.data.message)
             setAllRolesData([...allRolesData, response.data.data]);

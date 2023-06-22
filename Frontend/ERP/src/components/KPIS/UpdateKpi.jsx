@@ -21,9 +21,9 @@ const UpdateKpi = ({ kpiToUpdate, setKpiToUpdate, setAllKpisData }) => {
         }
 
         try {
-            const response = await axiosInstance.put(`/kpis/update-kpi-name/${kpiToUpdate.id}`, { name: updateTheKpi }, {
-                headers: { token: Cookies.get('token') }
-            })
+            const response = await axiosInstance.put(`/kpis/update-kpi-name/${kpiToUpdate.id}`,
+                { name: updateTheKpi },
+                { headers: { token: Cookies.get('token') } })
             setLoading(true)
             GlobalToast('success', response.data.message)
             setTimeout(() => { setKpiToUpdate({ isOpen: false }) }, 1000);

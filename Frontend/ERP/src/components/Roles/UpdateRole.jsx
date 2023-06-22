@@ -22,9 +22,9 @@ const UpdateRole = ({ setAllRolesData, roleToUpdate, setRoleToUpdate }) => {
         }
 
         try {
-            const response = await axiosInstance.put(`/roles/update-role-name/${roleToUpdate.id}`, { name: updateTheRole }, {
-                headers: { token: Cookies.get('token') }
-            })
+            const response = await axiosInstance.put(`/roles/update-role-name/${roleToUpdate.id}`,
+                { name: updateTheRole },
+                { headers: { token: Cookies.get('token') } })
             setLoading(true)
             GlobalToast('success', response.data.message)
             setTimeout(() => { setRoleToUpdate({ isOpen: false }) }, 1000);

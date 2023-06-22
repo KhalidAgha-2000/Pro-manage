@@ -17,7 +17,8 @@ const Reports = () => {
         try {
             setLoading(true)
             const response = await
-                axiosInstance.get('/employees/all-employees', { headers: { token: Cookies.get('token') } }
+                axiosInstance.get('/employees/all-employees',
+                    { headers: { token: Cookies.get('token') } }
                 )
             setEmployees(response.data.data);
         } catch (error) {

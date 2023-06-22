@@ -22,7 +22,9 @@ const AddKpi = ({ allKpisData, setAllKpisData, addKpi, setAddKpi }) => {
         }
 
         try {
-            const response = await axiosInstance.post('/kpis/add-kpi', { name: newKpi }, { headers: { token: Cookies.get('token') } })
+            const response = await axiosInstance.post('/kpis/add-kpi',
+                { name: newKpi },
+                { headers: { token: Cookies.get('token') } })
             setLoading(true)
             GlobalToast('success', response.data.message)
             setAllKpisData([...allKpisData, response.data.data]);

@@ -81,9 +81,8 @@ export default Roles
 
 export const getAllRoles = async () => {
     try {
-        const response = await axiosInstance.get('/roles/all-roles', {
-            headers: { token: Cookies.get('token') }
-        });
+        const response = await axiosInstance.get('/roles/all-roles',
+            { headers: { token: Cookies.get('token') } });
         return response.data.data;
     } catch (error) {
         if (error.response && error.response.data) {

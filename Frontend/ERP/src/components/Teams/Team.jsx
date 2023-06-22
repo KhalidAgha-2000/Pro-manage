@@ -26,7 +26,8 @@ const Team = ({ allTeamsData, setallTeamsData }) => {
         try {
             setLoading(true)
             const response = await
-                axiosInstance.get(`/teams/specific-team/${idToEdit}`, { headers: { token: Cookies.get('token') } })
+                axiosInstance.get(`/teams/specific-team/${idToEdit}`,
+                    { headers: { token: Cookies.get('token') } })
             setTeamName(response.data.data.name)
             setAssignedEmployees(response.data.data.employees)
             setUnassignedEmployees(response.data.unassignedEmployees)
@@ -54,9 +55,9 @@ const Team = ({ allTeamsData, setallTeamsData }) => {
         }
 
         try {
-            const response = await axiosInstance.put(`/teams/update-team-name/${idToEdit}`, { name: updateTheTeam }, {
-                headers: { token: Cookies.get('token') }
-            })
+            const response = await axiosInstance.put(`/teams/update-team-name/${idToEdit}`,
+                { name: updateTheTeam },
+                { headers: { token: Cookies.get('token') } })
             setLoading(true)
             GlobalToast('success', response.data.message)
             // Get The Updated Team Data
@@ -77,9 +78,9 @@ const Team = ({ allTeamsData, setallTeamsData }) => {
     const handleAssignEmployee = async (e, employeeId) => {
         e.preventDefault();
         try {
-            const response = await axiosInstance.put(`/teams/assign-team-to-employee/${idToEdit}`, { employeeId: employeeId }, {
-                headers: { token: Cookies.get('token') }
-            });
+            const response = await axiosInstance.put(`/teams/assign-team-to-employee/${idToEdit}`,
+                { employeeId: employeeId },
+                { headers: { token: Cookies.get('token') } });
             GlobalToast('success', "Done");
             // Update unassignedEmployees array by removing the assigned employee
             setUnassignedEmployees(prevEmployees => prevEmployees.filter(emp => emp.id !== employeeId));
@@ -107,9 +108,9 @@ const Team = ({ allTeamsData, setallTeamsData }) => {
     const handleUnAssignEmployee = async (e, employeeId) => {
         e.preventDefault();
         try {
-            const response = await axiosInstance.put(`/teams/un-assign-employee-from-team/${idToEdit}`, { employeeId: employeeId }, {
-                headers: { token: Cookies.get('token') }
-            });
+            const response = await axiosInstance.put(`/teams/un-assign-employee-from-team/${idToEdit}`,
+                { employeeId: employeeId },
+                { headers: { token: Cookies.get('token') } });
             GlobalToast('success', "Done");
             // Update AssignedEmployees array by removing the unassigned employee
             setAssignedEmployees(prevEmployees => prevEmployees.filter(emp => emp.id !== employeeId));
@@ -139,7 +140,8 @@ const Team = ({ allTeamsData, setallTeamsData }) => {
         try {
             setLoading(true)
             const response = await
-                axiosInstance.delete(`/teams/remove-team/${idToEdit}`, { headers: { token: Cookies.get('token') } })
+                axiosInstance.delete(`/teams/remove-team/${idToEdit}`,
+                    { headers: { token: Cookies.get('token') } })
             GlobalToast('success', response.data.message)
             setallTeamsData(allTeamsData.filter((team) => team._id !== idToEdit))
             setTimeout(() => { setOpenFormToAddEdit({ openedToEdit: false }) }, 2000);

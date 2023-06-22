@@ -24,7 +24,8 @@ const Admins = () => {
         try {
             setLoading(true)
             const response = await
-                axiosInstance.delete(`/admins/remove-admin/${id}`, { headers: { token: Cookies.get('token') } })
+                axiosInstance.delete(`/admins/remove-admin/${id}`,
+                    { headers: { token: Cookies.get('token') } })
             GlobalToast('success', response.data.message)
             setAllAdminsData(allAdminsData.filter((admin) => admin._id !== id))
         } catch (error) {
@@ -40,7 +41,8 @@ const Admins = () => {
         try {
             setLoading(true)
             const response = await
-                axiosInstance.get('/admins/all-admins', { headers: { token: Cookies.get('token') } })
+                axiosInstance.get('/admins/all-admins',
+                    { headers: { token: Cookies.get('token') } })
             setAllAdminsData(response.data.data)
         } catch (error) {
             if (error.response && error.response.data) {

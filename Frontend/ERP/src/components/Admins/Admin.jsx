@@ -48,7 +48,8 @@ const Admin = ({ setAllAdminsData }) => {
     const updateAdminInformation = async (e) => {
         e.preventDefault()
         try {
-            const response = await axiosInstance.put(`/admins/update-info/${idToEdit}`, { email: adminEmail, username: adminUsername }, {
+            const response = await axiosInstance.put(`/admins/update-info/${idToEdit}`,
+                { email: adminEmail, username: adminUsername }, {
                 headers: { token: Cookies.get('token') }
             });
             setLoading(true)
@@ -81,7 +82,8 @@ const Admin = ({ setAllAdminsData }) => {
     const changePassword = async (e) => {
         e.preventDefault()
         try {
-            const response = await axiosInstance.put(`/admins/change-password/${idToEdit}`, { newPassword: adminNewPassword, oldPassword: adminOldPassword }, {
+            const response = await axiosInstance.put(`/admins/change-password/${idToEdit}`,
+                { newPassword: adminNewPassword, oldPassword: adminOldPassword }, {
                 headers: { token: Cookies.get('token') }
             });
             setLoading(true)
@@ -106,9 +108,11 @@ const Admin = ({ setAllAdminsData }) => {
     const changeImage = async (e) => {
         e.preventDefault()
         try {
-            const response = await axiosInstance.put(`/admins/change-image/${idToEdit}`, { image: image }, {
-                headers: { token: Cookies.get('token'), "content-type": "multipart/form-data", }
-            })
+            const response = await axiosInstance.put(`/admins/change-image/${idToEdit}`,
+                { image: image },
+                {
+                    headers: { token: Cookies.get('token'), "content-type": "multipart/form-data", }
+                })
             setLoading(true)
             GlobalToast('success', response.data.message)
             if (Cookies.get('id') === idToEdit) {

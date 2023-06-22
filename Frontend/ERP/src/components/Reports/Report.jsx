@@ -27,7 +27,8 @@ const Report = () => {
         try {
             setLoading(true)
             const response = await
-                axiosInstance.get(`/employees/roles-kpis-report/${openFormToAddEdit.data ? openFormToAddEdit.data : id}`, { headers: { token: Cookies.get('token') } })
+                axiosInstance.get(`/employees/roles-kpis-report/${openFormToAddEdit.data ? openFormToAddEdit.data : id}`,
+                    { headers: { token: Cookies.get('token') } })
             setSetEmployeeData(response.data.data)
             setKpisOfEmployee(response.data.data.kpis)
             setRolesOfEmployee(response.data.data.roles)

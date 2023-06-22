@@ -28,7 +28,8 @@ const AddAdmin = ({ setAllAdminsData, allAdminsData }) => {
                 email: adminToAdd.email,
                 password: adminToAdd.password,
                 image: adminToAdd.image,
-            }, { headers: { token: Cookies.get('token'), "content-type": "multipart/form-data", } })
+            },
+                { headers: { token: Cookies.get('token'), "content-type": "multipart/form-data", } })
             setLoading(true)
             GlobalToast('success', response.data.message)
             setAllAdminsData([...allAdminsData, response.data.admin]);

@@ -1,13 +1,8 @@
 import { motion } from 'framer-motion'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Buttons } from '../Shared/Buttons'
 import Inputs from '../Shared/Inputs'
-import axiosInstance from '../../utils/axios'
-import Cookies from 'js-cookie'
-import GlobalToast from '../Shared/Toast'
-import { Context } from '../../Context/Context'
 import { HiUserCircle } from 'react-icons/hi'
-import { MdAssignmentTurnedIn } from 'react-icons/md'
 import { AiFillCheckCircle } from 'react-icons/ai'
 
 // Project Status: In_Progress / Archived 

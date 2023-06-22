@@ -25,7 +25,8 @@ const Login = () => {
         e.preventDefault();
 
         try {
-            const response = await axiosInstance.post('/registration/login', { email, password });
+            const response = await axiosInstance.post('/registration/login',
+                { email, password });
             GlobalToast('success', response.data.message)
             Cookies.set('token', response.data.token, { expires: 1 / 24 }) // Expires in 1 hour (1/24 of a day)
             Cookies.set('id', response.data.data._id, { expires: 1 / 24 })
