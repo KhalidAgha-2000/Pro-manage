@@ -48,7 +48,7 @@ const Projects = () => {
         try {
             setLoading(true)
             const response = await
-                axiosInstance.get('/teams/all-teams/',
+                axiosInstance.get('/teams/all-teams',
                     { headers: { token: Cookies.get('token') } })
             setTeamsData(response.data.data)
         } catch (error) {

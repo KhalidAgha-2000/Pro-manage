@@ -16,7 +16,7 @@ const Header = () => {
     const getSpecificAdminData = async () => {
         try {
             const response = await
-                axiosInstance.get(`/admins/specific-admin/${id}`,
+                axiosInstance.get(`/admins/specific-admin/${Cookies.get('id')}`,
                     { headers: { token: Cookies.get('token') } })
             setDataSpecificAdmin(response.data.data)
         } catch (error) {
