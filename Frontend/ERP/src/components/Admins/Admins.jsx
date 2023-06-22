@@ -10,7 +10,8 @@ import NoValueMatchSeaarch, { filteredArrayToSearch } from '../../utils/search'
 import AdminCard from './AdminCard';
 import GlobalToast from '../Shared/Toast';
 import { FalidtoFetch } from '../Shared/Loading';
-import { FormToEdit, FormToAdd } from '../Shared/FormtoEdit';
+import { FormToEdit, FormToAdd } from '../Shared/FormToEdit';
+
 
 const Admins = () => {
     const { setLoading, search, setOpenFormToAddEdit } = useContext(Context)

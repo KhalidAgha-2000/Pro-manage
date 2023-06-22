@@ -11,7 +11,7 @@ import { IconButtons } from "../Shared/Buttons";
 import ProjectCard from './ProjectCard';
 import AddProject from './AddProject';
 import Project from './Project';
-import { FormToEdit, FormToAdd } from '../Shared/FormtoEdit';
+import { FormToEdit, FormToAdd } from '../Shared/FormToEdit';
 import { getAllRoles } from '../Roles/Roles';
 
 const Projects = () => {

@@ -10,7 +10,7 @@ import NoValueMatchSeaarch, { filteredArrayToSearch } from '../../utils/search'
 import EmployeeCard from './EmployeeCard'
 import { FalidtoFetch } from "../Shared/Loading";
 import GlobalToast from '../Shared/Toast'
-import { FormToAdd, FormToEdit } from '../Shared/FormtoEdit'
+import { FormToEdit, FormToAdd } from '../Shared/FormToEdit';
 import Addemployee from './Addemployee'
 
 const Employees = () => {

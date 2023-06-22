@@ -9,7 +9,7 @@ import GlobalToast from '../Shared/Toast';
 import { FalidtoFetch } from '../Shared/Loading';
 import TeamCard from './TeamCard';
 import Team from './Team';
-import { FormToEdit } from '../Shared/FormtoEdit';
+import { FormToEdit, FormToAdd } from '../Shared/FormToEdit';
 import AddTeam from "./AddTeam";
 const Teams = () => {
 
