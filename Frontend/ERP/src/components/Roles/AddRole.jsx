@@ -41,7 +41,7 @@ const AddRole = ({ allRolesData, setAllRolesData, addRole, setAddRole }) => {
                     <form className='w-80 h-fit fixed right-10 bottom-20 flex flex-col gap-y-2 p-4 rounded-2xl bg-white border-4 border-sidebar '>
                         <span className='text-orange font-montserrat font-bold'>Add new Role</span>
                         <div className='flex items-center justify-between '>
-                            <input onChange={(e) => { setNewRole(e.target.value.trim()), console.log(newRole) }}
+                            <input onChange={(e) => { setNewRole(e.target.value.trim()) }}
                                 type="text" requiredname="name" placeholder='Role name'
                                 className="w-3/4 bg-gray-50 text-sm rounded-lg focus:ring-orange border outline-none p-2.5 "
                             />

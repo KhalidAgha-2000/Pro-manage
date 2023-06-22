@@ -15,7 +15,7 @@ import { FormToEdit, FormToAdd } from '../Shared/FormtoEdit';
 import { getAllRoles } from '../Roles/Roles';
 
 const Projects = () => {
-    //    E-commerce Website Blogging Platform Social Media Dashboard Task Management App Recipe Sharing Website Fitness Tracking App Online Portfolio Weather Forecast App Event Booking Platform Travel Planner Website
+
     const { setLoading, search, setOpenFormToAddEdit } = useContext(Context)
 
     const [allProjectsData, setAllProjectsData] = useState([]);
@@ -69,7 +69,6 @@ const Projects = () => {
                 const data = await getAllRoles();
                 if (data) {
                     setAllRolesData(data);
-                    console.log(data);
                 }
             } catch (error) {
                 console.error(error);

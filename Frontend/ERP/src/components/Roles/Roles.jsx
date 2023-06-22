@@ -2,9 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import axiosInstance from '../../utils/axios'
 import { Context } from '../../Context/Context'
 import Cookies from 'js-cookie'
-import { IoMdAnalytics } from 'react-icons/io'
 import { AnimatePresence, motion } from "framer-motion"
-import { AiFillEdit } from 'react-icons/ai'
 import { IconButtons } from '../Shared/Buttons'
 import { MdAdd } from 'react-icons/md';
 import NoValueMatchSeaarch, { filteredArrayToSearch } from '../../utils/search'

@@ -27,7 +27,6 @@ const UpdateRole = ({ setAllRolesData, roleToUpdate, setRoleToUpdate }) => {
             })
             setLoading(true)
             GlobalToast('success', response.data.message)
-            console.log(response);
             setTimeout(() => { setRoleToUpdate({ isOpen: false }) }, 1000);
             // Get The Updated Role Data
             setAllRolesData((prevAllRolesData) =>

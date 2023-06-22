@@ -8,7 +8,7 @@ import { HiOutlineLogout } from 'react-icons/hi'
 import { SiGoogleanalytics } from 'react-icons/si'
 import { AiFillProject } from 'react-icons/ai'
 import { motion } from "framer-motion";
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import logout from '../utils/logout';
 import Circles from '../components/Shared/Circles';
 

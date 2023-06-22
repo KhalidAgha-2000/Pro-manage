@@ -12,7 +12,6 @@ const Admin = ({ setAllAdminsData }) => {
 
     const { setLoading, idToEdit, setOpenFormToAddEdit } = useContext(Context)
 
-    // const { id } = idToEdit
     const [adminData, setAdminData] = useState({})
     const [adminEmail, setAdminEmail] = useState(adminData.email)
     const [adminUsername, setAdminUsername] = useState(adminData.username)

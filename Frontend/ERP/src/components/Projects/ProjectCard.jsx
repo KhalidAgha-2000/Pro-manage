@@ -1,18 +1,16 @@
-import React, { useContext, useState } from 'react'
-import { AnimatePresence, motion } from "framer-motion";
+import React, { useContext } from 'react'
+import { motion } from "framer-motion";
 import Circles from '../Shared/Circles';
-import { IoMdArchive, IoMdInformationCircle } from "react-icons/io";
+import { IoMdArchive } from "react-icons/io";
 import { GiProgression } from "react-icons/gi";
-import { AiOutlineEdit, AiOutlineStop } from "react-icons/ai";
+import { AiOutlineStop } from "react-icons/ai";
 import { MdOutlineNumbers } from "react-icons/md";
-import { IoFastFood, IoPeopleCircleOutline } from "react-icons/io5";
-import { TbLetterX } from "react-icons/tb";
+import { IoPeopleCircleOutline } from "react-icons/io5";
 import { Context } from '../../Context/Context';
 
-const ProjectCard = ({ _id, data, changeProjectStatus }) => {
+const ProjectCard = ({ _id, data }) => {
 
-    const [moreSettings, setMoreSettings] = useState(false)
-    const { setLoading, search, setOpenFormToAddEdit } = useContext(Context)
+    const { setOpenFormToAddEdit } = useContext(Context)
 
     return (
         <motion.div initial={{ opacity: 0, y: 10 }} whileHover={{ scale: 1.05 }} whileInView={{ y: [50, 0], opacity: [0, 0, 1] }} transition={{ duration: 0.3 }}
@@ -50,35 +48,6 @@ const ProjectCard = ({ _id, data, changeProjectStatus }) => {
                     </div>
                 }
 
-                {/* More..... */}
-                {/* <div className='inline-flex gap-x-2 w-full '>
-                    <AiOutlineEdit
-                        onClick={() => { setMoreSettings(!moreSettings) }}
-                        size={25} color='#e04e17' cursor='pointer' className='hover:scale-150  transition duration-200 ease-in-out' />
-                    More...
-                </div> */}
-
-                {/* More Settings dialog */}
-                <AnimatePresence>
-                    {moreSettings &&
-                        <motion.div
-                            initial={{ opacity: 0, y: '100%', x: '-100%', width: 0, height: 0 }}
-                            animate={{ opacity: 1, y: 0, x: 0, width: '100%', height: '100%' }}
-                            exit={{ opacity: 0, y: '100%', x: '-100%', width: 0, height: 0 }}
-                            transition={{ duration: 0.7 }}
-                            className='w-full h-full  text-dark p-3 rounded-md bg-light absolute bottom-1 left-1'>
-                            <TbLetterX size={20}
-                                onClick={() => { setMoreSettings(!moreSettings) }}
-                                cursor={'pointer'} color="#e04e17" className='absolute top-2 right-2' />
-                            <ul className=' space-y-2'>
-                                <li className='cursor-pointer text-lg w-fit font-bold font-montserrat text-dark hover:bg-orange rounded-md px-2 hover:scale-105 transition duration-200 ease-in-out '>- Fix Name</li>
-                                <li className='cursor-pointer text-lg w-fit font-bold font-montserrat text-dark hover:bg-orange rounded-md px-2 hover:scale-105 transition duration-200 ease-in-out '>- Change Status</li>
-                                <li className='cursor-pointer text-lg w-fit font-bold font-montserrat text-dark hover:bg-orange rounded-md px-2 hover:scale-105 transition duration-200 ease-in-out '>- Send to Archive</li>
-                                <li className='cursor-pointer text-lg w-fit font-bold font-montserrat text-dark hover:bg-orange rounded-md px-2 hover:scale-105 transition duration-200 ease-in-out '>- Team Settings</li>
-                            </ul>
-                        </motion.div>
-                    }
-                </AnimatePresence>
             </div>
 
         </motion.div>

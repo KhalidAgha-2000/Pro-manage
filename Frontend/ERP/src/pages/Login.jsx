@@ -1,5 +1,5 @@
 import React from 'react'
-import logo from '../assets/logo.jpg'
+import P_Logo_Home from '../assets/P_Logo_Home.png'
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import checkIfEmpty from '../utils/validation';
@@ -51,7 +51,7 @@ const Login = () => {
             <motion.section initial={{ opacity: 0, x: -100 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2, duration: 0.5, ease: "easeInOut" }}
                 className='leftt w-1/2 h-screen flex items-center'>
                 <form onSubmit={handleLogin}
-                    className="login-form relative w-1/2 p-1 h-2/3 m-auto flex flex-col items-center backdrop-blur-lg bg-gradient-to-b from-light to-sidebar shadow-orange/70 shadow-floating-shadow ">
+                    className="login-form rounded-md relative w-1/2 p-1 h-2/3 m-auto flex flex-col items-center backdrop-blur-lg bg-gradient-to-b from-light to-sidebar shadow-orange/70 shadow-floating-shadow ">
                     <h1 className='w-full h-fit p-1 mt-4 font-alkatra text-orange text-center font-bold text-3xl'>Welcome</h1>
                     <em className='w-full h-fit my-4 mb-10 text-orange text-center text-lg'>Log In as Administrator</em>
 
@@ -86,13 +86,12 @@ const Login = () => {
             <section className='right w-1/2 h-screen z-10 flex flex-col p-10 overflow-hidden'>
                 {/* Logo */}
                 <motion.div initial={{ opacity: 0, y: -100 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.5, ease: "easeInOut" }}
-                    className="relative px-1"
+                    className="relative px-1 bg-slate-5 mt-10 mr-20 flex items-center justify-center"
                 >
-                    <img src={logo} alt="logo" className='w-72' />
-                    <p className='absolute top-28 left-[105px] text-orange font-alkatra text-5xl'>ERP</p>
+                    <img src={P_Logo_Home} alt="logo" className='w-64' />
                 </motion.div>
 
-                <div className='w-fit h-fit m-auto p-2  '>
+                <div className='w-fit h-fit m-auto p-10 mb-8 '>
                     <p className='text-4xl text-light leading-snug font-alkatra'>Facilitate your HR management</p>
                     <p className='text-4xl text-light leading-snug font-alkatra'>Fast and Precise Results</p>
                 </div>

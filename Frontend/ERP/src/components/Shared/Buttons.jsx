@@ -49,13 +49,3 @@ export const IconButtons = ({ Icon, onClick, className, linkTo }) => {
     );
 };
 
-// Padge to Navigate
-export const PadgeToNavigate = ({ className, onClick, text }) => {
-    return (
-        <span
-            onClick={onClick}
-            className={`${className} rounded-lg bg-light h-fit p-2 text-center font-alkatra text-xl`}>{text}</span>
-    )
-}
-
-

@@ -8,9 +8,9 @@ import Teams from './components/Teams/Teams'
 import Team from './components/Teams/Team'
 import AddTeam from './components/Teams/AddTeam'
 import Projects from './components/Projects/Projects'
+import Project from './components/Projects/Project'
 import Kpis from './components/KPIS/Kpis'
 import { ToastContainer } from 'react-toastify'
-import './App.css'
 import Login from './pages/Login'
 import NotFound from './pages/NotFound'
 import Roles from './components/Roles/Roles'
@@ -45,6 +45,7 @@ function App() {
 
               {/* PROJECTS */}
               <Route path="projects" element={<Projects />} />
+              <Route path="projects/project/:id" element={<Project />} />
 
               {/* KPIS */}
               <Route path="kpis" element={<Kpis />} />
@@ -56,7 +57,6 @@ function App() {
               <Route path="reports" element={<Reports />} />
               <Route path="reports/report/:id" element={<Report />} />
 
-              {/* <Route path="*" element={<NotFound />} /> */}
             </Route>
             :
             <Route path="/login" element={<Login />} />
@@ -72,3 +72,4 @@ function App() {
 }
 
 export default App
+

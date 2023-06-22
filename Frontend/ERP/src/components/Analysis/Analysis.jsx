@@ -11,6 +11,7 @@ import axiosInstance from '../../utils/axios';
 import Cookies from 'js-cookie';
 import Circles from "../Shared/Circles";
 import GlobalToast from '../Shared/Toast';
+import { FalidtoFetch } from '../Shared/Loading';
 
 const Analysis = () => {
 
@@ -51,7 +52,8 @@ const Analysis = () => {
         <div className='flex flex-wrap items-center justify-center mt-3 gap-7 p-4 '>
 
             {Object.entries(analysisDataState)
-                .map((analys, index) => (
+                .length == 0 ? <FalidtoFetch /> :
+                Object.entries(analysisDataState).map((analys, index) => (
                     <motion.div initial={{ opacity: 0, y: 100 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.5, ease: "easeInOut" }}
                         key={index} className={`w-[30%] h-28 p-4 relative flex overflow-hidden gap-1 items-center my-1 rounded-3xl bg-card border-r-4 border-b-4
                             ${index >= Object.entries(analysisDataState).length - 2 ? 'w-[40%]' : ''}`}
