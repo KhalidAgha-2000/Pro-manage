@@ -32,7 +32,7 @@ const Login = () => {
             Cookies.set('id', response.data.data._id, { expires: 1 / 24 })
             setTimeout(() => {
                 navigate('/dashboard/analysis');
-            }, 3000);
+            }, 6000);
         } catch (error) {
             if (error.response && error.response.data) {
                 setFormValues({ ...formValues, email: '', password: '' })
