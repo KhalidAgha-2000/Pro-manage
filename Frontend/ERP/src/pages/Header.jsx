@@ -10,13 +10,13 @@ import Search from '../components/Shared/Search';
 const Header = () => {
     const [dataSpecificAdmin, setDataSpecificAdmin] = useState([])
 
-    let { id } = Cookies.get('id')
+    let id = Cookies.get('id')
 
     // Data Of Loggedin Admin
     const getSpecificAdminData = async () => {
         try {
             const response = await
-                axiosInstance.get(`/admins/specific-admin/${Cookies.get('id')}`,
+                axiosInstance.get(`/admins/specific-admin/${id}`,
                     { headers: { token: Cookies.get('token') } })
             setDataSpecificAdmin(response.data.data)
         } catch (error) {
