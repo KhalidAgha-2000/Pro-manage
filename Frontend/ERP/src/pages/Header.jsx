@@ -10,11 +10,13 @@ import Search from '../components/Shared/Search';
 const Header = () => {
     const [dataSpecificAdmin, setDataSpecificAdmin] = useState([])
 
+    let { id } = Cookies.get('id')
+
     // Data Of Loggedin Admin
     const getSpecificAdminData = async () => {
         try {
             const response = await
-                axiosInstance.get(`/admins/specific-admin/${Cookies.get('id')}`, { headers: { token: Cookies.get('token') } })
+                axiosInstance.get(`/admins/specific-admin/${id}`, { headers: { token: Cookies.get('token') } })
             setDataSpecificAdmin(response.data.data)
         } catch (error) {
             if (error.response && error.response.data) {
@@ -26,6 +28,9 @@ const Header = () => {
     useEffect(() => {
         getSpecificAdminData()
     }, [])
+
+    useEffect(() => { }, [id])
+
 
     return (
         <motion.div initial={{ opacity: 0, x: 100 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2, duration: 0.5, ease: "easeInOut" }}

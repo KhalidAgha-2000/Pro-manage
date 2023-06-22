@@ -50,7 +50,7 @@ const Employees = () => {
         try {
             setLoading(true)
             const response = await
-                axiosInstance.get('/teams/all-teams/', { headers: { token: Cookies.get('token') } })
+                axiosInstance.get('/teams/all-teams', { headers: { token: Cookies.get('token') } })
             setTeamsData(response.data.data)
         } catch (error) {
             if (error.response && error.response.data) {
@@ -63,7 +63,7 @@ const Employees = () => {
         try {
             setLoading(true)
             const response = await
-                axiosInstance.get('/kpis/all-kpis/', { headers: { token: Cookies.get('token') } })
+                axiosInstance.get('/kpis/all-kpis', { headers: { token: Cookies.get('token') } })
             setKpiData(response.data.data)
         } catch (error) {
             if (error.response && error.response.data) {
