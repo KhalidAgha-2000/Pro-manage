@@ -33,7 +33,7 @@ app.use(cookieParser());
 //     origin: '*',
 //     allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
 // }));
-app.options('*', cors());
+app.options('*', cors({ allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept' }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.listen(5000 || process.env.PORT)
 
