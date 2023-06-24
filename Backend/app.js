@@ -29,12 +29,14 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-const corsOptions = {
-    origin: '*',
-    // origin: ['https://pro-manager-pi.vercel.app', 'https://64970e50b48fbc711e584c6d--legendary-starship-f5c72d.netlify.app/'],
-    credentials: true,
-};
+app.use(cors());
 
+// const corsOptions = {
+//     origin: '*',
+//     credentials: true,
+// };
+
+// // origin: ['https://pro-manager-pi.vercel.app', 'https://64970e50b48fbc711e584c6d--legendary-starship-f5c72d.netlify.app/'],
 app.use(cors(corsOptions));
 app.use(express.static(path.join(__dirname, 'public')));
 app.listen(5000 || process.env.PORT)
