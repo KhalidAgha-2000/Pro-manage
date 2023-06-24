@@ -30,7 +30,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 const corsOptions = {
-    origin: 'https://pro-manager-pi.vercel.app',
+    origin: '*',
+    // origin: ['https://pro-manager-pi.vercel.app', 'https://64970e50b48fbc711e584c6d--legendary-starship-f5c72d.netlify.app/'],
     credentials: true,
 };
 
