@@ -7,11 +7,13 @@ const axiosInstance = axios.create({
     withCredentials: true,
     headers: {
         'Content-Type': 'application/json',
-        "Access-Control-Allow-Origin": "https://pro-manager-server.vercel.app/",
-        "Access-Control-Allow-Headers": "Origin, X- Requested - With, Content- Type, Accept"
     },
 });
 
 export default axiosInstance;
 
 
+
+// "Access-Control-Allow-Origin": "*",
+// "Access-Control-Allow-Origin": "https://pro-manager-server.vercel.app/",
+// "Access-Control-Allow-Headers": "Origin, X- Requested - With, Content- Type, Accept"
