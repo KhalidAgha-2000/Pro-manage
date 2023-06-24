@@ -13,7 +13,3 @@ const axiosInstance = axios.create({
 export default axiosInstance;
 
 
-
-// "Access-Control-Allow-Origin": "*",
-// "Access-Control-Allow-Origin": "https://pro-manager-server.vercel.app/",
-// "Access-Control-Allow-Headers": "Origin, X- Requested - With, Content- Type, Accept"
