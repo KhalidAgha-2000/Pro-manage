@@ -33,7 +33,7 @@ app.use(cookieParser());
 app.use(cors({
     origin: [
         'https://pro-manage-v1.vercel.app',
-        'http://localhost:5173/'
+        'http://localhost:5173'
     ],
     credentials: true
 }));
