@@ -1,6 +1,6 @@
 # Pro_Manage
-# Enterprise Resource Planning
 
+## Enterprise Resource Planning (ERP)
 ## Project Description
 
 A lot of companies tend to grow quickly without having the proper infrastructure to do so. To make up for that, they go for several third party applications that they have no control over and have to use several of or, and its becoming very common, they make their own all inclusive software to manage all their business needs in one centralized application.
@@ -106,13 +106,34 @@ Access the application in your browser at http://localhost:5173/.
 
 <hr>
 
+<hr>
+
+## Postman Collection
+To interact with the API endpoints and test the functionalities of the Pro_Manage project, you can use the provided Postman collection. Follow the steps below to import the collection into Postman:
+
+1- Download the Postman collection file from the following location: 
+ - https://documenter.getpostman.com/view/25121847/2s93z6eQHY
+
+2- Open Postman and click on the "Import" button in the top left corner.
+
+3- In the Import dialog, click on the "Upload Files" tab and select the downloaded Postman collection file.
+
+4- Once the collection is uploaded, you will see it listed in the left sidebar of Postman.
+
+You can now explore the available endpoints, request bodies, and response structures in the collection to interact with the Pro_Manage API.
+
+
+
+<hr>
+
 ## Contact
 
 If you have any questions or suggestions regarding this project, feel free to reach out .
 
-Name : Mohamad Khalid Kassem Agha
-Email : mkhalid.k.agha@gmail.com
-LinkedIn : https://www.linkedin.com/in/khalid-agha/
+- Name : Mohamad Khalid Kassem Agha
+- Email : mkhalid.k.agha@gmail.com
+- LinkedIn : https://www.linkedin.com/in/khalid-agha/
+
 Feel free to customize the sections and information based on your specific project requirements.
 
 <hr>
