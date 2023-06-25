@@ -29,7 +29,15 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(cors());
+// app.use(cors());
+app.use(cors({
+    origin: [
+        'https://pro-manage-v1.vercel.app',
+        'http://localhost:5173/'
+    ],
+    credentials: true
+}));
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.listen(5000 || process.env.PORT)
 
