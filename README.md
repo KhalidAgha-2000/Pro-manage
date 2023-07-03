@@ -100,7 +100,7 @@ Run npm run dev to start the development server.
 
 Access the application in your browser at http://localhost:5173/.
 
-> email : agha@gmail.com
+> email : agha@prom.com
 
 > password : 123123
 

@@ -201,8 +201,8 @@ const Project = ({ allProjectsData, setAllProjectsData, teamsData, allRolesData,
             {/* Close */}
             <AiFillCloseCircle onClick={() => setOpenFormToAddEdit({ openedToEdit: false, })} className='absolute top-2 right-2' cursor='pointer' size={25} color='#e04e17' />
             {/* Title */}
-            <h1 className='font-alkatra text-orange font-semibold w-full p-2 my-1 text-center text-xl'>
-                Project's Settings
+            <h1 className='font-alkatra uppercase text-orange font-semibold w-full p-2 my-1 text-center text-xl'>
+                {ProjectData.name ? ProjectData.name : "Project's settings"}
             </h1>
 
             {/* Nav Tabs */}

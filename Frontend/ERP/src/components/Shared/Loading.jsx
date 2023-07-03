@@ -28,7 +28,7 @@ export default Loading
 export const FalidtoFetch = () => {
     return (
         <h1 className='w-fit h-fit m-auto p-3 my-8 rounded-md bg-orange text-lg font-alkatra text-light'>
-            Getting Data, Try to reload !
+            Getting Data, Try to navigate !
         </h1>
     )
 }
