@@ -100,7 +100,7 @@ Run npm run dev to start the development server.
 
 Access the application in your browser at http://localhost:5173/.
 
-> email : agha@prom.com
+> email : khalid@prom.com
 
 > password : 123123
 
@@ -111,12 +111,12 @@ Access the application in your browser at http://localhost:5173/.
 ## Postman Collection
 To interact with the API endpoints and test the functionalities of the Pro_Manage project, you can use the provided Postman collection. Follow the steps below to import the collection into Postman:
 
-1- Download the Postman collection file from the following location: 
+1- Visit the Postman collection file from the following location: 
  - https://documenter.getpostman.com/view/25121847/2s93z6eQHY
 
-2- Open Postman and click on the "Import" button in the top left corner.
+2- Click on "Run in Postman" button.
 
-3- In the Import dialog, click on the "Upload Files" tab and select the downloaded Postman collection file.
+3- In the dialog, click on the available application.
 
 4- Once the collection is uploaded, you will see it listed in the left sidebar of Postman.
 
